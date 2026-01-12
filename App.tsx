@@ -16,6 +16,7 @@ function App() {
    const [user, setUser] = useState<User | null>(null);
    const [loading, setLoading] = useState(true);
    const [currentView, setCurrentView] = useState<View>('dashboard');
+   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
    // Persistent State
    const [foods, setFoods] = useState<Food[]>(() => {
@@ -40,18 +41,29 @@ function App() {
          return;
       }
 
-      const q = query(collection(db, 'daily_logs'), where('userId', '==', user.uid));
+      // For Dashboard: query only selected date
+      // For Stats: query all logs for weekly calculations
+      let q;
+      if (currentView === 'dashboard') {
+         q = query(
+            collection(db, 'daily_logs'),
+            where('userId', '==', user.uid),
+            where('date', '==', selectedDate)
+         );
+      } else {
+         q = query(collection(db, 'daily_logs'), where('userId', '==', user.uid));
+      }
+
       const unsubscribe = onSnapshot(q, (snapshot) => {
          const fetchedLogs: LogEntry[] = [];
          snapshot.forEach((doc) => {
             fetchedLogs.push(doc.data() as LogEntry);
          });
-         // Sort logs by date/time if needed, or by creation
          setLogs(fetchedLogs);
       });
 
       return () => unsubscribe();
-   }, [user]);
+   }, [user, currentView, selectedDate]);
 
    useEffect(() => {
       localStorage.setItem('macrotrack_foods', JSON.stringify(foods));
@@ -150,6 +162,8 @@ function App() {
                   logs={logs}
                   onAddLog={addLog}
                   onDeleteLog={deleteLog}
+                  selectedDate={selectedDate}
+                  onDateChange={setSelectedDate}
                />
             )}
             {currentView === 'library' && (

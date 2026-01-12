@@ -9,11 +9,12 @@ interface DashboardProps {
     logs: LogEntry[];
     onAddLog: (entry: LogEntry) => void;
     onDeleteLog: (id: string) => void;
+    selectedDate: string;
+    onDateChange: (date: string) => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLog }) => {
+const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLog, selectedDate, onDateChange }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
     // Modal State
     const [selectedFoodId, setSelectedFoodId] = useState('');
@@ -21,8 +22,8 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
     const [mealType, setMealType] = useState<MealType>('Desayuno');
     const [foodSearch, setFoodSearch] = useState('');
 
-    // Daily Stats Calculation
-    const dailyLogs = logs.filter(log => log.date === selectedDate);
+    // Daily Stats Calculation - logs are already filtered by App.tsx
+    const dailyLogs = logs;
     const totals = useMemo(() => {
         return dailyLogs.reduce((acc, curr) => ({
             calories: acc.calories + curr.calculated.calories,
@@ -87,7 +88,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                     <input
                         type="date"
                         value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
+                        onChange={(e) => onDateChange(e.target.value)}
                         className="bg-surface text-white border border-surfaceHighlight rounded-lg pl-3 pr-8 py-2 focus:outline-none focus:border-primary appearance-none text-right"
                     />
                     <Icons.Calendar size={18} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
