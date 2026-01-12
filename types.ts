@@ -1,0 +1,34 @@
+export type MealType = 'Desayuno' | 'Almuerzo' | 'Comida' | 'Merienda' | 'Cena';
+
+export interface Food {
+  id: string;
+  name: string;
+  category: string; // New field for organization
+  calories: number; // per 100g
+  protein: number; // per 100g
+  carbs: number; // per 100g
+  fat: number; // per 100g
+}
+
+export interface LogEntry {
+  id: string;
+  date: string; // ISO Date String YYYY-MM-DD
+  foodId: string;
+  foodName: string; // Cached name in case library changes
+  meal: MealType;
+  grams: number;
+  calculated: {
+    calories: number;
+    protein: number;
+    carbs: number;
+    fat: number;
+  };
+}
+
+export interface DayStats {
+  date: string;
+  totalCalories: number;
+  totalProtein: number;
+  totalCarbs: number;
+  totalFat: number;
+}
