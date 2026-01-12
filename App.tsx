@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { User, onAuthStateChanged } from 'firebase/auth';
-import { auth } from './src/firebase';
+import { collection, query, where, onSnapshot, setDoc, deleteDoc, doc } from 'firebase/firestore';
+import { auth, db } from './src/firebase';
 import Login from './src/components/Login';
 import { Icons } from './components/ui/Icons';
 import Dashboard from './components/Dashboard';
@@ -22,10 +23,7 @@ function App() {
       return saved ? JSON.parse(saved) : INITIAL_FOODS;
    });
 
-   const [logs, setLogs] = useState<LogEntry[]>(() => {
-      const saved = localStorage.getItem('macrotrack_logs');
-      return saved ? JSON.parse(saved) : [];
-   });
+   const [logs, setLogs] = useState<LogEntry[]>([]);
 
    useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -35,20 +33,53 @@ function App() {
       return () => unsubscribe();
    }, []);
 
+   // Listen for daily_logs from Firestore
+   useEffect(() => {
+      if (!user) {
+         setLogs([]);
+         return;
+      }
+
+      const q = query(collection(db, 'daily_logs'), where('userId', '==', user.uid));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+         const fetchedLogs: LogEntry[] = [];
+         snapshot.forEach((doc) => {
+            fetchedLogs.push(doc.data() as LogEntry);
+         });
+         // Sort logs by date/time if needed, or by creation
+         setLogs(fetchedLogs);
+      });
+
+      return () => unsubscribe();
+   }, [user]);
+
    useEffect(() => {
       localStorage.setItem('macrotrack_foods', JSON.stringify(foods));
    }, [foods]);
-
-   useEffect(() => {
-      localStorage.setItem('macrotrack_logs', JSON.stringify(logs));
-   }, [logs]);
 
    // Handlers
    const addFood = (food: Food) => setFoods([...foods, food]);
    const deleteFood = (id: string) => setFoods(foods.filter(f => f.id !== id));
 
-   const addLog = (log: LogEntry) => setLogs([...logs, log]);
-   const deleteLog = (id: string) => setLogs(logs.filter(l => l.id !== id));
+   const addLog = async (log: LogEntry) => {
+      if (!user) return;
+      try {
+         // Add userId to the log entry before saving
+         const logWithUser = { ...log, userId: user.uid };
+         await setDoc(doc(db, 'daily_logs', log.id), logWithUser);
+      } catch (error) {
+         console.error("Error adding log:", error);
+      }
+   };
+
+   const deleteLog = async (id: string) => {
+      if (!user) return;
+      try {
+         await deleteDoc(doc(db, 'daily_logs', id));
+      } catch (error) {
+         console.error("Error deleting log:", error);
+      }
+   };
 
    if (loading) {
       return <div className="min-h-screen bg-background flex items-center justify-center text-white">Loading...</div>;
