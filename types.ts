@@ -3,11 +3,13 @@ export type MealType = 'Desayuno' | 'Almuerzo' | 'Comida' | 'Merienda' | 'Cena';
 export interface Food {
   id: string;
   name: string;
+  brand?: string; // Optional brand name
   category: string; // New field for organization
   calories: number; // per 100g
   protein: number; // per 100g
   carbs: number; // per 100g
   fat: number; // per 100g
+  userId?: string; // Present if user-created food
 }
 
 export interface LogEntry {

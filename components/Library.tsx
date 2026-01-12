@@ -14,9 +14,10 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
-  
-  const [newFood, setNewFood] = useState<Omit<Food, 'id'>>({
+
+  const [newFood, setNewFood] = useState<Omit<Food, 'id' | 'userId'>>({
     name: '',
+    brand: '',
     category: 'Otros', // Default
     calories: 0,
     protein: 0,
@@ -44,7 +45,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
     onAddFood({ ...newFood, id: Date.now().toString() });
     setIsAdding(false);
     // Reset form but keep category if user wants to add multiple to same
-    setNewFood({ ...newFood, name: '', calories: 0, protein: 0, carbs: 0, fat: 0 });
+    setNewFood({ ...newFood, name: '', brand: '', calories: 0, protein: 0, carbs: 0, fat: 0 });
   };
 
   // Helper to get Icon based on category name
@@ -81,7 +82,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
       case "Bebidas": return Icons.GlassWater;
       case "Alimentos Fermentados": return Icons.Wine;
       case "Procesados": return Icons.Package;
-      
+
       default: return Icons.Folder;
     }
   };
@@ -95,20 +96,20 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-3">
           {selectedCategory && !isSearching && (
-             <button 
-                onClick={() => setSelectedCategory(null)}
-                className="bg-surfaceHighlight hover:bg-gray-700 p-2 rounded-lg transition-colors"
-             >
-                <Icons.Back size={20} />
-             </button>
+            <button
+              onClick={() => setSelectedCategory(null)}
+              className="bg-surfaceHighlight hover:bg-gray-700 p-2 rounded-lg transition-colors"
+            >
+              <Icons.Back size={20} />
+            </button>
           )}
           <div>
             <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                <Icons.Fridge className="text-primary" />
-                {isSearching ? 'Buscando...' : selectedCategory || 'Nevera'}
+              <Icons.Fridge className="text-primary" />
+              {isSearching ? 'Buscando...' : selectedCategory || 'Nevera'}
             </h2>
             <p className="text-gray-400 text-sm">
-                {selectedCategory ? 'Explorando carpeta' : 'Organiza tus alimentos por carpetas'}
+              {selectedCategory ? 'Explorando carpeta' : 'Organiza tus alimentos por carpetas'}
             </p>
           </div>
         </div>
@@ -135,26 +136,37 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
               placeholder="Ej. Pechuga de Pavo"
             />
           </div>
-          
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-400 mb-1">Marca (Opcional)</label>
+            <input
+              type="text"
+              value={newFood.brand}
+              onChange={(e) => setNewFood({ ...newFood, brand: e.target.value })}
+              className="w-full bg-background border border-surfaceHighlight rounded-lg p-3 text-white focus:outline-none focus:border-primary"
+              placeholder="Ej. Hacendado, Carrefour..."
+            />
+          </div>
+
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-400 mb-1">Carpeta / Categoría</label>
             <div className="relative">
-                <Icons.ChevronDown className="absolute right-3 top-3.5 text-gray-500 pointer-events-none" size={16} />
-                <select
+              <Icons.ChevronDown className="absolute right-3 top-3.5 text-gray-500 pointer-events-none" size={16} />
+              <select
                 required
                 value={newFood.category}
                 onChange={(e) => setNewFood({ ...newFood, category: e.target.value })}
                 className="w-full bg-background border border-surfaceHighlight rounded-lg p-3 text-white appearance-none focus:outline-none focus:border-primary"
-                >
+              >
                 <option value="" disabled>Selecciona una carpeta...</option>
                 {Object.entries(FOOD_CATEGORIES).map(([group, subcategories]) => (
-                    <optgroup key={group} label={group}>
-                        {subcategories.map(sub => (
-                            <option key={sub} value={sub}>{sub}</option>
-                        ))}
-                    </optgroup>
+                  <optgroup key={group} label={group}>
+                    {subcategories.map(sub => (
+                      <option key={sub} value={sub}>{sub}</option>
+                    ))}
+                  </optgroup>
                 ))}
-                </select>
+              </select>
             </div>
           </div>
 
@@ -229,34 +241,34 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
       {/* VIEW: Folder Grid (Default when not searching and no category selected) */}
       {!isSearching && !selectedCategory && (
         <div className="space-y-8">
-            {Object.entries(FOOD_CATEGORIES).map(([group, subcategories]) => (
-                <div key={group}>
-                    <h3 className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-4 border-b border-surfaceHighlight/50 pb-2">{group}</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {subcategories.map(sub => {
-                            // Optional: Count items in category
-                            const count = foods.filter(f => f.category === sub).length;
-                            const IconComponent = getCategoryIcon(sub);
-                            
-                            return (
-                                <button 
-                                    key={sub}
-                                    onClick={() => setSelectedCategory(sub)}
-                                    className="bg-surface p-4 rounded-xl border border-surfaceHighlight hover:border-primary/50 hover:bg-surfaceHighlight/50 transition-all flex flex-col items-center justify-center gap-3 text-center group h-32"
-                                >
-                                    <div className="p-3 bg-surfaceHighlight rounded-full group-hover:bg-primary group-hover:text-black transition-colors text-gray-400">
-                                        <IconComponent size={24} />
-                                    </div>
-                                    <div>
-                                        <span className="text-sm font-medium text-white block">{sub}</span>
-                                        <span className="text-xs text-gray-500">{count} alimentos</span>
-                                    </div>
-                                </button>
-                            );
-                        })}
-                    </div>
-                </div>
-            ))}
+          {Object.entries(FOOD_CATEGORIES).map(([group, subcategories]) => (
+            <div key={group}>
+              <h3 className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-4 border-b border-surfaceHighlight/50 pb-2">{group}</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {subcategories.map(sub => {
+                  // Optional: Count items in category
+                  const count = foods.filter(f => f.category === sub).length;
+                  const IconComponent = getCategoryIcon(sub);
+
+                  return (
+                    <button
+                      key={sub}
+                      onClick={() => setSelectedCategory(sub)}
+                      className="bg-surface p-4 rounded-xl border border-surfaceHighlight hover:border-primary/50 hover:bg-surfaceHighlight/50 transition-all flex flex-col items-center justify-center gap-3 text-center group h-32"
+                    >
+                      <div className="p-3 bg-surfaceHighlight rounded-full group-hover:bg-primary group-hover:text-black transition-colors text-gray-400">
+                        <IconComponent size={24} />
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium text-white block">{sub}</span>
+                        <span className="text-xs text-gray-500">{count} alimentos</span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
@@ -268,8 +280,8 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
               <div key={food.id} className="bg-surface p-4 rounded-xl border border-surfaceHighlight hover:border-gray-600 transition-colors group relative">
                 <div className="flex justify-between items-start mb-2">
                   <div className="pr-6">
-                     <h3 className="font-semibold text-white truncate">{food.name}</h3>
-                     {isSearching && <span className="text-[10px] text-gray-500 bg-surfaceHighlight px-2 py-0.5 rounded-full">{food.category}</span>}
+                    <h3 className="font-semibold text-white truncate">{food.name}</h3>
+                    {isSearching && <span className="text-[10px] text-gray-500 bg-surfaceHighlight px-2 py-0.5 rounded-full">{food.category}</span>}
                   </div>
                   <button
                     onClick={() => onDeleteFood(food.id)}
@@ -290,15 +302,15 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
             ))
           ) : (
             <div className="col-span-full py-12 text-center text-gray-500 flex flex-col items-center gap-2">
-                {selectedCategory && (
-                    <>
-                         {React.createElement(getCategoryIcon(selectedCategory), { size: 48, className: "text-gray-700" })}
-                         <p>No hay alimentos en la carpeta {selectedCategory}.</p>
-                    </>
-                )}
-                {isSearching && <p>No se encontraron alimentos.</p>}
-                
-                <button onClick={() => setIsAdding(true)} className="text-primary hover:underline text-sm">Crear nuevo alimento aquí</button>
+              {selectedCategory && (
+                <>
+                  {React.createElement(getCategoryIcon(selectedCategory), { size: 48, className: "text-gray-700" })}
+                  <p>No hay alimentos en la carpeta {selectedCategory}.</p>
+                </>
+              )}
+              {isSearching && <p>No se encontraron alimentos.</p>}
+
+              <button onClick={() => setIsAdding(true)} className="text-primary hover:underline text-sm">Crear nuevo alimento aquí</button>
             </div>
           )}
         </div>

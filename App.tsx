@@ -19,10 +19,8 @@ function App() {
    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
    // Persistent State
-   const [foods, setFoods] = useState<Food[]>(() => {
-      const saved = localStorage.getItem('macrotrack_foods');
-      return saved ? JSON.parse(saved) : INITIAL_FOODS;
-   });
+   const [userFoods, setUserFoods] = useState<Food[]>([]);
+   const foods = [...INITIAL_FOODS, ...userFoods]; // Combine static and user foods
 
    const [logs, setLogs] = useState<LogEntry[]>([]);
 
@@ -65,13 +63,50 @@ function App() {
       return () => unsubscribe();
    }, [user, currentView, selectedDate]);
 
+   // Listen for user_foods from Firestore
    useEffect(() => {
-      localStorage.setItem('macrotrack_foods', JSON.stringify(foods));
-   }, [foods]);
+      if (!user) {
+         setUserFoods([]);
+         return;
+      }
+
+      const q = query(collection(db, 'user_foods'), where('userId', '==', user.uid));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+         const fetchedFoods: Food[] = [];
+         snapshot.forEach((doc) => {
+            fetchedFoods.push(doc.data() as Food);
+         });
+         setUserFoods(fetchedFoods);
+      });
+
+      return () => unsubscribe();
+   }, [user]);
 
    // Handlers
-   const addFood = (food: Food) => setFoods([...foods, food]);
-   const deleteFood = (id: string) => setFoods(foods.filter(f => f.id !== id));
+   const addFood = async (food: Food) => {
+      if (!user) return;
+      try {
+         const foodWithUser = { ...food, userId: user.uid };
+         await setDoc(doc(db, 'user_foods', food.id), foodWithUser);
+      } catch (error) {
+         console.error("Error adding food:", error);
+      }
+   };
+
+   const deleteFood = async (id: string) => {
+      if (!user) return;
+      // Only allow deleting user-created foods
+      const foodToDelete = foods.find(f => f.id === id);
+      if (!foodToDelete?.userId) {
+         console.warn("Cannot delete static food");
+         return;
+      }
+      try {
+         await deleteDoc(doc(db, 'user_foods', id));
+      } catch (error) {
+         console.error("Error deleting food:", error);
+      }
+   };
 
    const addLog = async (log: LogEntry) => {
       if (!user) return;
