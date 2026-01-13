@@ -5,6 +5,7 @@ export interface Food {
   name: string;
   brand?: string; // Optional brand name
   category: string; // New field for organization
+  subCategory?: string; // Optional sub-grouping
   calories: number; // per 100g
   protein: number; // per 100g
   carbs: number; // per 100g

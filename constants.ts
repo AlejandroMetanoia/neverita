@@ -45,11 +45,20 @@ export const FOOD_CATEGORIES = {
   ]
 };
 
+export const SUB_CATEGORIES: Record<string, string[]> = {
+  "Cereales": [
+    "Grano Entero",
+    "Cereal Procesado",
+    "Cereal Molido",
+    "Cereal Fermentado"
+  ]
+};
+
 export const INITIAL_FOODS: Food[] = [
   { id: '1', name: 'Filetes de Pollo', category: 'Carnes Blancas', calories: 110, protein: 23, carbs: 0, fat: 1.9 },
-  { id: '2', name: 'Arroz Blanco (Cocido)', category: 'Cereales', calories: 130, protein: 2.7, carbs: 28, fat: 0.3 },
+  { id: '2', name: 'Arroz Blanco (Cocido)', category: 'Cereales', subCategory: 'Cereal Procesado', calories: 130, protein: 2.7, carbs: 28, fat: 0.3 },
   { id: '3', name: 'Huevo Mediano', category: 'Huevos', calories: 155, protein: 13, carbs: 1.1, fat: 11 },
-  { id: '4', name: 'Avena', category: 'Cereales', calories: 389, protein: 16.9, carbs: 66, fat: 6.9 },
+  { id: '4', name: 'Avena', category: 'Cereales', subCategory: 'Grano Entero', calories: 389, protein: 16.9, carbs: 66, fat: 6.9 },
   { id: '5', name: 'Aguacate', category: 'Grasas de Frutas', calories: 160, protein: 2, carbs: 8.5, fat: 15 },
   { id: '6', name: 'Proteína Whey (Polvo)', category: 'Procesados', calories: 370, protein: 78, carbs: 6, fat: 4 },
   { id: '7', name: 'Manzana', category: 'Frutas', calories: 52, protein: 0.3, carbs: 14, fat: 0.2 },
