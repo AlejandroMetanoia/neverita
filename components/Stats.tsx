@@ -8,7 +8,7 @@ interface StatsProps {
 
 const Stats: React.FC<StatsProps> = ({ logs }) => {
     const weeklyData = useMemo(() => {
-        const data: Record<string, { date: string; calories: number; protein: number; carbs: number; fat: number }> = {};
+        const data: Record<string, { date: string; calories: number; protein: number; carbs: number; fat: number; hasRecord: boolean }> = {};
 
         // Get current week's Monday
         const today = new Date();
@@ -22,7 +22,11 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
         for (let i = 0; i < 7; i++) {
             const d = new Date(monday);
             d.setDate(monday.getDate() + i);
-            const dateStr = d.toISOString().split('T')[0];
+            const dateStr = [
+                d.getFullYear(),
+                String(d.getMonth() + 1).padStart(2, '0'),
+                String(d.getDate()).padStart(2, '0')
+            ].join('-');
             // Short format for label "Lun", "Mar", etc.
             const label = d.toLocaleDateString('es-ES', { weekday: 'short' });
 
@@ -31,7 +35,8 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
                 calories: 0,
                 protein: 0,
                 carbs: 0,
-                fat: 0
+                fat: 0,
+                hasRecord: false
             };
         }
 
@@ -41,6 +46,7 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
                 data[log.date].protein += log.calculated.protein;
                 data[log.date].carbs += log.calculated.carbs;
                 data[log.date].fat += log.calculated.fat;
+                data[log.date].hasRecord = true;
             }
         });
 
@@ -48,8 +54,10 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
     }, [logs]);
 
     const averages = useMemo(() => {
-        const totalDays = weeklyData.length;
-        const sums = weeklyData.reduce((acc, curr) => ({
+        const daysWithRecords = weeklyData.filter(day => day.hasRecord);
+        const totalDays = daysWithRecords.length || 1; // Prevent division by zero
+
+        const sums = daysWithRecords.reduce((acc, curr) => ({
             calories: acc.calories + curr.calories,
             protein: acc.protein + curr.protein,
             carbs: acc.carbs + curr.carbs,
