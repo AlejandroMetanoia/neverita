@@ -14,13 +14,22 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLog, selectedDate, onDateChange }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [entryMode, setEntryMode] = useState<'search' | 'manual' | null>(null);
 
     // Modal State
     const [selectedFoodId, setSelectedFoodId] = useState('');
     const [grams, setGrams] = useState<number>(100);
     const [mealType, setMealType] = useState<MealType>('Desayuno');
     const [foodSearch, setFoodSearch] = useState('');
+
+    // Manual Entry State
+    const [manualEntry, setManualEntry] = useState({
+        calories: 0,
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+        name: 'Comida Fuera'
+    });
 
     // Daily Stats Calculation - logs are already filtered by App.tsx
     const dailyLogs = logs;
@@ -55,23 +64,44 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
 
     const handleAddLog = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!selectedFood || !calculatedMacros) return;
 
-        const newLog: LogEntry = {
-            id: Date.now().toString(),
-            date: selectedDate,
-            foodId: selectedFood.id,
-            foodName: selectedFood.name,
-            meal: mealType,
-            grams: grams,
-            calculated: calculatedMacros
-        };
+        let newLog: LogEntry;
+
+        if (entryMode === 'search') {
+            if (!selectedFood || !calculatedMacros) return;
+            newLog = {
+                id: Date.now().toString(),
+                date: selectedDate,
+                foodId: selectedFood.id,
+                foodName: selectedFood.name,
+                meal: mealType,
+                grams: grams,
+                calculated: calculatedMacros
+            };
+        } else {
+            // Manual Mode
+            newLog = {
+                id: Date.now().toString(),
+                date: selectedDate,
+                foodId: `manual-${Date.now()}`,
+                foodName: manualEntry.name || "Comida Fuera",
+                meal: mealType,
+                grams: 1, // Dummy value
+                calculated: {
+                    calories: manualEntry.calories,
+                    protein: manualEntry.protein,
+                    carbs: manualEntry.carbs,
+                    fat: manualEntry.fat
+                }
+            };
+        }
 
         onAddLog(newLog);
-        setIsModalOpen(false);
+        setEntryMode(null);
         // Reset minimal state
         setGrams(100);
         setFoodSearch('');
+        setManualEntry({ calories: 0, protein: 0, carbs: 0, fat: 0, name: 'Comida Fuera' });
     };
 
     const filteredFoods = foods.filter(f =>
@@ -184,14 +214,23 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                 </div>
             </div>
 
-            {/* Add Button */}
-            <button
-                onClick={() => setIsModalOpen(true)}
-                className="w-full py-4 bg-primary hover:bg-gray-200 rounded-2xl text-black font-bold text-lg shadow-lg hover:shadow-gray-500/20 transition-all flex items-center justify-center gap-2"
-            >
-                <Icons.Plus size={24} />
-                Añadir Alimento
-            </button>
+            {/* Add Buttons */}
+            <div className="flex flex-col gap-3">
+                <button
+                    onClick={() => setEntryMode('search')}
+                    className="w-full py-4 bg-primary hover:bg-gray-200 rounded-2xl text-black font-bold text-lg shadow-lg hover:shadow-gray-500/20 transition-all flex items-center justify-center gap-2"
+                >
+                    <Icons.Plus size={24} />
+                    Añadir Alimento
+                </button>
+                <button
+                    onClick={() => setEntryMode('manual')}
+                    className="w-full py-3 bg-surfaceHighlight hover:bg-gray-700 rounded-xl text-gray-300 font-semibold text-base transition-all flex items-center justify-center gap-2"
+                >
+                    <Icons.Plus size={18} />
+                    Comida Fuera
+                </button>
+            </div>
 
             {/* Log List by Meal */}
             <div className="space-y-6">
@@ -242,106 +281,180 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
             </div>
 
             {/* Modal */}
-            {isModalOpen && (
+            {entryMode && (
                 <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                     <div className="bg-surface w-full max-w-lg rounded-2xl border border-surfaceHighlight shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
                         <div className="p-6 border-b border-surfaceHighlight flex justify-between items-center">
-                            <h3 className="text-xl font-bold text-white">Calculadora</h3>
-                            <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-white"><Icons.Plus className="rotate-45" /></button>
+                            <h3 className="text-xl font-bold text-white">{entryMode === 'search' ? 'Calculadora' : 'Comida Fuera'}</h3>
+                            <button onClick={() => setEntryMode(null)} className="text-gray-400 hover:text-white"><Icons.Plus className="rotate-45" /></button>
                         </div>
 
                         <div className="p-6 space-y-6">
-                            {/* Food Selector */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-400 mb-2">1. Buscar Alimento</label>
-                                <div className="relative">
-                                    <Icons.Search className="absolute left-3 top-3 text-gray-500" size={18} />
-                                    <input
-                                        type="text"
-                                        placeholder="Escribe para buscar..."
-                                        value={foodSearch}
-                                        onChange={(e) => {
-                                            setFoodSearch(e.target.value);
-                                            setSelectedFoodId(''); // Reset selection on search
-                                        }}
-                                        className="w-full bg-background border border-surfaceHighlight rounded-lg pl-10 pr-4 py-2.5 text-white focus:outline-none focus:border-primary"
-                                    />
-                                </div>
-                                {foodSearch && !selectedFoodId && (
-                                    <div className="mt-2 max-h-40 overflow-y-auto bg-background border border-surfaceHighlight rounded-lg">
-                                        {filteredFoods.map(f => (
-                                            <div
-                                                key={f.id}
-                                                onClick={() => {
-                                                    setSelectedFoodId(f.id);
-                                                    setFoodSearch(f.name);
+                            {entryMode === 'search' ? (
+                                <>
+                                    {/* Food Selector */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-400 mb-2">1. Buscar Alimento</label>
+                                        <div className="relative">
+                                            <Icons.Search className="absolute left-3 top-3 text-gray-500" size={18} />
+                                            <input
+                                                type="text"
+                                                placeholder="Escribe para buscar..."
+                                                value={foodSearch}
+                                                onChange={(e) => {
+                                                    setFoodSearch(e.target.value);
+                                                    setSelectedFoodId(''); // Reset selection on search
                                                 }}
-                                                className="p-3 hover:bg-surfaceHighlight cursor-pointer text-sm text-gray-200 flex justify-between"
-                                            >
-                                                <span>{f.name}</span>
-                                                <span className="text-gray-500">{f.calories} kcal/100g</span>
+                                                className="w-full bg-background border border-surfaceHighlight rounded-lg pl-10 pr-4 py-2.5 text-white focus:outline-none focus:border-primary"
+                                            />
+                                        </div>
+                                        {foodSearch && !selectedFoodId && (
+                                            <div className="mt-2 max-h-40 overflow-y-auto bg-background border border-surfaceHighlight rounded-lg">
+                                                {filteredFoods.map(f => (
+                                                    <div
+                                                        key={f.id}
+                                                        onClick={() => {
+                                                            setSelectedFoodId(f.id);
+                                                            setFoodSearch(f.name);
+                                                        }}
+                                                        className="p-3 hover:bg-surfaceHighlight cursor-pointer text-sm text-gray-200 flex justify-between"
+                                                    >
+                                                        <span>{f.name}</span>
+                                                        <span className="text-gray-500">{f.calories} kcal/100g</span>
+                                                    </div>
+                                                ))}
+                                                {filteredFoods.length === 0 && <div className="p-3 text-sm text-gray-500">No encontrado</div>}
                                             </div>
-                                        ))}
-                                        {filteredFoods.length === 0 && <div className="p-3 text-sm text-gray-500">No encontrado</div>}
+                                        )}
                                     </div>
-                                )}
-                            </div>
 
-                            <div className="grid grid-cols-2 gap-4">
-                                {/* Grams Input */}
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-400 mb-2">2. Cantidad (g)</label>
-                                    <input
-                                        type="number"
-                                        value={grams}
-                                        onChange={(e) => setGrams(parseFloat(e.target.value) || 0)}
-                                        className="w-full bg-background border border-surfaceHighlight rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary"
-                                    />
-                                </div>
-                                {/* Meal Select */}
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-400 mb-2">3. Comida</label>
-                                    <select
-                                        value={mealType}
-                                        onChange={(e) => setMealType(e.target.value as MealType)}
-                                        className="w-full bg-background border border-surfaceHighlight rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary appearance-none"
-                                    >
-                                        {MEAL_TYPES.map(m => <option key={m} value={m}>{m}</option>)}
-                                    </select>
-                                </div>
-                            </div>
-
-                            {/* Live Calculator Result */}
-                            {calculatedMacros && (
-                                <div className="bg-surfaceHighlight/30 rounded-xl p-4 border border-dashed border-gray-700">
-                                    <p className="text-xs text-gray-400 uppercase tracking-wider mb-2 text-center">Resultado Automático</p>
-                                    <div className="grid grid-cols-4 gap-2 text-center">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {/* Grams Input */}
                                         <div>
-                                            <p className="text-lg font-bold text-white">{calculatedMacros.calories}</p>
-                                            <p className="text-[10px] text-gray-500">Kcal</p>
+                                            <label className="block text-sm font-medium text-gray-400 mb-2">2. Cantidad (g)</label>
+                                            <input
+                                                type="number"
+                                                value={grams}
+                                                onChange={(e) => setGrams(parseFloat(e.target.value) || 0)}
+                                                className="w-full bg-background border border-surfaceHighlight rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary"
+                                            />
                                         </div>
+                                        {/* Meal Select */}
                                         <div>
-                                            <p className="text-lg font-bold text-emerald-400">{calculatedMacros.protein}g</p>
-                                            <p className="text-[10px] text-gray-500">Prot</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-lg font-bold text-orange-400">{calculatedMacros.carbs}g</p>
-                                            <p className="text-[10px] text-gray-500">Carbs</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-lg font-bold text-yellow-400">{calculatedMacros.fat}g</p>
-                                            <p className="text-[10px] text-gray-500">Grasa</p>
+                                            <label className="block text-sm font-medium text-gray-400 mb-2">3. Comida</label>
+                                            <select
+                                                value={mealType}
+                                                onChange={(e) => setMealType(e.target.value as MealType)}
+                                                className="w-full bg-background border border-surfaceHighlight rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary appearance-none"
+                                            >
+                                                {MEAL_TYPES.map(m => <option key={m} value={m}>{m}</option>)}
+                                            </select>
                                         </div>
                                     </div>
-                                </div>
+
+                                    {/* Live Calculator Result */}
+                                    {calculatedMacros && (
+                                        <div className="bg-surfaceHighlight/30 rounded-xl p-4 border border-dashed border-gray-700">
+                                            <p className="text-xs text-gray-400 uppercase tracking-wider mb-2 text-center">Resultado Automático</p>
+                                            <div className="grid grid-cols-4 gap-2 text-center">
+                                                <div>
+                                                    <p className="text-lg font-bold text-white">{calculatedMacros.calories}</p>
+                                                    <p className="text-[10px] text-gray-500">Kcal</p>
+                                                </div>
+                                                <div>
+                                                    <p className="text-lg font-bold text-emerald-400">{calculatedMacros.protein}g</p>
+                                                    <p className="text-[10px] text-gray-500">Prot</p>
+                                                </div>
+                                                <div>
+                                                    <p className="text-lg font-bold text-orange-400">{calculatedMacros.carbs}g</p>
+                                                    <p className="text-[10px] text-gray-500">Carbs</p>
+                                                </div>
+                                                <div>
+                                                    <p className="text-lg font-bold text-yellow-400">{calculatedMacros.fat}g</p>
+                                                    <p className="text-[10px] text-gray-500">Grasa</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </>
+                            ) : (
+                                /* MANUAL MODE */
+                                <>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-400 mb-2">Nombre del plato (Opcional)</label>
+                                        <input
+                                            type="text"
+                                            value={manualEntry.name}
+                                            onChange={(e) => setManualEntry({ ...manualEntry, name: e.target.value })}
+                                            className="w-full bg-background border border-surfaceHighlight rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary"
+                                            placeholder="Ej. Comida con amigos"
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-400 mb-2">Calorías</label>
+                                            <input
+                                                type="number"
+                                                value={manualEntry.calories || ''}
+                                                onChange={(e) => setManualEntry({ ...manualEntry, calories: parseFloat(e.target.value) || 0 })}
+                                                className="w-full bg-background border border-surfaceHighlight rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary"
+                                                placeholder="0"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-400 mb-2">Comida</label>
+                                            <select
+                                                value={mealType}
+                                                onChange={(e) => setMealType(e.target.value as MealType)}
+                                                className="w-full bg-background border border-surfaceHighlight rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary appearance-none"
+                                            >
+                                                {MEAL_TYPES.map(m => <option key={m} value={m}>{m}</option>)}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-emerald-400 mb-2">Proteína (g)</label>
+                                            <input
+                                                type="number"
+                                                value={manualEntry.protein || ''}
+                                                onChange={(e) => setManualEntry({ ...manualEntry, protein: parseFloat(e.target.value) || 0 })}
+                                                className="w-full bg-background border border-surfaceHighlight rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500"
+                                                placeholder="0"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-orange-400 mb-2">Carbs (g)</label>
+                                            <input
+                                                type="number"
+                                                value={manualEntry.carbs || ''}
+                                                onChange={(e) => setManualEntry({ ...manualEntry, carbs: parseFloat(e.target.value) || 0 })}
+                                                className="w-full bg-background border border-surfaceHighlight rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-orange-500"
+                                                placeholder="0"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-yellow-400 mb-2">Grasa (g)</label>
+                                            <input
+                                                type="number"
+                                                value={manualEntry.fat || ''}
+                                                onChange={(e) => setManualEntry({ ...manualEntry, fat: parseFloat(e.target.value) || 0 })}
+                                                className="w-full bg-background border border-surfaceHighlight rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-yellow-500"
+                                                placeholder="0"
+                                            />
+                                        </div>
+                                    </div>
+                                </>
                             )}
 
                             <button
                                 onClick={handleAddLog}
-                                disabled={!selectedFood}
+                                disabled={entryMode === 'search' && !selectedFood}
                                 className="w-full bg-primary hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold py-3 rounded-xl transition-colors"
                             >
-                                Añadir al Diario
+                                {entryMode === 'search' ? 'Añadir al Diario' : 'Registrar Comida'}
                             </button>
                         </div>
                     </div>
