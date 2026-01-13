@@ -180,6 +180,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
               value={newFood.calories || ''}
               onChange={(e) => setNewFood({ ...newFood, calories: parseFloat(e.target.value) || 0 })}
               className="w-full bg-background border border-surfaceHighlight rounded-lg p-3 text-white focus:outline-none focus:border-primary"
+              placeholder="0"
             />
           </div>
           <div>
@@ -192,6 +193,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
               value={newFood.protein || ''}
               onChange={(e) => setNewFood({ ...newFood, protein: parseFloat(e.target.value) || 0 })}
               className="w-full bg-background border border-surfaceHighlight rounded-lg p-3 text-white focus:outline-none focus:border-primary"
+              placeholder="0"
             />
           </div>
           <div>
@@ -204,6 +206,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
               value={newFood.carbs || ''}
               onChange={(e) => setNewFood({ ...newFood, carbs: parseFloat(e.target.value) || 0 })}
               className="w-full bg-background border border-surfaceHighlight rounded-lg p-3 text-white focus:outline-none focus:border-primary"
+              placeholder="0"
             />
           </div>
           <div>
@@ -216,6 +219,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
               value={newFood.fat || ''}
               onChange={(e) => setNewFood({ ...newFood, fat: parseFloat(e.target.value) || 0 })}
               className="w-full bg-background border border-surfaceHighlight rounded-lg p-3 text-white focus:outline-none focus:border-primary"
+              placeholder="0"
             />
           </div>
           <button
