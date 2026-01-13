@@ -1,12 +1,12 @@
-import { 
-  Plus, 
-  Trash2, 
-  Search, 
-  ChevronRight, 
-  ChevronLeft, 
-  Utensils, 
-  BookOpen, 
-  BarChart3, 
+import {
+  Plus,
+  Trash2,
+  Search,
+  ChevronRight,
+  ChevronLeft,
+  Utensils,
+  BookOpen,
+  BarChart3,
   LayoutDashboard,
   Flame,
   Beef,
@@ -36,7 +36,8 @@ import {
   Leaf,
   Croissant,
   Coffee,
-  Calendar
+  Calendar,
+  Sparkles
 } from 'lucide-react';
 
 export const Icons = {
@@ -78,5 +79,6 @@ export const Icons = {
   Leaf,
   Croissant,
   Coffee,
-  Calendar
+  Calendar,
+  Sparkles
 };

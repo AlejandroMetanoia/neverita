@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Food, LogEntry, MealType } from '../types';
 import { MEAL_TYPES, MEAL_COLORS } from '../constants';
 import { Icons } from './ui/Icons';
@@ -14,7 +15,13 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLog, selectedDate, onDateChange }) => {
-    const [entryMode, setEntryMode] = useState<'search' | 'manual' | null>(null);
+    const [entryMode, setEntryMode] = useState<'search' | 'manual' | 'ai' | null>(null);
+
+    // AI State
+    const [aiDescription, setAiDescription] = useState('');
+    const [aiImage, setAiImage] = useState<string | null>(null);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Modal State
     const [selectedFoodId, setSelectedFoodId] = useState('');
@@ -102,6 +109,78 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
         setGrams(100);
         setFoodSearch('');
         setManualEntry({ calories: 0, protein: 0, carbs: 0, fat: 0, name: 'Comida Fuera' });
+    };
+
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setAiImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleAnalyze = async () => {
+        setIsAnalyzing(true);
+        try {
+            const apiKey = import.meta.env.GEMINI_API_NEVERITA;
+            if (!apiKey) {
+                alert("API Key not found (GEMINI_API_NEVERITA)");
+                setIsAnalyzing(false);
+                return;
+            }
+
+            const genAI = new GoogleGenerativeAI(apiKey);
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+            const prompt = `Act as an expert nutritionist. Estimate the macros (kcal, protein, carbs, fat) per 100g of the described or photographed dish.
+            Description: ${aiDescription}
+            
+            IMPORTANT: Return ONLY a raw JSON object (no markdown formatting, no code blocks) with this exact format:
+            {"kcal": 0, "proteinas": 0, "carbohidratos": 0, "grasas": 0}`;
+
+            let result;
+            if (aiImage) {
+                const base64Data = aiImage.split(',')[1];
+                const imagePart = {
+                    inlineData: {
+                        data: base64Data,
+                        mimeType: "image/jpeg"
+                    },
+                };
+                result = await model.generateContent([prompt, imagePart]);
+            } else {
+                result = await model.generateContent(prompt);
+            }
+
+            const response = result.response;
+            const text = response.text();
+
+            // Cleanup
+            const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
+            const data = JSON.parse(jsonStr);
+
+            setManualEntry({
+                name: aiDescription || 'Plato analizado',
+                calories: data.kcal || 0,
+                protein: data.proteinas || 0,
+                carbs: data.carbohidratos || 0,
+                fat: data.grasas || 0
+            });
+            setEntryMode('manual');
+
+            // Reset AI state
+            setAiDescription('');
+            setAiImage(null);
+
+        } catch (error) {
+            console.error("Error analyzing food:", error);
+            alert("Error al analizar. Por favor intenta de nuevo.");
+        } finally {
+            setIsAnalyzing(false);
+        }
     };
 
     const filteredFoods = foods.filter(f =>
@@ -229,6 +308,13 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                 >
                     <Icons.Plus size={18} />
                     Comida Fuera
+                </button>
+                <button
+                    onClick={() => setEntryMode('ai')}
+                    className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-xl text-white font-semibold text-base transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-purple-500/20"
+                >
+                    <Icons.Sparkles size={18} />
+                    Ayuda IA
                 </button>
             </div>
 
@@ -455,6 +541,87 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                 className="w-full bg-primary hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold py-3 rounded-xl transition-colors"
                             >
                                 {entryMode === 'search' ? 'Añadir al Diario' : 'Registrar Comida'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* AI Modal */}
+            {entryMode === 'ai' && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-surface w-full max-w-lg rounded-2xl border border-surfaceHighlight shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+                        <div className="p-6 border-b border-surfaceHighlight flex justify-between items-center">
+                            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                                <Icons.Sparkles className="text-purple-400" />
+                                Asistente Nutricional
+                            </h3>
+                            <button onClick={() => setEntryMode(null)} className="text-gray-400 hover:text-white"><Icons.Plus className="rotate-45" /></button>
+                        </div>
+
+                        <div className="p-6 space-y-6">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-400 mb-2">Describe tu plato</label>
+                                <textarea
+                                    value={aiDescription}
+                                    onChange={(e) => setAiDescription(e.target.value)}
+                                    placeholder="Ej: Filete a la vilaroy con patatas..."
+                                    className="w-full bg-background border border-surfaceHighlight rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 min-h-[100px] resize-none"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-400 mb-2">O sube una foto</label>
+                                <div
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="border-2 border-dashed border-surfaceHighlight hover:border-purple-500 rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition-colors bg-background/50"
+                                >
+                                    {aiImage ? (
+                                        <div className="relative w-full h-48">
+                                            <img src={aiImage} alt="Preview" className="w-full h-full object-contain rounded-lg" />
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setAiImage(null);
+                                                }}
+                                                className="absolute top-2 right-2 p-1 bg-black/50 rounded-full hover:bg-red-500/80 text-white transition-colors"
+                                            >
+                                                <Icons.Trash size={16} />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <Icons.Sparkles className="text-gray-500 mb-2" size={32} />
+                                            <p className="text-sm text-gray-400">Clic para subir foto or tomar foto</p>
+                                        </>
+                                    )}
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        className="hidden"
+                                        accept="image/*"
+                                        capture="environment"
+                                        onChange={handleImageUpload}
+                                    />
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={handleAnalyze}
+                                disabled={isAnalyzing || (!aiDescription && !aiImage)}
+                                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-purple-900/20 flex items-center justify-center gap-2"
+                            >
+                                {isAnalyzing ? (
+                                    <>
+                                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                        Analizando...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Icons.Sparkles size={18} />
+                                        Analizar con IA
+                                    </>
+                                )}
                             </button>
                         </div>
                     </div>
