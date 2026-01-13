@@ -74,7 +74,10 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
         setFoodSearch('');
     };
 
-    const filteredFoods = foods.filter(f => f.name.toLowerCase().includes(foodSearch.toLowerCase()));
+    const filteredFoods = foods.filter(f =>
+        f.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+            .includes(foodSearch.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase())
+    );
 
     return (
         <div className="space-y-6 animate-fade-in pb-20">

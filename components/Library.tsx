@@ -35,7 +35,8 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
 
   // Filter Logic
   const filteredFoods = foods.filter((f) => {
-    const matchesSearch = f.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
+    const matchesSearch = f.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+      .includes(debouncedSearchTerm.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase());
     const matchesCategory = selectedCategory ? f.category === selectedCategory : true;
     return matchesSearch && matchesCategory;
   });
