@@ -177,7 +177,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
               required
               type="number"
               min="0"
-              value={newFood.calories}
+              value={newFood.calories || ''}
               onChange={(e) => setNewFood({ ...newFood, calories: parseFloat(e.target.value) || 0 })}
               className="w-full bg-background border border-surfaceHighlight rounded-lg p-3 text-white focus:outline-none focus:border-primary"
             />
@@ -189,7 +189,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
               type="number"
               min="0"
               step="0.1"
-              value={newFood.protein}
+              value={newFood.protein || ''}
               onChange={(e) => setNewFood({ ...newFood, protein: parseFloat(e.target.value) || 0 })}
               className="w-full bg-background border border-surfaceHighlight rounded-lg p-3 text-white focus:outline-none focus:border-primary"
             />
@@ -201,7 +201,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
               type="number"
               min="0"
               step="0.1"
-              value={newFood.carbs}
+              value={newFood.carbs || ''}
               onChange={(e) => setNewFood({ ...newFood, carbs: parseFloat(e.target.value) || 0 })}
               className="w-full bg-background border border-surfaceHighlight rounded-lg p-3 text-white focus:outline-none focus:border-primary"
             />
@@ -213,7 +213,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
               type="number"
               min="0"
               step="0.1"
-              value={newFood.fat}
+              value={newFood.fat || ''}
               onChange={(e) => setNewFood({ ...newFood, fat: parseFloat(e.target.value) || 0 })}
               className="w-full bg-background border border-surfaceHighlight rounded-lg p-3 text-white focus:outline-none focus:border-primary"
             />
