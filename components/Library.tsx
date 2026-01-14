@@ -107,7 +107,6 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
   const isSearching = debouncedSearchTerm.length > 0;
 
   return (
-  return (
     <div className="space-y-8 animate-fade-in pb-20">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">

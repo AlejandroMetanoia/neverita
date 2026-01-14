@@ -73,7 +73,6 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
     }, [weeklyData]);
 
     return (
-    return (
         <div className="space-y-8 animate-fade-in pb-20">
             <div className="flex flex-col">
                 <h2 className="text-3xl font-bold text-white tracking-tight drop-shadow-md">Registro Semanal</h2>
