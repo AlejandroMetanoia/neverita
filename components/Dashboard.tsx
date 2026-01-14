@@ -324,7 +324,6 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                             </div>
                         </div>
 
-                        {/* Add Buttons - Floating & Neon - Reduced Height */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
                             <button
                                 onClick={() => setEntryMode('search')}
@@ -678,7 +677,10 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                             </div>
                         )}
                     </div>
-                    );
+                </div>
+            </div>
+        </div>
+    );
 };
 
-                    export default Dashboard;
+export default Dashboard;
