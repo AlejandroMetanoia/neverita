@@ -1,53 +1,69 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MacroTrack Pro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              background: '#000000', // Pure Black
-              surface: '#09090b', // Zinc 950
-              surfaceHighlight: '#27272a', // Zinc 800
-              primary: '#e4e4e7', // Zinc 200 (Light Gray)
-              secondary: '#fb923c', // Orange-400
-              accent: '#a78bfa', // Purple-400
-              danger: '#f87171', // Red-400
-              success: '#34d399', // Emerald-400
-            },
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-            }
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MacroTrack Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            background: '#0a0a0a', // Deep Black/Gray
+            surface: '#121212', // Slightly lighter for cards
+            surfaceHighlight: '#27272a', // Zinc 800
+            primary: '#e4e4e7', // Zinc 200
+            secondary: '#fb923c', // Orange-400
+            accent: '#8b5cf6', // Violet-500
+            danger: '#f87171', // Red-400
+            success: '#34d399', // Emerald-400
+            // Glass effects
+            glass: 'rgba(255, 255, 255, 0.05)',
+            glassBorder: 'rgba(255, 255, 255, 0.1)',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          boxShadow: {
+            'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+            'neon': '0 0 10px rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 255, 255, 0.05)',
+          },
+          backdropBlur: {
+            'xs': '2px',
           }
         }
       }
-    </script>
-    <style>
-      body {
-        background-color: #000000;
-        color: #f8fafc;
-        font-family: 'Inter', sans-serif;
-      }
-      /* Custom Scrollbar for dark theme */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #000000; 
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #27272a; 
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #3f3f46; 
-      }
-    </style>
+    }
+  </script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      min-height: 100vh;
+      color: #f8fafc;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Custom Scrollbar for dark theme */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #000000;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #27272a;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3f3f46;
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -60,8 +76,10 @@
 }
 </script>
 </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
 </html>

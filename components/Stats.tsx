@@ -73,82 +73,103 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
     }, [weeklyData]);
 
     return (
-        <div className="space-y-6 animate-fade-in">
+    return (
+        <div className="space-y-8 animate-fade-in pb-20">
             <div className="flex flex-col">
-                <h2 className="text-2xl font-bold text-white">Registro Semanal</h2>
-                <p className="text-gray-400 text-sm">Resumen de los últimos 7 días</p>
+                <h2 className="text-3xl font-bold text-white tracking-tight drop-shadow-md">Registro Semanal</h2>
+                <p className="text-gray-400 text-sm font-medium">Resumen y tendencias de los últimos 7 días</p>
             </div>
 
-            {/* Averages Cards */}
+            {/* Averages Cards - GLASS */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-surface p-4 rounded-xl border border-surfaceHighlight">
-                    <p className="text-gray-400 text-xs uppercase">Media Calórica</p>
-                    <p className="text-2xl font-bold text-white mt-1">{averages.calories}</p>
+                <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-white/20 transition-all shadow-glass group">
+                    <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Calorías Media</p>
+                    <p className="text-3xl font-black text-white group-hover:scale-105 transition-transform origin-left">{averages.calories}</p>
+                    <p className="text-xs text-gray-500 mt-1">kcal/día</p>
                 </div>
-                <div className="bg-surface p-4 rounded-xl border border-surfaceHighlight">
-                    <p className="text-gray-400 text-xs uppercase">Media Proteína</p>
-                    <p className="text-2xl font-bold text-emerald-400 mt-1">{averages.protein}g</p>
+                <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-emerald-500/30 transition-all shadow-glass group">
+                    <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Proteína Media</p>
+                    <p className="text-3xl font-black text-emerald-400 group-hover:scale-105 transition-transform origin-left">{averages.protein}g</p>
+                    <p className="text-xs text-gray-500 mt-1">g/día</p>
                 </div>
-                <div className="bg-surface p-4 rounded-xl border border-surfaceHighlight">
-                    <p className="text-gray-400 text-xs uppercase">Media Carbs</p>
-                    <p className="text-2xl font-bold text-orange-400 mt-1">{averages.carbs}g</p>
+                <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-orange-500/30 transition-all shadow-glass group">
+                    <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Carbs Media</p>
+                    <p className="text-3xl font-black text-orange-400 group-hover:scale-105 transition-transform origin-left">{averages.carbs}g</p>
+                    <p className="text-xs text-gray-500 mt-1">g/día</p>
                 </div>
-                <div className="bg-surface p-4 rounded-xl border border-surfaceHighlight">
-                    <p className="text-gray-400 text-xs uppercase">Media Grasas</p>
-                    <p className="text-2xl font-bold text-cyan-400 mt-1">{averages.fat}g</p>
+                <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-cyan-500/30 transition-all shadow-glass group">
+                    <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Grasas Media</p>
+                    <p className="text-3xl font-black text-cyan-400 group-hover:scale-105 transition-transform origin-left">{averages.fat}g</p>
+                    <p className="text-xs text-gray-500 mt-1">g/día</p>
                 </div>
             </div>
 
-            {/* Main Chart */}
-            <div className="bg-surface p-6 rounded-2xl border border-surfaceHighlight h-80">
-                <h3 className="text-lg font-bold text-white mb-4">Tendencia Calórica</h3>
-                <ResponsiveContainer width="100%" height="90%">
+            {/* Main Chart - GLASS */}
+            <div className="bg-black/40 backdrop-blur-xl p-8 rounded-3xl border border-white/10 h-96 shadow-glass relative overflow-hidden">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1/2 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
+                <h3 className="text-xl font-bold text-white mb-6 relative z-10">Tendencia Calórica</h3>
+                <ResponsiveContainer width="100%" height="85%">
                     <BarChart data={weeklyData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
                         <XAxis
                             dataKey="date"
-                            stroke="#94a3b8"
+                            stroke="#9ca3af"
                             fontSize={12}
                             tickLine={false}
                             axisLine={false}
+                            dy={10}
                         />
                         <YAxis
-                            stroke="#94a3b8"
+                            stroke="#9ca3af"
                             fontSize={12}
                             tickLine={false}
                             axisLine={false}
+                            dx={-10}
                         />
                         <Tooltip
-                            contentStyle={{ backgroundColor: '#1E2330', border: '1px solid #334155', borderRadius: '8px', color: '#fff' }}
-                            cursor={{ fill: '#334155', opacity: 0.2 }}
+                            cursor={{ fill: '#ffffff05' }}
+                            contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }}
+                            itemStyle={{ color: '#fff' }}
                         />
-                        <Bar dataKey="calories" fill="#e4e4e7" radius={[4, 4, 0, 0]} />
+                        <Bar
+                            dataKey="calories"
+                            fill="url(#colorGradient)"
+                            radius={[6, 6, 0, 0]}
+                            barSize={32}
+                            animationDuration={1500}
+                        />
+                        <defs>
+                            <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#e4e4e7" stopOpacity={1} />
+                                <stop offset="100%" stopColor="#e4e4e7" stopOpacity={0.3} />
+                            </linearGradient>
+                        </defs>
                     </BarChart>
                 </ResponsiveContainer>
             </div>
 
-            {/* Macro Stacked Chart could go here, keeping it simple for now */}
-            <div className="bg-surface p-6 rounded-2xl border border-surfaceHighlight">
-                <h3 className="text-lg font-bold text-white mb-4">Detalle Diario</h3>
+            {/* Table - GLASS */}
+            <div className="bg-black/20 backdrop-blur-md p-8 rounded-3xl border border-white/10 shadow-glass overflow-hidden">
+                <h3 className="text-xl font-bold text-white mb-6">Detalle Diario</h3>
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm text-left text-gray-400">
-                        <thead className="text-xs text-gray-500 uppercase bg-surfaceHighlight/50">
+                        <thead className="text-xs text-gray-500 uppercase bg-white/5 border-b border-white/5">
                             <tr>
-                                <th className="px-4 py-3 rounded-l-lg">Día</th>
-                                <th className="px-4 py-3">Kcal</th>
-                                <th className="px-4 py-3">Prot</th>
-                                <th className="px-4 py-3">Carb</th>
-                                <th className="px-4 py-3 rounded-r-lg">Grasa</th>
+                                <th className="px-6 py-4 rounded-tl-xl font-bold tracking-wider">Día</th>
+                                <th className="px-6 py-4 font-bold tracking-wider">Kcal</th>
+                                <th className="px-6 py-4 font-bold tracking-wider">Prot</th>
+                                <th className="px-6 py-4 font-bold tracking-wider">Carb</th>
+                                <th className="px-6 py-4 rounded-tr-xl font-bold tracking-wider">Grasa</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="divide-y divide-white/5">
                             {weeklyData.map((day, idx) => (
-                                <tr key={idx} className="border-b border-surfaceHighlight/30 hover:bg-surfaceHighlight/20 transition-colors">
-                                    <td className="px-4 py-4 font-medium text-white">{day.date}</td>
-                                    <td className="px-4 py-4">{Math.round(day.calories)}</td>
-                                    <td className="px-4 py-4 text-emerald-400">{Math.round(day.protein)}g</td>
-                                    <td className="px-4 py-4 text-orange-400">{Math.round(day.carbs)}g</td>
-                                    <td className="px-4 py-4 text-cyan-400">{Math.round(day.fat)}g</td>
+                                <tr key={idx} className="hover:bg-white/5 transition-colors">
+                                    <td className="px-6 py-5 font-medium text-white">{day.date}</td>
+                                    <td className="px-6 py-5 font-bold">{Math.round(day.calories)}</td>
+                                    <td className="px-6 py-5 text-emerald-400 font-medium">{Math.round(day.protein)}g</td>
+                                    <td className="px-6 py-5 text-orange-400 font-medium">{Math.round(day.carbs)}g</td>
+                                    <td className="px-6 py-5 text-cyan-400 font-medium">{Math.round(day.fat)}g</td>
                                 </tr>
                             ))}
                         </tbody>

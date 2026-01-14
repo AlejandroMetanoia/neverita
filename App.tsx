@@ -141,17 +141,21 @@ function App() {
    }
 
    return (
-      <div className="min-h-screen bg-background text-gray-100 flex flex-col md:flex-row">
+      <div className="min-h-screen text-gray-100 flex flex-col md:flex-row relative overflow-hidden">
+         {/* Background Elements for depth */}
+         <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-900/20 rounded-full blur-[120px] pointer-events-none" />
+         <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-900/20 rounded-full blur-[120px] pointer-events-none" />
+
          {/* Sidebar Navigation */}
-         <aside className="fixed bottom-0 w-full md:w-20 md:h-screen md:static bg-surface/90 backdrop-blur-lg md:bg-surface border-t md:border-t-0 md:border-r border-surfaceHighlight z-40 flex md:flex-col justify-around md:justify-center items-center py-3 md:py-0 md:gap-8">
+         <aside className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] md:translate-x-0 md:left-0 md:bottom-0 md:w-24 md:h-screen md:static bg-black/20 backdrop-blur-xl border border-white/10 rounded-full md:rounded-none z-50 flex md:flex-col justify-around md:justify-center items-center py-4 md:py-0 md:gap-10 shadow-glass">
             <button
                onClick={() => setCurrentView('profile')}
-               className="hidden md:flex absolute top-8 w-10 h-10 rounded-xl items-center justify-center overflow-hidden hover:ring-2 hover:ring-primary transition-all"
+               className="hidden md:flex absolute top-10 w-12 h-12 rounded-2xl items-center justify-center overflow-hidden ring-1 ring-white/10 hover:ring-primary/50 transition-all shadow-lg"
             >
                {user.photoURL ? (
                   <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
                ) : (
-                  <div className="w-full h-full bg-white flex items-center justify-center text-black font-bold text-xl">
+                  <div className="w-full h-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white font-bold text-xl">
                      {user.displayName?.[0] || 'U'}
                   </div>
                )}
@@ -159,38 +163,41 @@ function App() {
 
             <button
                onClick={() => setCurrentView('dashboard')}
-               className={`p-3 rounded-xl transition-all ${currentView === 'dashboard' ? 'bg-primary text-black shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-gray-400 hover:text-white hover:bg-surfaceHighlight'}`}
+               className={`p-3.5 rounded-2xl transition-all duration-300 group relative ${currentView === 'dashboard' ? 'text-white bg-white/10 shadow-neon' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}
             >
-               <Icons.Utensils size={24} />
+               <Icons.Utensils size={26} className="relative z-10" />
+               {currentView === 'dashboard' && <div className="absolute inset-0 bg-primary/20 blur-lg rounded-full" />}
             </button>
 
             <button
                onClick={() => setCurrentView('library')}
-               className={`p-3 rounded-xl transition-all ${currentView === 'library' ? 'bg-primary text-black shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-gray-400 hover:text-white hover:bg-surfaceHighlight'}`}
+               className={`p-3.5 rounded-2xl transition-all duration-300 group relative ${currentView === 'library' ? 'text-white bg-white/10 shadow-neon' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}
             >
-               <Icons.Fridge size={24} />
+               <Icons.Fridge size={26} className="relative z-10" />
+               {currentView === 'library' && <div className="absolute inset-0 bg-primary/20 blur-lg rounded-full" />}
             </button>
 
             <button
                onClick={() => setCurrentView('stats')}
-               className={`p-3 rounded-xl transition-all ${currentView === 'stats' ? 'bg-primary text-black shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-gray-400 hover:text-white hover:bg-surfaceHighlight'}`}
+               className={`p-3.5 rounded-2xl transition-all duration-300 group relative ${currentView === 'stats' ? 'text-white bg-white/10 shadow-neon' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}
             >
-               <Icons.Stats size={24} />
+               <Icons.Stats size={26} className="relative z-10" />
+               {currentView === 'stats' && <div className="absolute inset-0 bg-primary/20 blur-lg rounded-full" />}
             </button>
 
             {/* Mobile Profile Link */}
             <button
                onClick={() => setCurrentView('profile')}
-               className={`md:hidden p-3 rounded-xl transition-all ${currentView === 'profile' ? 'bg-primary text-black shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-gray-400 hover:text-white hover:bg-surfaceHighlight'}`}
+               className={`md:hidden p-3 rounded-full transition-all ${currentView === 'profile' ? 'ring-2 ring-primary shadow-neon' : 'opacity-70'}`}
             >
-               <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-700">
+               <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-700 ring-1 ring-white/20">
                   {user.photoURL && <img src={user.photoURL} alt="User" className="w-full h-full object-cover" />}
                </div>
             </button>
          </aside>
 
          {/* Main Content Area */}
-         <main className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full pb-24 md:pb-8">
+         <main className="flex-1 p-4 md:p-10 max-w-7xl mx-auto w-full pb-32 md:pb-10 relative z-0">
             {currentView === 'dashboard' && (
                <Dashboard
                   foods={foods}
@@ -213,7 +220,9 @@ function App() {
             )}
             {currentView === 'profile' && (
                <div className="flex items-center justify-center h-full">
-                  <Login user={user} />
+                  <div className="bg-black/40 backdrop-blur-xl border border-white/10 p-10 rounded-3xl shadow-2xl">
+                     <Login user={user} />
+                  </div>
                </div>
             )}
          </main>
