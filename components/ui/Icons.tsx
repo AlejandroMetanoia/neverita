@@ -37,7 +37,8 @@ import {
   Croissant,
   Coffee,
   Calendar,
-  Sparkles
+  Sparkles,
+  Edit2
 } from 'lucide-react';
 
 export const Icons = {
@@ -80,5 +81,6 @@ export const Icons = {
   Croissant,
   Coffee,
   Calendar,
-  Sparkles
+  Sparkles,
+  Edit2
 };
