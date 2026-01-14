@@ -86,19 +86,19 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
                     <p className="text-3xl font-black text-white group-hover:scale-105 transition-transform origin-left">{averages.calories}</p>
                     <p className="text-xs text-gray-500 mt-1">kcal/día</p>
                 </div>
-                <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-emerald-500/30 transition-all shadow-glass group">
+                <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-protein/30 transition-all shadow-glass group">
                     <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Proteína Media</p>
-                    <p className="text-3xl font-black text-emerald-400 group-hover:scale-105 transition-transform origin-left">{averages.protein}g</p>
+                    <p className="text-3xl font-black text-protein group-hover:scale-105 transition-transform origin-left">{averages.protein}g</p>
                     <p className="text-xs text-gray-500 mt-1">g/día</p>
                 </div>
-                <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-orange-500/30 transition-all shadow-glass group">
+                <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-carbs/30 transition-all shadow-glass group">
                     <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Carbs Media</p>
-                    <p className="text-3xl font-black text-orange-400 group-hover:scale-105 transition-transform origin-left">{averages.carbs}g</p>
+                    <p className="text-3xl font-black text-carbs group-hover:scale-105 transition-transform origin-left">{averages.carbs}g</p>
                     <p className="text-xs text-gray-500 mt-1">g/día</p>
                 </div>
-                <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-cyan-500/30 transition-all shadow-glass group">
+                <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-fat/30 transition-all shadow-glass group">
                     <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Grasas Media</p>
-                    <p className="text-3xl font-black text-cyan-400 group-hover:scale-105 transition-transform origin-left">{averages.fat}g</p>
+                    <p className="text-3xl font-black text-fat group-hover:scale-105 transition-transform origin-left">{averages.fat}g</p>
                     <p className="text-xs text-gray-500 mt-1">g/día</p>
                 </div>
             </div>
