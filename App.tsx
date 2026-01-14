@@ -141,90 +141,113 @@ function App() {
    }
 
    return (
-      <div className="min-h-screen text-gray-100 flex flex-col md:flex-row relative overflow-hidden">
-         {/* Background Elements for depth */}
-         <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-900/20 rounded-full blur-[120px] pointer-events-none" />
-         <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-900/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="min-h-screen text-textMain font-family-sans flex flex-col md:flex-row relative overflow-hidden bg-background">
+         {/* Airy Gradients for Light Mode */}
+         <div className="fixed top-0 left-0 w-full h-full bg-gradient-to-br from-indigo-50/50 via-sky-50/50 to-white/0 pointer-events-none" />
+         <div className="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-200/20 rounded-full blur-[120px] pointer-events-none" />
+         <div className="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-200/20 rounded-full blur-[120px] pointer-events-none" />
 
-         {/* Sidebar Navigation */}
-         <aside className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] md:translate-x-0 md:left-0 md:bottom-0 md:w-24 md:h-screen md:static bg-black/20 backdrop-blur-xl border border-white/10 rounded-full md:rounded-none z-50 flex md:flex-col justify-around md:justify-center items-center py-4 md:py-0 md:gap-10 shadow-glass">
-            <button
-               onClick={() => setCurrentView('profile')}
-               className="hidden md:flex absolute top-10 w-12 h-12 rounded-2xl items-center justify-center overflow-hidden ring-1 ring-white/10 hover:ring-primary/50 transition-all shadow-lg"
-            >
-               {user.photoURL ? (
-                  <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
-               ) : (
-                  <div className="w-full h-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white font-bold text-xl">
-                     {user.displayName?.[0] || 'U'}
-                  </div>
-               )}
-            </button>
+         {/* Sidebar Navigation - Floating Light Dock */}
+         <aside className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] md:translate-x-0 md:left-6 md:top-1/2 md:-translate-y-1/2 md:w-24 md:h-[90vh] md:bottom-auto bg-surface backdrop-blur-xl border border-white/50 rounded-3xl z-50 flex md:flex-col justify-around md:justify-center items-center py-4 md:py-8 md:gap-8 shadow-glass transition-all duration-300">
+
+            {/* Logo / Brand */}
+            <div className="hidden md:flex flex-col items-center gap-2 mb-auto">
+               <div className="w-12 h-12 bg-gradient-to-tr from-secondary to-accent rounded-2xl flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                  <Icons.Utensils className="text-white" size={24} />
+               </div>
+            </div>
 
             <button
                onClick={() => setCurrentView('dashboard')}
-               className={`p-3.5 rounded-2xl transition-all duration-300 group relative ${currentView === 'dashboard' ? 'text-white bg-white/10 shadow-neon' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}
+               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'dashboard' ? 'bg-indigo-50 text-indigo-500 shadow-sm' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'}`}
             >
-               <Icons.Utensils size={26} className="relative z-10" />
-               {currentView === 'dashboard' && <div className="absolute inset-0 bg-primary/20 blur-lg rounded-full" />}
+               <Icons.Dashboard size={28} className={`transition-transform duration-300 ${currentView === 'dashboard' ? 'scale-110' : 'group-hover:scale-110'}`} />
+               {currentView === 'dashboard' && <div className="absolute left-0 w-1 h-8 bg-indigo-500 rounded-r-full hidden md:block -ml-[2px]" />}
             </button>
 
             <button
                onClick={() => setCurrentView('library')}
-               className={`p-3.5 rounded-2xl transition-all duration-300 group relative ${currentView === 'library' ? 'text-white bg-white/10 shadow-neon' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}
+               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'library' ? 'bg-sky-50 text-sky-500 shadow-sm' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'}`}
             >
-               <Icons.Fridge size={26} className="relative z-10" />
-               {currentView === 'library' && <div className="absolute inset-0 bg-primary/20 blur-lg rounded-full" />}
+               <Icons.Library size={28} className={`transition-transform duration-300 ${currentView === 'library' ? 'scale-110' : 'group-hover:scale-110'}`} />
+               {currentView === 'library' && <div className="absolute left-0 w-1 h-8 bg-sky-500 rounded-r-full hidden md:block -ml-[2px]" />}
             </button>
 
             <button
                onClick={() => setCurrentView('stats')}
-               className={`p-3.5 rounded-2xl transition-all duration-300 group relative ${currentView === 'stats' ? 'text-white bg-white/10 shadow-neon' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}
+               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'stats' ? 'bg-fuchsia-50 text-fuchsia-500 shadow-sm' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'}`}
             >
-               <Icons.Stats size={26} className="relative z-10" />
-               {currentView === 'stats' && <div className="absolute inset-0 bg-primary/20 blur-lg rounded-full" />}
+               <Icons.Stats size={28} className={`transition-transform duration-300 ${currentView === 'stats' ? 'scale-110' : 'group-hover:scale-110'}`} />
+               {currentView === 'stats' && <div className="absolute left-0 w-1 h-8 bg-fuchsia-500 rounded-r-full hidden md:block -ml-[2px]" />}
+            </button>
+
+            {/* Profile */}
+            <button
+               onClick={() => setCurrentView('profile')}
+               className="hidden md:flex mt-auto w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-md hover:shadow-lg transition-transform hover:scale-105"
+            >
+               {user?.photoURL ? (
+                  <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
+               ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-500 font-bold">
+                     {user?.displayName?.[0] || 'U'}
+                  </div>
+               )}
             </button>
 
             {/* Mobile Profile Link */}
             <button
                onClick={() => setCurrentView('profile')}
-               className={`md:hidden p-3 rounded-full transition-all ${currentView === 'profile' ? 'ring-2 ring-primary shadow-neon' : 'opacity-70'}`}
+               className={`md:hidden p-3 rounded-full transition-all ${currentView === 'profile' ? 'ring-2 ring-secondary shadow-md' : 'opacity-80'}`}
             >
-               <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-700 ring-1 ring-white/20">
-                  {user.photoURL && <img src={user.photoURL} alt="User" className="w-full h-full object-cover" />}
+               <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 ring-2 ring-white shadow-sm">
+                  {user?.photoURL ? <img src={user.photoURL} alt="User" className="w-full h-full object-cover" /> : <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">U</div>}
                </div>
             </button>
          </aside>
 
          {/* Main Content Area */}
-         <main className="flex-1 p-4 md:p-10 max-w-7xl mx-auto w-full pb-32 md:pb-10 relative z-0">
-            {currentView === 'dashboard' && (
-               <Dashboard
-                  foods={foods}
-                  logs={logs}
-                  onAddLog={addLog}
-                  onDeleteLog={deleteLog}
-                  selectedDate={selectedDate}
-                  onDateChange={setSelectedDate}
-               />
-            )}
-            {currentView === 'library' && (
-               <Library
-                  foods={foods}
-                  onAddFood={addFood}
-                  onDeleteFood={deleteFood}
-               />
-            )}
-            {currentView === 'stats' && (
-               <Stats logs={logs} />
-            )}
-            {currentView === 'profile' && (
-               <div className="flex items-center justify-center h-full">
-                  <div className="bg-black/40 backdrop-blur-xl border border-white/10 p-10 rounded-3xl shadow-2xl">
-                     <Login user={user} />
+         <main className="flex-1 p-4 md:p-10 max-w-6xl mx-auto w-full pb-32 md:pb-10 relative z-0 md:ml-32">
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
+               {currentView === 'dashboard' && (
+                  <Dashboard
+                     foods={foods}
+                     logs={logs}
+                     onAddLog={addLog}
+                     onDeleteLog={deleteLog}
+                     selectedDate={selectedDate}
+                     onDateChange={setSelectedDate}
+                  />
+               )}
+               {currentView === 'library' && (
+                  <Library
+                     foods={foods}
+                     onAddFood={addFood}
+                     onDeleteFood={deleteFood}
+                  />
+               )}
+               {currentView === 'stats' && (
+                  <Stats logs={logs} />
+               )}
+               {currentView === 'profile' && (
+                  <div className="flex items-center justify-center h-[80vh]">
+                     <div className="bg-surface backdrop-blur-xl border border-white/60 p-12 rounded-[2rem] shadow-glass max-w-md w-full text-center relative overflow-hidden">
+                        <div className="absolute top-0 w-full h-32 bg-gradient-to-b from-blue-50 to-transparent opacity-50 pointer-events-none left-0" />
+                        <div className="relative z-10">
+                           <img src={user?.photoURL || 'https://ui-avatars.com/api/?name=User'} className="w-28 h-28 rounded-full mx-auto mb-6 border-[6px] border-white shadow-xl" />
+                           <h2 className="text-3xl font-bold text-gray-800 mb-2 font-[Outfit]">{user?.displayName}</h2>
+                           <p className="text-gray-500 mb-8 font-medium">{user?.email}</p>
+                           <button onClick={() => auth.signOut()} className="w-full bg-red-50 hover:bg-red-100 text-red-500 border border-red-200 font-bold py-4 px-8 rounded-2xl transition-all shadow-sm hover:shadow text-lg">
+                              Cerrar Sesión
+                           </button>
+                           <div className="mt-8 pt-8 border-t border-gray-100">
+                              <p className="text-xs text-gray-400 uppercase tracking-widest font-bold">MacroTrack Pro v2.0</p>
+                           </div>
+                        </div>
+                     </div>
                   </div>
-               </div>
-            )}
+               )}
+            </div>
          </main>
       </div>
    );

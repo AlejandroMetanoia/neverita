@@ -75,41 +75,41 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
     return (
         <div className="space-y-8 animate-fade-in pb-20">
             <div className="flex flex-col">
-                <h2 className="text-3xl font-bold text-white tracking-tight drop-shadow-md">Registro Semanal</h2>
-                <p className="text-gray-400 text-sm font-medium">Resumen y tendencias de los últimos 7 días</p>
+                <h2 className="text-3xl font-bold text-gray-800 tracking-tight">Registro Semanal</h2>
+                <p className="text-gray-500 text-sm font-medium">Resumen y tendencias de los últimos 7 días</p>
             </div>
 
-            {/* Averages Cards - GLASS */}
+            {/* Averages Cards - Ethereal Light */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-white/20 transition-all shadow-glass group">
+                <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] border border-white/60 hover:border-indigo-200 hover:bg-white/80 transition-all shadow-sm hover:shadow-md group">
                     <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Calorías Media</p>
-                    <p className="text-3xl font-black text-white group-hover:scale-105 transition-transform origin-left">{averages.calories}</p>
+                    <p className="text-3xl font-black text-gray-800 group-hover:scale-105 transition-transform origin-left">{averages.calories}</p>
                     <p className="text-xs text-gray-500 mt-1">kcal/día</p>
                 </div>
-                <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-protein/30 transition-all shadow-glass group">
+                <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] border border-white/60 hover:border-sky-300 hover:bg-white/80 transition-all shadow-sm hover:shadow-md group">
                     <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Proteína Media</p>
-                    <p className="text-3xl font-black text-protein group-hover:scale-105 transition-transform origin-left">{averages.protein}g</p>
+                    <p className="text-3xl font-black text-sky-500 group-hover:scale-105 transition-transform origin-left">{averages.protein}g</p>
                     <p className="text-xs text-gray-500 mt-1">g/día</p>
                 </div>
-                <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-carbs/30 transition-all shadow-glass group">
+                <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] border border-white/60 hover:border-indigo-300 hover:bg-white/80 transition-all shadow-sm hover:shadow-md group">
                     <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Carbs Media</p>
-                    <p className="text-3xl font-black text-carbs group-hover:scale-105 transition-transform origin-left">{averages.carbs}g</p>
+                    <p className="text-3xl font-black text-indigo-500 group-hover:scale-105 transition-transform origin-left">{averages.carbs}g</p>
                     <p className="text-xs text-gray-500 mt-1">g/día</p>
                 </div>
-                <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 hover:border-fat/30 transition-all shadow-glass group">
+                <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] border border-white/60 hover:border-fuchsia-300 hover:bg-white/80 transition-all shadow-sm hover:shadow-md group">
                     <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Grasas Media</p>
-                    <p className="text-3xl font-black text-fat group-hover:scale-105 transition-transform origin-left">{averages.fat}g</p>
+                    <p className="text-3xl font-black text-fuchsia-500 group-hover:scale-105 transition-transform origin-left">{averages.fat}g</p>
                     <p className="text-xs text-gray-500 mt-1">g/día</p>
                 </div>
             </div>
 
-            {/* Main Chart - GLASS */}
-            <div className="bg-black/40 backdrop-blur-xl p-8 rounded-3xl border border-white/10 h-96 shadow-glass relative overflow-hidden">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1/2 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
-                <h3 className="text-xl font-bold text-white mb-6 relative z-10">Tendencia Calórica</h3>
+            {/* Main Chart - LIGHT GLASS */}
+            <div className="bg-white/50 backdrop-blur-xl p-8 rounded-[2rem] border border-white/60 h-96 shadow-glass relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50/50 blur-[80px] rounded-full pointer-events-none translate-x-1/2 -translate-y-1/2" />
+                <h3 className="text-xl font-bold text-gray-800 mb-6 relative z-10">Tendencia Calórica</h3>
                 <ResponsiveContainer width="100%" height="85%">
                     <BarChart data={weeklyData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#00000008" vertical={false} />
                         <XAxis
                             dataKey="date"
                             stroke="#9ca3af"
@@ -126,9 +126,9 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
                             dx={-10}
                         />
                         <Tooltip
-                            cursor={{ fill: '#ffffff05' }}
-                            contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }}
-                            itemStyle={{ color: '#fff' }}
+                            cursor={{ fill: '#00000005' }}
+                            contentStyle={{ backgroundColor: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(10px)', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', color: '#1f2937' }}
+                            itemStyle={{ color: '#1f2937' }}
                         />
                         <Bar
                             dataKey="calories"
@@ -139,36 +139,36 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
                         />
                         <defs>
                             <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="#e4e4e7" stopOpacity={1} />
-                                <stop offset="100%" stopColor="#e4e4e7" stopOpacity={0.3} />
+                                <stop offset="0%" stopColor="#4f46e5" stopOpacity={0.8} />
+                                <stop offset="100%" stopColor="#818cf8" stopOpacity={0.3} />
                             </linearGradient>
                         </defs>
                     </BarChart>
                 </ResponsiveContainer>
             </div>
 
-            {/* Table - GLASS */}
-            <div className="bg-black/20 backdrop-blur-md p-8 rounded-3xl border border-white/10 shadow-glass overflow-hidden">
-                <h3 className="text-xl font-bold text-white mb-6">Detalle Diario</h3>
+            {/* Table - LIGHT GLASS */}
+            <div className="bg-white/60 backdrop-blur-md p-8 rounded-[2rem] border border-white/60 shadow-glass overflow-hidden">
+                <h3 className="text-xl font-bold text-gray-800 mb-6">Detalle Diario</h3>
                 <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-left text-gray-400">
-                        <thead className="text-xs text-gray-500 uppercase bg-white/5 border-b border-white/5">
+                    <table className="w-full text-sm text-left text-gray-500">
+                        <thead className="text-xs text-gray-400 uppercase bg-gray-50/50 border-b border-gray-100">
                             <tr>
-                                <th className="px-6 py-4 rounded-tl-xl font-bold tracking-wider">Día</th>
-                                <th className="px-6 py-4 font-bold tracking-wider">Kcal</th>
-                                <th className="px-6 py-4 font-bold tracking-wider">Prot</th>
-                                <th className="px-6 py-4 font-bold tracking-wider">Carb</th>
-                                <th className="px-6 py-4 rounded-tr-xl font-bold tracking-wider">Grasa</th>
+                                <th className="px-6 py-4 rounded-tl-xl font-bold tracking-wider text-gray-500">Día</th>
+                                <th className="px-6 py-4 font-bold tracking-wider text-gray-500">Kcal</th>
+                                <th className="px-6 py-4 font-bold tracking-wider text-gray-500">Prot</th>
+                                <th className="px-6 py-4 font-bold tracking-wider text-gray-500">Carb</th>
+                                <th className="px-6 py-4 rounded-tr-xl font-bold tracking-wider text-gray-500">Grasa</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-white/5">
+                        <tbody className="divide-y divide-gray-100/50">
                             {weeklyData.map((day, idx) => (
-                                <tr key={idx} className="hover:bg-white/5 transition-colors">
-                                    <td className="px-6 py-5 font-medium text-white">{day.date}</td>
-                                    <td className="px-6 py-5 font-bold">{Math.round(day.calories)}</td>
-                                    <td className="px-6 py-5 text-emerald-400 font-medium">{Math.round(day.protein)}g</td>
-                                    <td className="px-6 py-5 text-orange-400 font-medium">{Math.round(day.carbs)}g</td>
-                                    <td className="px-6 py-5 text-cyan-400 font-medium">{Math.round(day.fat)}g</td>
+                                <tr key={idx} className="hover:bg-white/40 transition-colors">
+                                    <td className="px-6 py-5 font-bold text-gray-800">{day.date}</td>
+                                    <td className="px-6 py-5 font-bold text-gray-700">{Math.round(day.calories)}</td>
+                                    <td className="px-6 py-5 text-sky-500 font-medium">{Math.round(day.protein)}g</td>
+                                    <td className="px-6 py-5 text-indigo-500 font-medium">{Math.round(day.carbs)}g</td>
+                                    <td className="px-6 py-5 text-fuchsia-500 font-medium">{Math.round(day.fat)}g</td>
                                 </tr>
                             ))}
                         </tbody>

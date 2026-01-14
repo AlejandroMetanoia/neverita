@@ -197,24 +197,26 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
             {/* Header & Date Picker */}
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold text-white tracking-tight drop-shadow-md">Registro Diario</h2>
-                    <p className="text-gray-400 text-sm font-medium">Resumen y seguimiento nutricional</p>
+                    <h2 className="text-3xl font-bold text-gray-800 tracking-tight">Registro Diario</h2>
+                    <p className="text-gray-500 text-sm font-medium">Resumen y seguimiento nutricional</p>
                 </div>
                 <div className="relative group">
-                    <div className="absolute inset-0 bg-primary/20 blur-md rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                    {/* Light mode glow */}
+                    <div className="absolute inset-0 bg-blue-100 blur-md rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                     <input
                         type="date"
                         value={selectedDate}
                         onChange={(e) => onDateChange(e.target.value)}
-                        className="relative z-10 bg-black/40 backdrop-blur-md text-white border border-white/10 rounded-xl pl-4 pr-10 py-3 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 appearance-none text-right shadow-lg transition-all"
+                        className="relative z-10 bg-white/60 backdrop-blur-md text-gray-700 border border-white/60 rounded-xl pl-4 pr-10 py-3 focus:outline-none focus:border-blue-300 focus:ring-1 focus:ring-blue-300 appearance-none text-right shadow-sm transition-all"
                     />
                     <Icons.Calendar size={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-20" />
                 </div>
             </div>
 
-            {/* Unified Summary Card (Glassmorphism) - Compact Layout */}
-            <div className="bg-white/5 backdrop-blur-xl p-6 rounded-3xl border border-white/10 shadow-glass relative overflow-hidden mb-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 blur-[100px] rounded-full pointer-events-none translate-x-1/2 -translate-y-1/2" />
+            {/* Unified Summary Card (Ethereal Light Glass) */}
+            <div className="bg-surface backdrop-blur-xl p-6 rounded-3xl border border-white/60 shadow-glass relative overflow-hidden mb-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                {/* Soft background blob */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50/50 blur-[80px] rounded-full pointer-events-none translate-x-1/2 -translate-y-1/2" />
 
                 {/* Chart Side */}
                 <div className="relative w-40 h-40 md:w-56 md:h-56 mx-auto flex-shrink-0">
@@ -239,7 +241,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                     {/* Center Text */}
                     <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                         <Icons.Calories size={24} className="text-gray-400 mb-1" />
-                        <span className="text-4xl font-black text-white tracking-tighter leading-none">{Math.round(totals.calories)}</span>
+                        <span className="text-4xl font-black text-gray-800 tracking-tighter leading-none">{Math.round(totals.calories)}</span>
                         <span className="text-[10px] font-bold text-gray-500 tracking-[0.2em] uppercase mt-1">kcal</span>
                     </div>
                 </div>
@@ -247,11 +249,11 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                 {/* Macros List Side */}
                 <div className="flex flex-col gap-3 w-full">
                     {/* Protein */}
-                    <div className="bg-black/20 backdrop-blur-md p-4 rounded-2xl border border-white/5 hover:bg-white/5 transition-colors group flex items-center justify-between">
+                    <div className="bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-white/60 hover:bg-white/80 transition-colors group flex items-center justify-between shadow-sm">
                         <div>
                             <p className="text-xs text-protein font-bold uppercase tracking-wider mb-0.5">Proteína</p>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-xl font-bold text-white group-hover:scale-105 transition-transform">{Math.round(totals.protein)}</span>
+                                <span className="text-xl font-bold text-gray-800 group-hover:scale-105 transition-transform">{Math.round(totals.protein)}</span>
                                 <span className="text-xs text-gray-500 font-bold">g</span>
                             </div>
                         </div>
@@ -261,11 +263,11 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                     </div>
 
                     {/* Carbs */}
-                    <div className="bg-black/20 backdrop-blur-md p-4 rounded-2xl border border-white/5 hover:bg-white/5 transition-colors group flex items-center justify-between">
+                    <div className="bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-white/60 hover:bg-white/80 transition-colors group flex items-center justify-between shadow-sm">
                         <div>
                             <p className="text-xs text-carbs font-bold uppercase tracking-wider mb-0.5">Carbs</p>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-xl font-bold text-white group-hover:scale-105 transition-transform">{Math.round(totals.carbs)}</span>
+                                <span className="text-xl font-bold text-gray-800 group-hover:scale-105 transition-transform">{Math.round(totals.carbs)}</span>
                                 <span className="text-xs text-gray-500 font-bold">g</span>
                             </div>
                         </div>
@@ -275,11 +277,11 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                     </div>
 
                     {/* Fat */}
-                    <div className="bg-black/20 backdrop-blur-md p-4 rounded-2xl border border-white/5 hover:bg-white/5 transition-colors group flex items-center justify-between">
+                    <div className="bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-white/60 hover:bg-white/80 transition-colors group flex items-center justify-between shadow-sm">
                         <div>
                             <p className="text-xs text-fat font-bold uppercase tracking-wider mb-0.5">Grasas</p>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-xl font-bold text-white group-hover:scale-105 transition-transform">{Math.round(totals.fat)}</span>
+                                <span className="text-xl font-bold text-gray-800 group-hover:scale-105 transition-transform">{Math.round(totals.fat)}</span>
                                 <span className="text-xs text-gray-500 font-bold">g</span>
                             </div>
                         </div>
@@ -290,68 +292,73 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <button
                     onClick={() => setEntryMode('search')}
-                    className="group relative w-full py-3 bg-white/5 hover:bg-white/10 rounded-none border border-white/10 text-white font-bold text-sm shadow-glass hover:shadow-neon transition-all overflow-hidden flex items-center justify-center gap-3 backdrop-blur-md"
+                    className="group relative w-full py-4 bg-white hover:bg-gray-50 rounded-2xl border border-gray-100 text-gray-600 hover:text-indigo-500 font-bold text-sm shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3"
                 >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                    <Icons.Plus size={18} className="text-gray-400 group-hover:text-white transition-colors" />
+                    <div className="p-2 bg-indigo-50 rounded-lg group-hover:scale-110 transition-transform">
+                        <Icons.Plus size={18} className="text-indigo-400" />
+                    </div>
                     <span>Añadir Alimento</span>
                 </button>
 
                 <button
                     onClick={() => setEntryMode('manual')}
-                    className="w-full py-3 bg-black/20 hover:bg-black/40 rounded-none border border-white/5 hover:border-white/20 text-gray-300 hover:text-white font-semibold text-sm transition-all flex items-center justify-center gap-3 backdrop-blur-sm"
+                    className="w-full py-4 bg-white hover:bg-gray-50 rounded-2xl border border-gray-100 text-gray-600 hover:text-gray-800 font-semibold text-sm transition-all flex items-center justify-center gap-3 shadow-sm hover:shadow-md"
                 >
-                    <Icons.Edit2 size={16} />
+                    <div className="p-2 bg-gray-50 rounded-lg group-hover:scale-110 transition-transform">
+                        <Icons.Edit2 size={16} />
+                    </div>
                     <span>Registro Manual</span>
                 </button>
 
                 <button
                     onClick={() => setEntryMode('ai')}
-                    className="group w-full py-3 bg-gradient-to-r from-accent/80 to-blue-600/80 hover:from-accent hover:to-blue-600 rounded-none text-white font-bold text-sm transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-accent/50 relative overflow-hidden"
+                    className="group w-full py-4 bg-gradient-to-br from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 rounded-2xl text-white font-bold text-sm transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl relative overflow-hidden"
                 >
-                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"></div>
+                    <div className="absolute inset-0 bg-white/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <Icons.Sparkles size={16} className="animate-pulse" />
                     <span className="relative z-10">Asistente IA</span>
                 </button>
             </div>
+
             {/* Log List by Meal */}
             <div className="space-y-8">
                 {MEAL_TYPES.map(meal => {
                     const mealLogs = dailyLogs.filter(l => l.meal === meal);
                     if (mealLogs.length === 0) return null;
 
-                    const style = MEAL_COLORS[meal];
+                    // Ensure specific colors for Light Mode (overriding mealColors import if needed, or mapping)
+                    // We'll use simple mapping for now
+                    const mealHeaderColor = meal === 'Desayuno' ? 'text-orange-400' : meal === 'Almuerzo' ? 'text-emerald-400' : meal === 'Cena' ? 'text-indigo-400' : 'text-gray-400';
 
                     return (
                         <div key={meal} className="space-y-4">
-                            <h4 className={`text-xl font-bold flex items-center gap-3 ${style.text} pl-2`}>
-                                <span className={`w-3 h-3 rounded-full ${style.bg.replace('/10', '')} shadow-[0_0_10px_currentColor]`}></span>
+                            <h4 className={`text-xl font-bold flex items-center gap-3 text-gray-700 pl-2`}>
+                                <span className={`w-3 h-3 rounded-full bg-current shadow-sm ${mealHeaderColor}`}></span>
                                 {meal}
                             </h4>
                             <div className="grid gap-3">
                                 {mealLogs.map(log => (
-                                    <div key={log.id} className={`bg-black/20 backdrop-blur-md p-5 rounded-2xl border border-white/5 hover:border-white/15 hover:bg-black/30 transition-all flex justify-between items-center group relative overflow-hidden`}>
-                                        <div className={`absolute left-0 top-0 bottom-0 w-1 ${style.bg.replace('/10', '')} opacity-60`} />
+                                    <div key={log.id} className="bg-white/80 backdrop-blur-md p-5 rounded-2xl border border-white/50 hover:border-blue-200 hover:bg-white hover:shadow-md transition-all flex justify-between items-center group relative overflow-hidden">
 
-                                        <div className="pl-3">
-                                            <p className="font-bold text-lg text-white mb-0.5">{log.foodName}</p>
+                                        <div className="pl-1">
+                                            <p className="font-bold text-lg text-gray-800 mb-0.5">{log.foodName}</p>
                                             <p className="text-sm text-gray-500 font-medium">{log.grams}g</p>
                                         </div>
                                         <div className="flex items-center gap-8">
                                             <div className="text-right">
-                                                <p className="font-bold text-xl text-white">{log.calculated.calories} <span className="text-sm text-gray-500 font-normal">kcal</span></p>
-                                                <div className="flex gap-3 text-xs text-gray-500 font-medium mt-1">
-                                                    <span className="bg-white/5 px-2 py-0.5 rounded-md border border-white/5">P: {log.calculated.protein}</span>
-                                                    <span className="bg-white/5 px-2 py-0.5 rounded-md border border-white/5">C: {log.calculated.carbs}</span>
-                                                    <span className="bg-white/5 px-2 py-0.5 rounded-md border border-white/5">G: {log.calculated.fat}</span>
+                                                <p className="font-bold text-xl text-gray-800">{log.calculated.calories} <span className="text-sm text-gray-400 font-normal">kcal</span></p>
+                                                <div className="flex gap-2 text-xs text-gray-500 font-medium mt-1">
+                                                    <span className="bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100 text-blue-600">P: {log.calculated.protein}</span>
+                                                    <span className="bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100 text-indigo-600">C: {log.calculated.carbs}</span>
+                                                    <span className="bg-fuchsia-50 px-2 py-0.5 rounded-md border border-fuchsia-100 text-fuchsia-600">G: {log.calculated.fat}</span>
                                                 </div>
                                             </div>
                                             <button
                                                 onClick={() => onDeleteLog(log.id)}
-                                                className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 hover:bg-red-500/20 text-gray-500 hover:text-red-400 transition-all opacity-0 group-hover:opacity-100"
+                                                className="w-10 h-10 rounded-full flex items-center justify-center bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100"
                                             >
                                                 <Icons.Trash size={18} />
                                             </button>
@@ -363,26 +370,26 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                     )
                 })}
                 {dailyLogs.length === 0 && (
-                    <div className="text-center py-16 text-gray-500 border border-dashed border-white/10 rounded-3xl bg-white/5 backdrop-blur-sm">
-                        <Icons.Utensils className="mx-auto mb-4 opacity-20" size={48} />
-                        <p className="text-lg">No hay registros hoy.</p>
+                    <div className="text-center py-20 text-gray-400 border-2 border-dashed border-gray-200 rounded-3xl bg-white/30 backdrop-blur-sm">
+                        <Icons.Utensils className="mx-auto mb-4 opacity-30" size={48} />
+                        <p className="text-lg font-medium text-gray-500">No hay registros hoy.</p>
                         <p className="text-sm opacity-60">¡Empieza añadiendo tu primera comida!</p>
                     </div>
                 )}
             </div>
 
-            {/* Modal - GLASS */}
+            {/* Modal - Ethereal Light */}
             {entryMode && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] flex items-center justify-center p-4">
-                    <div className="bg-[#121212]/90 backdrop-blur-xl w-full max-w-xl rounded-3xl border border-white/10 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-                        <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
-                            <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-                                {entryMode === 'search' && <Icons.Search className="text-primary" />}
-                                {entryMode === 'manual' && <Icons.Plus className="text-primary" />}
-                                {entryMode === 'ai' && <Icons.Sparkles className="text-purple-400" />}
+                <div className="fixed inset-0 bg-black/20 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+                    <div className="bg-white/90 backdrop-blur-xl w-full max-w-xl rounded-[2rem] border border-white/60 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                        <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white/50">
+                            <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
+                                {entryMode === 'search' && <Icons.Search className="text-indigo-500" />}
+                                {entryMode === 'manual' && <Icons.Plus className="text-indigo-500" />}
+                                {entryMode === 'ai' && <Icons.Sparkles className="text-purple-500" />}
                                 {entryMode === 'search' ? 'Calculadora' : entryMode === 'manual' ? 'Comida Fuera' : 'Asistente Nutricional'}
                             </h3>
-                            <button onClick={() => setEntryMode(null)} className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors"><Icons.Plus className="rotate-45" size={20} /></button>
+                            <button onClick={() => setEntryMode(null)} className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"><Icons.Plus className="rotate-45" size={20} /></button>
                         </div>
 
                         <div className="p-8 space-y-8 max-h-[80vh] overflow-y-auto custom-scrollbar">
@@ -391,9 +398,9 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                 <>
                                     {/* Food Selector */}
                                     <div>
-                                        <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wider">1. Buscar Alimento</label>
+                                        <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">1. Buscar Alimento</label>
                                         <div className="relative group">
-                                            <Icons.Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-primary transition-colors" size={20} />
+                                            <Icons.Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-indigo-500 transition-colors" size={20} />
                                             <input
                                                 type="text"
                                                 placeholder="Ej. Arroz con pollo..."
@@ -402,11 +409,11 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                                     setFoodSearch(e.target.value);
                                                     setSelectedFoodId(''); // Reset selection on search
                                                 }}
-                                                className="w-full bg-black/40 border border-white/10 rounded-xl pl-12 pr-4 py-4 text-white focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all placeholder:text-gray-600"
+                                                className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-12 pr-4 py-4 text-gray-800 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100 transition-all placeholder:text-gray-400 font-medium"
                                             />
                                         </div>
                                         {foodSearch && !selectedFoodId && (
-                                            <div className="mt-2 max-h-48 overflow-y-auto bg-[#1a1a1a] border border-white/10 rounded-xl shadow-xl z-20">
+                                            <div className="mt-2 max-h-48 overflow-y-auto bg-white border border-gray-100 rounded-xl shadow-xl z-20">
                                                 {filteredFoods.map(f => (
                                                     <div
                                                         key={f.id}
@@ -414,10 +421,10 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                                             setSelectedFoodId(f.id);
                                                             setFoodSearch(f.name);
                                                         }}
-                                                        className="p-4 hover:bg-white/5 cursor-pointer text-sm text-gray-200 flex justify-between border-b border-white/5 last:border-0"
+                                                        className="p-4 hover:bg-gray-50 cursor-pointer text-sm text-gray-700 flex justify-between border-b border-gray-50 last:border-0"
                                                     >
                                                         <span className="font-medium">{f.name}</span>
-                                                        <span className="text-gray-500 font-mono bg-black/40 px-2 py-0.5 rounded-md">{f.calories} kcal</span>
+                                                        <span className="text-gray-500 font-mono bg-gray-100 px-2 py-0.5 rounded-md">{f.calories} kcal</span>
                                                     </div>
                                                 ))}
                                                 {filteredFoods.length === 0 && <div className="p-4 text-sm text-gray-500 text-center">No encontrado</div>}
@@ -428,56 +435,56 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                     <div className="grid grid-cols-2 gap-6">
                                         {/* Grams Input */}
                                         <div>
-                                            <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wider">2. Cantidad (g)</label>
+                                            <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">2. Cantidad (g)</label>
                                             <div className="relative">
                                                 <input
                                                     type="number"
                                                     value={grams}
                                                     onChange={(e) => setGrams(parseFloat(e.target.value) || 0)}
-                                                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all font-mono text-lg"
+                                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100 transition-all font-mono text-lg font-bold"
                                                 />
-                                                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 font-bold pointer-events-none">g</span>
+                                                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold pointer-events-none">g</span>
                                             </div>
                                         </div>
                                         {/* Meal Select */}
                                         <div>
-                                            <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wider">3. Comida</label>
+                                            <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">3. Comida</label>
                                             <div className="relative">
                                                 <select
                                                     value={mealType}
                                                     onChange={(e) => setMealType(e.target.value as MealType)}
-                                                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 appearance-none transition-all cursor-pointer"
+                                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100 appearance-none transition-all cursor-pointer font-medium"
                                                 >
                                                     {MEAL_TYPES.map(m => <option key={m} value={m}>{m}</option>)}
                                                 </select>
-                                                <Icons.ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" size={16} />
+                                                <Icons.ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
                                             </div>
                                         </div>
                                     </div>
 
                                     {/* Live Calculator Result */}
                                     {calculatedMacros && (
-                                        <div className="bg-white/5 rounded-2xl p-6 border border-white/10 shadow-inner relative overflow-hidden group">
-                                            <div className="absolute top-0 right-0 p-3 opacity-10">
+                                        <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm relative overflow-hidden group">
+                                            <div className="absolute top-0 right-0 p-3 opacity-5 text-indigo-500">
                                                 <Icons.Stats size={64} />
                                             </div>
-                                            <p className="text-xs text-gray-500 uppercase tracking-widest mb-4 font-bold">Resultado Automático</p>
-                                            <div className="grid grid-cols-4 gap-4 text-center divide-x divide-white/10">
+                                            <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-4 font-bold">Resultado Automático</p>
+                                            <div className="grid grid-cols-4 gap-4 text-center divide-x divide-gray-100">
                                                 <div>
-                                                    <p className="text-2xl font-black text-white">{calculatedMacros.calories}</p>
-                                                    <p className="text-[10px] text-gray-500 uppercase font-bold mt-1">Kcal</p>
+                                                    <p className="text-2xl font-black text-gray-800">{calculatedMacros.calories}</p>
+                                                    <p className="text-[10px] text-gray-400 uppercase font-bold mt-1">Kcal</p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-2xl font-bold text-emerald-400">{calculatedMacros.protein}g</p>
-                                                    <p className="text-[10px] text-gray-500 uppercase font-bold mt-1">Prot</p>
+                                                    <p className="text-2xl font-bold text-protein">{calculatedMacros.protein}g</p>
+                                                    <p className="text-[10px] text-gray-400 uppercase font-bold mt-1">Prot</p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-2xl font-bold text-orange-400">{calculatedMacros.carbs}g</p>
-                                                    <p className="text-[10px] text-gray-500 uppercase font-bold mt-1">Carbs</p>
+                                                    <p className="text-2xl font-bold text-carbs">{calculatedMacros.carbs}g</p>
+                                                    <p className="text-[10px] text-gray-400 uppercase font-bold mt-1">Carbs</p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-2xl font-bold text-yellow-400">{calculatedMacros.fat}g</p>
-                                                    <p className="text-[10px] text-gray-500 uppercase font-bold mt-1">Grasa</p>
+                                                    <p className="text-2xl font-bold text-fat">{calculatedMacros.fat}g</p>
+                                                    <p className="text-[10px] text-gray-400 uppercase font-bold mt-1">Grasa</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -487,34 +494,34 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                 /* MANUAL MODE */
                                 <>
                                     <div>
-                                        <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wider">Nombre del plato</label>
+                                        <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Nombre del plato</label>
                                         <input
                                             type="text"
                                             value={manualEntry.name}
                                             onChange={(e) => setManualEntry({ ...manualEntry, name: e.target.value })}
-                                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all"
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100 transition-all font-medium"
                                             placeholder="Ej. Comida con amigos"
                                         />
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-6">
                                         <div>
-                                            <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wider">Calorías Total</label>
+                                            <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Calorías Total</label>
                                             <input
                                                 type="number"
                                                 value={manualEntry.calories || ''}
                                                 onChange={(e) => setManualEntry({ ...manualEntry, calories: parseFloat(e.target.value) || 0 })}
-                                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary/50 font-mono text-lg"
+                                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100 font-mono text-lg font-bold"
                                                 placeholder="0"
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wider">Comida</label>
+                                            <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Comida</label>
                                             <div className="relative">
                                                 <select
                                                     value={mealType}
                                                     onChange={(e) => setMealType(e.target.value as MealType)}
-                                                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-primary/50 appearance-none"
+                                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100 appearance-none font-medium"
                                                 >
                                                     {MEAL_TYPES.map(m => <option key={m} value={m}>{m}</option>)}
                                                 </select>
@@ -525,32 +532,32 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
 
                                     <div className="grid grid-cols-3 gap-4">
                                         <div>
-                                            <label className="block text-sm font-bold text-emerald-400 mb-2 uppercase tracking-wider">Proteína (g)</label>
+                                            <label className="block text-xs font-bold text-protein mb-2 uppercase tracking-wider">Proteína (g)</label>
                                             <input
                                                 type="number"
                                                 value={manualEntry.protein || ''}
                                                 onChange={(e) => setManualEntry({ ...manualEntry, protein: parseFloat(e.target.value) || 0 })}
-                                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50"
+                                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-protein focus:ring-4 focus:ring-sky-50 font-mono font-bold"
                                                 placeholder="0"
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-bold text-orange-400 mb-2 uppercase tracking-wider">Carbs (g)</label>
+                                            <label className="block text-xs font-bold text-carbs mb-2 uppercase tracking-wider">Carbs (g)</label>
                                             <input
                                                 type="number"
                                                 value={manualEntry.carbs || ''}
                                                 onChange={(e) => setManualEntry({ ...manualEntry, carbs: parseFloat(e.target.value) || 0 })}
-                                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50"
+                                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-carbs focus:ring-4 focus:ring-indigo-50 font-mono font-bold"
                                                 placeholder="0"
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-bold text-yellow-400 mb-2 uppercase tracking-wider">Grasa (g)</label>
+                                            <label className="block text-xs font-bold text-fat mb-2 uppercase tracking-wider">Grasa (g)</label>
                                             <input
                                                 type="number"
                                                 value={manualEntry.fat || ''}
                                                 onChange={(e) => setManualEntry({ ...manualEntry, fat: parseFloat(e.target.value) || 0 })}
-                                                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-yellow-500/50 focus:ring-1 focus:ring-yellow-500/50"
+                                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-fat focus:ring-4 focus:ring-fuchsia-50 font-mono font-bold"
                                                 placeholder="0"
                                             />
                                         </div>
@@ -560,20 +567,20 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                 /* AI MODE */
                                 <>
                                     <div>
-                                        <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wider">Describe tu plato</label>
+                                        <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Describe tu plato</label>
                                         <textarea
                                             value={aiDescription}
                                             onChange={(e) => setAiDescription(e.target.value)}
                                             placeholder="Ej: Filete a la vilaroy con patatas y un poco de ensalada..."
-                                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 min-h-[120px] resize-none placeholder:text-gray-600 transition-all"
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-purple-300 focus:ring-4 focus:ring-purple-50 min-h-[120px] resize-none placeholder:text-gray-400 transition-all font-medium"
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-bold text-gray-400 mb-2 uppercase tracking-wider">O sube una foto</label>
+                                        <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">O sube una foto</label>
                                         <div
                                             onClick={() => fileInputRef.current?.click()}
-                                            className="border-2 border-dashed border-white/10 hover:border-purple-500/50 hover:bg-white/5 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all group"
+                                            className="border-2 border-dashed border-gray-200 hover:border-purple-400 hover:bg-purple-50 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all group"
                                         >
                                             {aiImage ? (
                                                 <div className="relative w-full h-48 group-hover:scale-[1.02] transition-transform">
@@ -583,17 +590,17 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                                             e.stopPropagation();
                                                             setAiImage(null);
                                                         }}
-                                                        className="absolute top-2 right-2 p-2 bg-black/60 backdrop-blur-md rounded-full hover:bg-red-500 text-white transition-colors"
+                                                        className="absolute top-2 right-2 p-2 bg-white/80 backdrop-blur-md rounded-full hover:bg-red-50 text-gray-600 hover:text-red-500 transition-colors shadow-sm"
                                                     >
                                                         <Icons.Trash size={16} />
                                                     </button>
                                                 </div>
                                             ) : (
                                                 <>
-                                                    <div className="p-4 bg-white/5 rounded-full mb-4 group-hover:scale-110 transition-transform">
-                                                        <Icons.Sparkles className="text-purple-400" size={32} />
+                                                    <div className="p-4 bg-purple-50 rounded-full mb-4 group-hover:scale-110 transition-transform text-purple-400">
+                                                        <Icons.Sparkles size={32} />
                                                     </div>
-                                                    <p className="text-sm text-gray-400 font-medium">Clic para subir o tomar foto</p>
+                                                    <p className="text-sm text-gray-500 font-medium">Clic para subir o tomar foto</p>
                                                 </>
                                             )}
                                             <input
@@ -614,7 +621,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                 <button
                                     onClick={handleAnalyze}
                                     disabled={isAnalyzing || (!aiDescription && !aiImage)}
-                                    className="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-lg rounded-xl transition-all shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_30px_rgba(147,51,234,0.5)] flex items-center justify-center gap-3"
+                                    className="w-full py-4 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-lg rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
                                 >
                                     {isAnalyzing ? (
                                         <>
@@ -632,7 +639,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                 <button
                                     onClick={handleAddLog}
                                     disabled={entryMode === 'search' && !selectedFood}
-                                    className="w-full bg-primary hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed text-black font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-xl text-lg flex items-center justify-center gap-2"
+                                    className="w-full bg-gray-900 hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-xl text-lg flex items-center justify-center gap-2"
                                 >
                                     <Icons.Plus size={24} />
                                     {entryMode === 'search' ? 'Añadir al Diario' : 'Registrar Comida'}
@@ -643,7 +650,6 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                 </div>
             )}
         </div>
-
     );
 };
 

@@ -4,51 +4,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MacroTrack Pro</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            background: '#0a0a0a', // Deep Black/Gray
-            surface: '#121212', // Slightly lighter for cards
-            surfaceHighlight: '#27272a', // Zinc 800
-            primary: '#e4e4e7', // Zinc 200
-            secondary: '#3b82f6', // Blue-500 (New main accent variant)
+            background: '#f8fafc', // Slate 50 (Soft Off-White)
+            surface: 'rgba(255, 255, 255, 0.65)', // White Glass
+            surfaceHighlight: 'rgba(255, 255, 255, 0.9)', // Stronger white for hover
+            primary: '#cbd5e1', // Slate 300 (Subtle borders/dividers)
+            textMain: '#1e293b', // Slate 800 (Dark Gray text)
+            textSecondary: '#64748b', // Slate 500 (Medium Gray)
 
-            // New Harmony Palette
-            protein: '#38bdf8', // Sky-400 (Cyan-ish Blue)
-            carbs: '#818cf8',   // Indigo-400 (Purple-ish Blue)
-            fat: '#c084fc',     // Fuchsia-400 (Pink-ish Purple)
+            // New Harmony Palette - PASTEL / SOFT
+            secondary: '#60a5fa', // Blue-400 (Soft Blue)
+            protein: '#7dd3fc', // Sky-300 (Airy Blue)
+            carbs: '#a5b4fc',   // Indigo-300 (Soft Purple)
+            fat: '#f0abfc',     // Fuchsia-300 (Soft Pink)
 
-            accent: '#8b5cf6', // Violet-500
-            danger: '#f87171', // Red-400
-            success: '#34d399', // Emerald-400
-            // Glass effects
-            glass: 'rgba(255, 255, 255, 0.05)',
-            glassBorder: 'rgba(255, 255, 255, 0.1)',
+            accent: '#818cf8', // Indigo-400
+            danger: '#fca5a5', // Red-300
+            success: '#86efac', // Green-300
+
+            // Glass effects - Adjusted for Light Mode
+            glass: 'rgba(255, 255, 255, 0.4)',
+            glassBorder: 'rgba(255, 255, 255, 0.6)',
           },
           borderRadius: {
-            'none': '0',
-            'sm': '0',
-            DEFAULT: '0',
-            'md': '0',
-            'lg': '0',
-            'xl': '0',
-            '2xl': '0',
-            '3xl': '0',
-            // We keep 'full' for actual circles like the donut chart or pills, but override box corners
+            // Compromise: Slightly softened corners (2px)
+            'none': '0px',
+            'sm': '2px',
+            DEFAULT: '2px',
+            'md': '4px',
+            'lg': '6px',
+            'xl': '8px',
+            '2xl': '12px',
+            '3xl': '16px',
+            'full': '9999px',
           },
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
+            sans: ['Outfit', 'Inter', 'sans-serif'],
           },
           boxShadow: {
-            'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
-            'neon': '0 0 10px rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 255, 255, 0.05)',
+            'glass': '0 8px 30px rgba(0, 0, 0, 0.04)', // Very soft diffused shadow
+            'neon': 'none', // Removing neon
+            'soft-xl': '0 20px 40px -10px rgba(0, 0, 0, 0.05)',
+            'soft-inner': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
           },
           backdropBlur: {
             'xs': '2px',
+            'xl': '20px',
           }
         }
       }
@@ -56,29 +65,34 @@
   </script>
   <style>
     body {
-      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      /* Airy light blue gradient */
       min-height: 100vh;
-      color: #f8fafc;
-      font-family: 'Inter', sans-serif;
+      color: #1e293b;
+      /* Slate 800 */
+      font-family: 'Outfit', 'Inter', sans-serif;
+      overflow-x: hidden;
     }
 
-    /* Custom Scrollbar for dark theme */
+    /* Custom Scrollbar for Light Theme */
     ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
     }
 
     ::-webkit-scrollbar-track {
-      background: #000000;
+      background: transparent;
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #27272a;
+      background: #cbd5e1;
+      /* Slate 300 */
       border-radius: 4px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: #3f3f46;
+      background: #94a3b8;
+      /* Slate 400 */
     }
   </style>
   <script type="importmap">
