@@ -50,7 +50,7 @@ const Login: React.FC<LoginProps> = ({ user }) => {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[50vh] gap-6 w-full h-screen bg-[url('/login-bg-mobile.png')] md:bg-[url('/login-bg-desktop.png')] bg-cover bg-center bg-no-repeat fixed top-0 left-0 z-50">
+        <div className="flex flex-col items-center justify-center min-h-[50vh] gap-6 w-full h-screen bg-[url('/login-bg-mobile.png')] md:bg-[url('/login-background-desktop.png')] bg-cover bg-center bg-no-repeat fixed top-0 left-0 z-50">
             {/* Dark overlay for text readability */}
             <div className="absolute inset-0 bg-black/10 pointer-events-none" />
 
