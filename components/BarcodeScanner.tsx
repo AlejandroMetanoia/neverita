@@ -24,12 +24,12 @@ interface ScannedProduct {
     image_url?: string;
 }
 
-const BarcodeScanner: React.FC<BarcodeScannerProps> = ({ 
-    onClose, 
-    onAddLog, 
-    onNavigateToManual, 
+const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
+    onClose,
+    onAddLog,
+    onNavigateToManual,
     onNavigateToNewFood,
-    selectedDate 
+    selectedDate
 }) => {
     const scannerRef = useRef<Html5Qrcode | null>(null);
     const [scanState, setScanState] = useState<ScanState>('scanning');
@@ -50,7 +50,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
         }
 
         const initializeScanner = async () => {
-             // Give the DOM a moment to render the div
+            // Give the DOM a moment to render the div
             await new Promise(r => setTimeout(r, 100));
 
             try {
@@ -58,11 +58,11 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                     scannerRef.current = new Html5Qrcode(mountNodeId);
                 }
 
-                const config = { 
-                    fps: 10, 
+                const config = {
+                    fps: 10,
                     qrbox: { width: 250, height: 250 },
                     aspectRatio: 1.0,
-                    formatsToSupport: [ 
+                    formatsToSupport: [
                         Html5QrcodeSupportedFormats.EAN_13,
                         Html5QrcodeSupportedFormats.UPC_A
                     ]
@@ -78,17 +78,17 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                         // console.log(errorMessage); // Ignore parse errors
                     }
                 );
-                
+
                 // Check flash capability
                 try {
-                     // Get the track and capabilities from the running stream
-                     // Only works if the scanner has started
-                     const track = scannerRef.current.getRunningTrackCameraCapabilities();
-                     // Note: html5-qrcode types might be slightly off or strict
-                     // @ts-ignore
-                     if (track && track.torchFeature && track.torchFeature.isSupported()) {
-                         setHasFlash(true);
-                     }
+                    // Get the track and capabilities from the running stream
+                    // Only works if the scanner has started
+                    const track = scannerRef.current.getRunningTrackCameraCapabilities();
+                    // Note: html5-qrcode types might be slightly off or strict
+                    // @ts-ignore
+                    if (track && track.torchFeature && track.torchFeature.isSupported()) {
+                        setHasFlash(true);
+                    }
                 } catch (e) {
                     console.warn("Flash capability check failed", e);
                 }
@@ -122,45 +122,48 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
 
     const handleBarcodeDetected = async (barcode: string) => {
         if (scanState !== 'scanning') return;
-        
+
         // Haptic feedback
         if (navigator.vibrate) navigator.vibrate(200);
-        
-        // Sound feedback
-        const audio = new Audio('/beep.mp3'); // We might not have this file, fallback to just vibration
-        // Just in case we can play a simple oscillator beep if needed, but let's stick to vibration for now or try-catch
-        
+
         setScanState('searching');
         try {
             const response = await fetch(`https://world.openfoodfacts.org/api/v2/product/${barcode}`);
             const data = await response.json();
 
-            if (data.status === 1) {
+            console.log('API Response:', data);
+
+            // Robust check: ensure status is success and product object exists
+            if (data.status === 1 && data.product) {
                 const p = data.product;
                 const newProduct: ScannedProduct = {
                     code: barcode,
                     name: p.product_name || 'Producto Desconocido',
                     brand: p.brands || '',
-                    calories: p.nutriments['energy-kcal_100g'] || 0,
-                    protein: p.nutriments.proteins_100g || 0,
-                    carbs: p.nutriments.carbohydrates_100g || 0,
-                    fat: p.nutriments.fat_100g || 0,
-                    image_url: p.image_front_small_url
+                    // Use optional chaining and fallback to 0 to prevent crashes
+                    calories: p.nutriments?.['energy-kcal_100g'] || p.nutriments?.['energy-kcal'] || 0,
+                    protein: p.nutriments?.proteins_100g || p.nutriments?.proteins || 0,
+                    carbs: p.nutriments?.carbohydrates_100g || p.nutriments?.carbohydrates || 0,
+                    fat: p.nutriments?.fat_100g || p.nutriments?.fat || 0,
+                    image_url: p.image_front_small_url || p.image_front_url
                 };
+
                 setProduct(newProduct);
                 setScanState('found');
             } else {
+                console.warn("Product found but incomplete or status not 1");
                 setScanState('not-found');
             }
         } catch (error) {
-            console.error("API Error", error);
-            setScanState('not-found'); // Treat API error as "not found" or "error" - user requested Plan B
+            console.error("API Error or Parse Error", error);
+            // On error, we don't want a blank screen. We go to not-found (Plan B)
+            setScanState('not-found');
         }
     };
 
     const handleSaveLog = () => {
         if (!product) return;
-        
+
         const ratio = grams / 100;
         const calculated = {
             calories: Math.round(product.calories * ratio),
@@ -191,49 +194,49 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                     <Icons.Plus className="rotate-45" size={24} />
                 </button>
                 <h3 className="text-white font-bold text-lg drop-shadow-md">Escanear Código</h3>
-                 <div className="w-10" /> {/* Spacer */}
+                <div className="w-10" /> {/* Spacer */}
             </div>
 
             {/* Viewfinder Scope - Only visible when scanning */}
             {scanState === 'scanning' && (
                 <div className="relative w-full h-full flex flex-col items-center justify-center">
                     <div id={mountNodeId} className="w-full h-full object-cover [&>video]:object-cover [&>video]:w-full [&>video]:h-full" />
-                    
+
                     {/* Overlay Frame */}
                     <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
                         <div className="w-64 h-64 border-2 border-white/80 rounded-3xl relative shadow-[0_0_0_9999px_rgba(0,0,0,0.5)]">
-                             <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-indigo-500 -mt-0.5 -ml-0.5 rounded-tl-xl" />
-                             <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-indigo-500 -mt-0.5 -mr-0.5 rounded-tr-xl" />
-                             <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-indigo-500 -mb-0.5 -ml-0.5 rounded-bl-xl" />
-                             <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-indigo-500 -mb-0.5 -mr-0.5 rounded-br-xl" />
+                            <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-indigo-500 -mt-0.5 -ml-0.5 rounded-tl-xl" />
+                            <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-indigo-500 -mt-0.5 -mr-0.5 rounded-tr-xl" />
+                            <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-indigo-500 -mb-0.5 -ml-0.5 rounded-bl-xl" />
+                            <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-indigo-500 -mb-0.5 -mr-0.5 rounded-br-xl" />
                         </div>
                     </div>
 
                     {/* Controls */}
                     {hasFlash && (
-                        <button 
+                        <button
                             onClick={toggleFlash}
                             className={`absolute bottom-20 p-4 rounded-full transition-all ${isFlashOn ? 'bg-yellow-400 text-black' : 'bg-white/20 text-white backdrop-blur-md'}`}
                         >
                             <Icons.Sparkles size={24} className={isFlashOn ? 'fill-current' : ''} />
                         </button>
                     )}
-                 </div>
+                </div>
             )}
 
             {/* Loading / Searching State */}
             {scanState === 'searching' && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/90 z-30">
-                     <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4" />
-                     <p className="text-white font-bold text-lg">Buscando producto...</p>
+                    <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4" />
+                    <p className="text-white font-bold text-lg">Buscando producto...</p>
                 </div>
             )}
 
             {/* Found Product Card */}
             {scanState === 'found' && product && (
-                 <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-[2rem] p-6 animate-in slide-in-from-bottom duration-300 z-30 h-[80vh] flex flex-col overflow-y-auto">
+                <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-[2rem] p-6 animate-in slide-in-from-bottom duration-300 z-30 h-[80vh] flex flex-col overflow-y-auto">
                     <div className="w-16 h-1.5 bg-gray-200 rounded-full mx-auto mb-6" />
-                    
+
                     <div className="flex items-start gap-4 mb-6">
                         {product.image_url ? (
                             <img src={product.image_url} alt={product.name} className="w-24 h-24 rounded-2xl object-cover bg-gray-100 shadow-md" />
@@ -251,32 +254,32 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                             </div>
                         </div>
                     </div>
-                    
+
                     <div className="grid grid-cols-4 gap-2 mb-8 bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                         <div className="text-center">
-                             <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Kcal</p>
-                             <p className="text-gray-800 font-black text-lg">{product.calories}</p>
-                         </div>
-                         <div className="text-center">
-                             <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Prot</p>
-                             <p className="text-protein font-black text-lg">{product.protein}</p>
-                         </div>
-                         <div className="text-center">
-                             <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Carb</p>
-                             <p className="text-carbs font-black text-lg">{product.carbs}</p>
-                         </div>
-                         <div className="text-center">
-                             <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Grasa</p>
-                             <p className="text-fat font-black text-lg">{product.fat}</p>
-                         </div>
+                        <div className="text-center">
+                            <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Kcal</p>
+                            <p className="text-gray-800 font-black text-lg">{product.calories}</p>
+                        </div>
+                        <div className="text-center">
+                            <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Prot</p>
+                            <p className="text-protein font-black text-lg">{product.protein}</p>
+                        </div>
+                        <div className="text-center">
+                            <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Carb</p>
+                            <p className="text-carbs font-black text-lg">{product.carbs}</p>
+                        </div>
+                        <div className="text-center">
+                            <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Grasa</p>
+                            <p className="text-fat font-black text-lg">{product.fat}</p>
+                        </div>
                     </div>
 
                     <div className="space-y-6 flex-1">
                         <div>
                             <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Cantidad (g)</label>
-                            <input 
-                                type="number" 
-                                value={grams} 
+                            <input
+                                type="number"
+                                value={grams}
                                 onChange={(e) => setGrams(parseFloat(e.target.value) || 0)}
                                 className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-2xl font-bold text-gray-800 focus:outline-none focus:border-indigo-500 transition-all font-mono"
                             />
@@ -285,8 +288,8 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                         <div>
                             <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Comida</label>
                             <div className="relative">
-                                <select 
-                                    value={mealType} 
+                                <select
+                                    value={mealType}
                                     onChange={(e) => setMealType(e.target.value)}
                                     className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 font-medium appearance-none focus:outline-none focus:border-indigo-500"
                                 >
@@ -299,56 +302,56 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                         </div>
                     </div>
 
-                    <button 
+                    <button
                         onClick={handleSaveLog}
                         className="w-full bg-gray-900 text-white font-bold py-4 rounded-xl mt-8 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
                     >
                         <Icons.Check size={20} />
                         Registrar Comida
                     </button>
-                    
-                    <button 
+
+                    <button
                         onClick={() => setScanState('scanning')}
                         className="w-full bg-transparent text-gray-500 font-bold py-4 rounded-xl mt-2 hover:text-gray-800 transition-all"
                     >
                         Cancelar
                     </button>
-                 </div>
+                </div>
             )}
 
             {/* Not Found View */}
             {scanState === 'not-found' && (
-                 <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-[2rem] p-8 animate-in slide-in-from-bottom duration-300 z-30 flex flex-col items-center text-center pb-12">
-                     <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center text-red-400 mb-4">
-                         <Icons.AlertCircle size={40} />
-                     </div>
-                     <h2 className="text-2xl font-bold text-gray-800 mb-2">Producto no encontrado</h2>
-                     <p className="text-gray-500 mb-8 max-w-xs">El código de barras no existe en la base de datos pública.</p>
+                <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-[2rem] p-8 animate-in slide-in-from-bottom duration-300 z-30 flex flex-col items-center text-center pb-12">
+                    <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center text-red-400 mb-4">
+                        <Icons.AlertCircle size={40} />
+                    </div>
+                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Producto no encontrado</h2>
+                    <p className="text-gray-500 mb-8 max-w-xs">El código de barras no existe en la base de datos pública.</p>
 
-                     <div className="w-full space-y-3">
-                         <button 
-                             onClick={onNavigateToManual}
-                             className="w-full bg-gray-50 border border-gray-200 hover:bg-gray-100 hover:border-gray-300 text-gray-800 font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-3"
-                         >
-                             <Icons.Edit2 size={18} />
-                             Registro Manual Rápido
-                         </button>
-                         <button 
-                             onClick={onNavigateToNewFood}
-                             className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold py-4 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-3"
-                         >
-                             <Icons.Plus size={18} />
-                             Añadir a mi NEVERA
-                         </button>
-                         
-                         <button 
+                    <div className="w-full space-y-3">
+                        <button
+                            onClick={onNavigateToManual}
+                            className="w-full bg-gray-50 border border-gray-200 hover:bg-gray-100 hover:border-gray-300 text-gray-800 font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-3"
+                        >
+                            <Icons.Edit2 size={18} />
+                            Registro Manual Rápido
+                        </button>
+                        <button
+                            onClick={onNavigateToNewFood}
+                            className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold py-4 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-3"
+                        >
+                            <Icons.Plus size={18} />
+                            Añadir a mi NEVERA
+                        </button>
+
+                        <button
                             onClick={() => setScanState('scanning')}
                             className="w-full py-4 text-gray-400 font-medium hover:text-gray-600 transition-colors mt-2"
-                         >
+                        >
                             Intentar escanear de nuevo
-                         </button>
-                     </div>
-                 </div>
+                        </button>
+                    </div>
+                </div>
             )}
         </div>
     );
