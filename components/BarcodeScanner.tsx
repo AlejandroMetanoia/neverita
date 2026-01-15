@@ -71,87 +71,89 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
         }
     };
 
+    const startScanner = async () => {
+        // 1. Viewfinder Readiness: Wait for DOM
+        // Relaxed delay: shorter wait, but enough for React to paint
+        log("Waiting for DOM...");
+        if (!document.getElementById(mountNodeId)) {
+            await new Promise(r => setTimeout(r, 300));
+        }
+
+        if (!isMountedRef.current) {
+            log("Aborted: Component unmounted.");
+            return;
+        }
+
+        // 2. Camera Lifecycle: Cleanup potential left-overs
+        await cleanupScanner();
+
+        try {
+            log("Creating Html5Qrcode instance...");
+            const html5QrCode = new Html5Qrcode(mountNodeId);
+            scannerRef.current = html5QrCode;
+
+            const config = {
+                fps: 30,
+                qrbox: { width: 300, height: 150 },
+                aspectRatio: 1.0,
+                formatsToSupport: [
+                    Html5QrcodeSupportedFormats.EAN_13,
+                    Html5QrcodeSupportedFormats.UPC_A
+                ]
+            };
+
+            const constraints = {
+                facingMode: "environment",
+                width: { min: 640, ideal: 1280, max: 1920 },
+                height: { min: 480, ideal: 720, max: 1080 },
+                focusMode: "continuous"
+            };
+
+            log("Requesting camera permissions...");
+
+            // 3. Initialize with Safety: Await the Promise. 
+            // This will HANG here while the native permission dialog is open.
+            // We do NOT set a timeout here, so the user can take their time.
+            await html5QrCode.start(
+                constraints,
+                config,
+                (decodedText) => {
+                    handleBarcodeDetected(decodedText);
+                },
+                (errorMessage) => {
+                    // ignore
+                }
+            );
+
+            log("Camera started successfully.");
+
+            // Flash Capability Check
+            try {
+                const track = html5QrCode.getRunningTrackCameraCapabilities();
+                // @ts-ignore
+                if (track && track.torchFeature && track.torchFeature.isSupported()) {
+                    setHasFlash(true);
+                }
+            } catch (e) {
+                // ignore
+            }
+
+        } catch (err: any) {
+            console.error("Failed to start scanner:", err);
+            log(`Error: ${err}`);
+
+            // Only show error screen if we are still mounted and in scanning state
+            if (isMountedRef.current && scanState === 'scanning') {
+                // Check if it's a permission denied error specifically to give better feedback?
+                // For now, generic error is fine as long as it doesn't show prematurely.
+                setScanState('error');
+            }
+        }
+    };
+
     useEffect(() => {
         isMountedRef.current = true;
         processingScanRef.current = false;
-
-        const startScanner = async () => {
-            if (scanState !== 'scanning') return;
-
-            // 1. Viewfinder Readiness: Wait for DOM
-            log("Waiting for DOM...");
-            await new Promise(r => setTimeout(r, 600)); // Generous delay to ensure DOM is ready and previous instances are gone
-
-            if (!isMountedRef.current) {
-                log("Aborted: Component unmounted during delay.");
-                return;
-            }
-
-            const element = document.getElementById(mountNodeId);
-            if (!element) {
-                log("Error: Mount node not found.");
-                setScanState('error');
-                return;
-            }
-
-            // 2. Camera Lifecycle: Cleanup potential left-overs
-            await cleanupScanner();
-
-            try {
-                log("Creating Html5Qrcode instance...");
-                const html5QrCode = new Html5Qrcode(mountNodeId);
-                scannerRef.current = html5QrCode;
-
-                const config = {
-                    fps: 30,
-                    qrbox: { width: 300, height: 150 },
-                    aspectRatio: 1.0,
-                    formatsToSupport: [
-                        Html5QrcodeSupportedFormats.EAN_13,
-                        Html5QrcodeSupportedFormats.UPC_A
-                    ]
-                };
-
-                const constraints = {
-                    facingMode: "environment",
-                    width: { min: 640, ideal: 1280, max: 1920 },
-                    height: { min: 480, ideal: 720, max: 1080 },
-                    focusMode: "continuous"
-                };
-
-                log("Starting camera stream...");
-                // 3. Initialize with Safety: Try-Catch around start
-                await html5QrCode.start(
-                    constraints,
-                    config,
-                    (decodedText) => {
-                        handleBarcodeDetected(decodedText);
-                    },
-                    (errorMessage) => {
-                        // ignore
-                    }
-                );
-
-                log("Camera started successfully.");
-
-                // Flash Capability Check
-                try {
-                    const track = html5QrCode.getRunningTrackCameraCapabilities();
-                    // @ts-ignore
-                    if (track && track.torchFeature && track.torchFeature.isSupported()) {
-                        setHasFlash(true);
-                    }
-                } catch (e) {
-                    // ignore
-                }
-
-            } catch (err) {
-                console.error("Failed to start scanner:", err);
-                log(`Error: ${err}`);
-                // 4. Prevent Auto-Close: Show Error state, don't onClose()
-                setScanState('error');
-            }
-        };
 
         if (scanState === 'scanning') {
             startScanner();
@@ -166,6 +168,15 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
             cleanupScanner();
         };
     }, [scanState, mountNodeId]);
+
+    const handleRetry = () => {
+        setScanState('scanning');
+        // The useEffect will trigger again because we are technically already in 'scanning' 
+        // OR we might need to force a re-render. 
+        // If scanState was 'error', setting it to 'scanning' triggers the effect.
+        // If it was already 'scanning' (unlikely if we are seeing error screen), we might need to call startScanner manually?
+        // Actually, if we are in 'error' state, setting to 'scanning' is sufficient.
+    };
 
     const handleBarcodeDetected = async (barcode: string) => {
         // Prevent multiple triggers
@@ -321,18 +332,20 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                     </div>
                     <h3 className="text-white font-bold text-xl mb-2">Error de Cámara</h3>
                     <p className="text-gray-400 mb-6">No se pudo acceder a la cámara. Verifica los permisos de tu navegador.</p>
-                    <button onClick={onClose} className="px-6 py-3 bg-white/10 rounded-xl text-white font-bold hover:bg-white/20 transition-all">
-                        Cerrar Escáner
-                    </button>
+                    <div className="flex gap-3">
+                        <button onClick={onClose} className="px-6 py-3 bg-white/10 rounded-xl text-white font-bold hover:bg-white/20 transition-all">
+                            Cancelar
+                        </button>
+                        <button onClick={handleRetry} className="px-6 py-3 bg-indigo-600 rounded-xl text-white font-bold hover:bg-indigo-700 transition-all">
+                            Reintentar
+                        </button>
+                    </div>
                 </div>
             )}
 
             {/* Results (Product or Not Found) */}
-            {/* ... Kept logically same as before but ensured safe rendering ... */}
-
             {scanState === 'found' && product && (
                 <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-[2rem] p-6 animate-in slide-in-from-bottom duration-300 z-30 h-[80vh] flex flex-col overflow-y-auto">
-                    {/* ... (Same Product Details UI) ... */}
                     <div className="w-16 h-1.5 bg-gray-200 rounded-full mx-auto mb-6" />
                     <div className="flex items-start gap-4 mb-6">
                         {product.image_url ? (
