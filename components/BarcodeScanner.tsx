@@ -31,7 +31,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
     onNavigateToNewFood,
     selectedDate
 }) => {
-    // Unique ID for the scanner container to avoid DOM conflicts
+    // Unique ID for the scanner container
     const [mountNodeId] = useState(`reader-${Date.now()}`);
 
     // Refs
@@ -46,110 +46,91 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
     const [mealType, setMealType] = useState<string>('Desayuno');
     const [hasFlash, setHasFlash] = useState(false);
     const [isFlashOn, setIsFlashOn] = useState(false);
-    const [debugMsg, setDebugMsg] = useState("Initializing...");
 
-    const log = (msg: string) => {
-        console.log(`[Scanner] ${msg}`);
-        setDebugMsg(msg);
-    };
-
-    // Helper to stop scanner safely
     const cleanupScanner = async () => {
-        log("Cleanup requested...");
         if (scannerRef.current) {
             try {
                 if (scannerRef.current.isScanning) {
                     await scannerRef.current.stop();
-                    log("Scanner stopped.");
                 }
                 scannerRef.current.clear();
-                log("Scanner cleared.");
             } catch (err) {
-                console.warn("Error during cleanup (safe to ignore):", err);
+                console.warn("Cleanup error:", err);
             }
             scannerRef.current = null;
-        }
-    };
-
-    const startScanner = async () => {
-        // Ensure DOM element exists before proceeding
-        let element = document.getElementById(mountNodeId);
-        if (!element) {
-            // Short wait for React paint
-            await new Promise(r => setTimeout(r, 100));
-            element = document.getElementById(mountNodeId);
-            if (!element) {
-                log("Mount node still not found");
-                return;
-            }
-        }
-
-        if (!isMountedRef.current) return;
-
-        // Cleanup any existing instance
-        await cleanupScanner();
-
-        try {
-            log("Creating new scanner instance...");
-            const html5QrCode = new Html5Qrcode(mountNodeId);
-            scannerRef.current = html5QrCode;
-
-            const config = {
-                fps: 30,
-                qrbox: { width: 300, height: 150 },
-                aspectRatio: 1.0,
-                formatsToSupport: [
-                    Html5QrcodeSupportedFormats.EAN_13,
-                    Html5QrcodeSupportedFormats.UPC_A
-                ]
-            };
-
-            const constraints = {
-                facingMode: "environment",
-                width: { min: 640, ideal: 1280, max: 1920 },
-                height: { min: 480, ideal: 720, max: 1080 },
-                focusMode: "continuous"
-            };
-
-            log("Requesting camera permission...");
-
-            // Wait indefinitely for user response (Native Dialog)
-            await html5QrCode.start(
-                constraints,
-                config,
-                (decodedText) => {
-                    handleBarcodeDetected(decodedText);
-                },
-                (errorMessage) => {
-                    // Start failed or scanning error, ignore frame errors
-                }
-            );
-
-            log("Camera started successfully");
-
-            try {
-                const track = html5QrCode.getRunningTrackCameraCapabilities();
-                // @ts-ignore
-                if (track && track.torchFeature && track.torchFeature.isSupported()) {
-                    setHasFlash(true);
-                }
-            } catch (e) {
-                // Flash check failed, non-critical
-            }
-
-        } catch (err) {
-            // Only show error if component is still mounted
-            if (isMountedRef.current && scanState === 'scanning') {
-                console.error("Scanner failed to start:", err);
-                log(`Error: ${err}`);
-                setScanState('error');
-            }
         }
     };
 
     useEffect(() => {
         isMountedRef.current = true;
         processingScanRef.current = false;
+
+        const startScanner = async () => {
+            // Wait for mount node to be present in DOM (standard React rendering timing)
+            const element = document.getElementById(mountNodeId);
+            if (!element) {
+                // If not ready, rely on next render or small natural delay. 
+                // But typically in useEffect, the DOM is ready. 
+                // We will try once after a microtask.
+                await new Promise(r => setTimeout(r, 50));
+            }
+
+            if (!isMountedRef.current) return;
+
+            // Simple cleanup of any previous instance
+            await cleanupScanner();
+
+            try {
+                const html5QrCode = new Html5Qrcode(mountNodeId);
+                scannerRef.current = html5QrCode;
+
+                const config = {
+                    fps: 30,
+                    qrbox: { width: 300, height: 150 },
+                    aspectRatio: 1.0,
+                    formatsToSupport: [
+                        Html5QrcodeSupportedFormats.EAN_13,
+                        Html5QrcodeSupportedFormats.UPC_A
+                    ]
+                };
+
+                const constraints = {
+                    facingMode: "environment",
+                    width: { min: 640, ideal: 1280, max: 1920 },
+                    height: { min: 480, ideal: 720, max: 1080 },
+                    focusMode: "continuous"
+                };
+
+                // DIRECT START - No timeouts, no pre-emptive errors. 
+                // The browser will handle the permission prompt here.
+                await html5QrCode.start(
+                    constraints,
+                    config,
+                    (decodedText) => {
+                        handleBarcodeDetected(decodedText);
+                    },
+                    (errorMessage) => {
+                        // Scan error (frame didn't have barcode), ignore.
+                    }
+                );
+
+                // Success
+                try {
+                    const track = html5QrCode.getRunningTrackCameraCapabilities();
+                    // @ts-ignore
+                    if (track && track.torchFeature && track.torchFeature.isSupported()) {
+                        setHasFlash(true);
+                    }
+                } catch (e) { }
+
+            } catch (err) {
+                console.error("Camera start failed:", err);
+                // ONLY set error if specifically rejected by the browser/lib
+                if (isMountedRef.current && scanState === 'scanning') {
+                    setScanState('error');
+                }
+            }
+        };
 
         if (scanState === 'scanning') {
             startScanner();
@@ -165,39 +146,27 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
 
     const handleRetry = () => {
         setScanState('scanning');
-        // The useEffect will trigger again because we are technically already in 'scanning' 
-        // OR we might need to force a re-render. 
-        // If scanState was 'error', setting it to 'scanning' triggers the effect.
-        // If it was already 'scanning' (unlikely if we are seeing error screen), we might need to call startScanner manually?
-        // Actually, if we are in 'error' state, setting to 'scanning' is sufficient.
     };
 
     const handleBarcodeDetected = async (barcode: string) => {
-        // Prevent multiple triggers
         if (processingScanRef.current || scanState !== 'scanning') return;
         processingScanRef.current = true;
 
-        log(`Barcode Detected: ${barcode}`);
-        // Haptic feedback
         if (navigator.vibrate) navigator.vibrate(200);
 
         setScanState('searching');
 
-        // Safety Timeout (6s)
+        // Network Timeout
         const timeoutId = setTimeout(() => {
             if (isMountedRef.current) {
-                log("API Timeout. Redirecting...");
                 onNavigateToManual();
             }
         }, 6000);
 
         try {
-            // Fallback API
             const response = await fetch(`https://world.openfoodfacts.org/api/v2/product/${barcode}.json`);
             clearTimeout(timeoutId);
-
             const data = await response.json();
-            console.log('API Response:', data);
 
             if ((data.status === 1 || data.status === 'success') && data.product) {
                 const p = data.product;
@@ -211,7 +180,6 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                     fat: p.nutriments?.fat_100g || p.nutriments?.fat || 0,
                     image_url: p.image_front_small_url || p.image_front_url
                 };
-
                 setProduct(newProduct);
                 setScanState('found');
             } else {
@@ -219,7 +187,6 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
             }
         } catch (error) {
             clearTimeout(timeoutId);
-            console.error("API Error", error);
             setScanState('not-found');
         }
     };
@@ -232,13 +199,12 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
             } as any);
             setIsFlashOn(!isFlashOn);
         } catch (err) {
-            console.error("Error toggling flash", err);
+            console.error(err);
         }
     };
 
     const handleSaveLog = () => {
         if (!product) return;
-
         const ratio = grams / 100;
         const calculated = {
             calories: Math.round(product.calories * ratio),
@@ -246,8 +212,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
             carbs: Number((product.carbs * ratio).toFixed(1)),
             fat: Number((product.fat * ratio).toFixed(1))
         };
-
-        const newLog: LogEntry = {
+        onAddLog({
             id: Date.now().toString(),
             date: selectedDate,
             foodId: `scanned-${product.code}`,
@@ -255,9 +220,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
             meal: mealType,
             grams: grams,
             calculated
-        };
-
-        onAddLog(newLog);
+        });
         onClose();
     };
 
@@ -272,16 +235,11 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                 <div className="w-10"></div>
             </div>
 
-            {/* Debug Overlay (Optional - visible for now to help debug) */}
-            <div className="absolute top-16 left-0 w-full text-center pointer-events-none z-10">
-                <p className="text-[10px] text-zinc-500 bg-black/20 inline-block px-2 rounded">{debugMsg}</p>
-            </div>
-
             {/* Scanning View */}
             <div className={`relative w-full h-full flex flex-col items-center justify-center bg-black ${scanState !== 'scanning' ? 'hidden' : ''}`}>
                 <div id={mountNodeId} className="w-full h-full" />
 
-                {/* Overlay only when camera is actively running */}
+                {/* Viewfinder Overlay */}
                 <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-10">
                     <div className="w-[320px] h-[170px] border-2 border-white/50 rounded-2xl relative shadow-[0_0_0_9999px_rgba(0,0,0,0.5)] overflow-hidden">
                         <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-red-500 rounded-tl-xl" />
@@ -310,7 +268,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                 )}
             </div>
 
-            {/* Parsing / Searching */}
+            {/* Loading Overlay (Searching) */}
             {scanState === 'searching' && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-black z-30">
                     <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4" />
@@ -318,14 +276,14 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                 </div>
             )}
 
-            {/* Error State */}
+            {/* Error Overlay */}
             {scanState === 'error' && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-black z-30 px-6 text-center">
                     <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mb-4 text-red-500">
                         <Icons.AlertCircle size={32} />
                     </div>
                     <h3 className="text-white font-bold text-xl mb-2">Error de Cámara</h3>
-                    <p className="text-gray-400 mb-6">No se pudo acceder a la cámara. Verifica los permisos de tu navegador.</p>
+                    <p className="text-gray-400 mb-6">No se pudo acceder a la cámara. Por favor permite el acceso y reintenta.</p>
                     <div className="flex gap-3">
                         <button onClick={onClose} className="px-6 py-3 bg-white/10 rounded-xl text-white font-bold hover:bg-white/20 transition-all">
                             Cancelar
@@ -337,7 +295,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                 </div>
             )}
 
-            {/* Results (Product or Not Found) */}
+            {/* Product Found / Not Found results logic (same as before) */}
             {scanState === 'found' && product && (
                 <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-[2rem] p-6 animate-in slide-in-from-bottom duration-300 z-30 h-[80vh] flex flex-col overflow-y-auto">
                     <div className="w-16 h-1.5 bg-gray-200 rounded-full mx-auto mb-6" />
@@ -358,6 +316,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                             </div>
                         </div>
                     </div>
+
                     <div className="grid grid-cols-4 gap-2 mb-8 bg-gray-50 p-4 rounded-2xl border border-gray-100">
                         <div className="text-center">
                             <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Kcal</p>
@@ -428,7 +387,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                         <Icons.AlertCircle size={40} />
                     </div>
                     <h2 className="text-2xl font-bold text-gray-800 mb-2">Producto no encontrado</h2>
-                    <p className="text-gray-500 mb-8 max-w-xs">El código de barras no existe o no tiene datos.</p>
+                    <p className="text-gray-500 mb-8 max-w-xs">El código de barras no existe en la base de datos pública.</p>
 
                     <div className="w-full space-y-3">
                         <button
@@ -450,12 +409,11 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                             onClick={() => setScanState('scanning')}
                             className="w-full py-4 text-gray-400 font-medium hover:text-gray-600 transition-colors mt-2"
                         >
-                            Intentar escanear de nuevo
+                            Reintentar
                         </button>
                     </div>
                 </div>
             )}
-
         </div>
     );
 };
