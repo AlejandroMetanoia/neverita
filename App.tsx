@@ -254,7 +254,7 @@ function App() {
                               Cerrar Sesión
                            </button>
                            <div className="mt-8 pt-8 border-t border-gray-100">
-                              <p className="text-xs text-gray-400 uppercase tracking-widest font-bold">MacroTrack Pro v2.0</p>
+                              <p className="text-xs text-gray-400 uppercase tracking-widest font-bold">Neverita v1.0</p>
                            </div>
                         </div>
                      </div>
