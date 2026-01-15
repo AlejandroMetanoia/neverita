@@ -202,7 +202,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
     );
 
     return (
-        <div className="space-y-8 animate-fade-in pb-20">
+        <div className="space-y-4 animate-fade-in pb-20">
             {/* Header & Date Picker */}
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
@@ -223,9 +223,9 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
             </div>
 
             {/* Refactored Stats Grid - Matching Reference Design */}
-            <div className="flex flex-col gap-4 mb-8">
+            <div className="flex flex-col gap-4 mb-4">
                 {/* Calories Card - Hero */}
-                <div className="bg-white/90 backdrop-blur-2xl p-6 rounded-[2rem] border border-white/60 shadow-lg relative overflow-hidden">
+                <div className="bg-white/90 backdrop-blur-2xl p-4 rounded-[2rem] border border-white/60 shadow-lg relative overflow-hidden">
                     {/* Background blob */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-orange-100/40 blur-[60px] rounded-full pointer-events-none translate-x-12 -translate-y-12" />
 
@@ -233,13 +233,13 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                         <div className="flex flex-col">
                             <p className="text-gray-500 font-bold mb-1 ml-1 text-sm">Calorías Consumidas</p>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-6xl font-black text-gray-800 tracking-tighter leading-none">{Math.round(totals.calories)}</span>
+                                <span className="text-5xl font-black text-gray-800 tracking-tighter leading-none">{Math.round(totals.calories)}</span>
                                 <span className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Kcal</span>
                             </div>
                         </div>
 
                         {/* Chart */}
-                        <div className="w-28 h-28 relative">
+                        <div className="w-20 h-20 relative">
                             <ResponsiveContainer width="100%" height="100%">
                                 <PieChart>
                                     <Pie
@@ -321,7 +321,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 <button
                     onClick={() => setEntryMode('scan')}
-                    className="w-full py-4 bg-white hover:bg-gray-50 rounded-2xl border border-gray-100 text-gray-600 hover:text-indigo-500 font-bold text-sm shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3"
+                    className="w-full py-3 bg-white hover:bg-gray-50 rounded-2xl border border-gray-100 text-gray-600 hover:text-indigo-500 font-bold text-sm shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3"
                 >
                     <div className="p-2 bg-indigo-50 rounded-lg group-hover:scale-110 transition-transform">
                         <Icons.ScanBarcode size={18} className="text-indigo-400" />
@@ -331,7 +331,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
 
                 <button
                     onClick={() => setEntryMode('search')}
-                    className="group relative w-full py-4 bg-white hover:bg-gray-50 rounded-2xl border border-gray-100 text-gray-600 hover:text-indigo-500 font-bold text-sm shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3"
+                    className="group relative w-full py-3 bg-white hover:bg-gray-50 rounded-2xl border border-gray-100 text-gray-600 hover:text-indigo-500 font-bold text-sm shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3"
                 >
                     <div className="p-2 bg-indigo-50 rounded-lg group-hover:scale-110 transition-transform">
                         <Icons.Plus size={18} className="text-indigo-400" />
@@ -341,7 +341,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
 
                 <button
                     onClick={() => setEntryMode('manual')}
-                    className="w-full py-4 bg-white hover:bg-gray-50 rounded-2xl border border-gray-100 text-gray-600 hover:text-gray-800 font-semibold text-sm transition-all flex items-center justify-center gap-3 shadow-sm hover:shadow-md"
+                    className="w-full py-3 bg-white hover:bg-gray-50 rounded-2xl border border-gray-100 text-gray-600 hover:text-gray-800 font-semibold text-sm transition-all flex items-center justify-center gap-3 shadow-sm hover:shadow-md"
                 >
                     <div className="p-2 bg-gray-50 rounded-lg group-hover:scale-110 transition-transform">
                         <Icons.Edit2 size={16} />
@@ -351,7 +351,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
 
                 <button
                     onClick={() => setEntryMode('ai')}
-                    className="group w-full py-4 bg-gradient-to-br from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 rounded-2xl text-white font-bold text-sm transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl relative overflow-hidden"
+                    className="group w-full py-3 bg-gradient-to-br from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 rounded-2xl text-white font-bold text-sm transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-xl relative overflow-hidden"
                 >
                     <div className="absolute inset-0 bg-white/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <Icons.Sparkles size={16} className="animate-pulse" />
