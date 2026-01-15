@@ -72,23 +72,25 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
     };
 
     const startScanner = async () => {
-        // 1. Viewfinder Readiness: Wait for DOM
-        // Relaxed delay: shorter wait, but enough for React to paint
-        log("Waiting for DOM...");
-        if (!document.getElementById(mountNodeId)) {
-            await new Promise(r => setTimeout(r, 300));
+        // Ensure DOM element exists before proceeding
+        let element = document.getElementById(mountNodeId);
+        if (!element) {
+            // Short wait for React paint
+            await new Promise(r => setTimeout(r, 100));
+            element = document.getElementById(mountNodeId);
+            if (!element) {
+                log("Mount node still not found");
+                return;
+            }
         }
 
-        if (!isMountedRef.current) {
-            log("Aborted: Component unmounted.");
-            return;
-        }
+        if (!isMountedRef.current) return;
 
-        // 2. Camera Lifecycle: Cleanup potential left-overs
+        // Cleanup any existing instance
         await cleanupScanner();
 
         try {
-            log("Creating Html5Qrcode instance...");
+            log("Creating new scanner instance...");
             const html5QrCode = new Html5Qrcode(mountNodeId);
             scannerRef.current = html5QrCode;
 
@@ -109,11 +111,9 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                 focusMode: "continuous"
             };
 
-            log("Requesting camera permissions...");
+            log("Requesting camera permission...");
 
-            // 3. Initialize with Safety: Await the Promise. 
-            // This will HANG here while the native permission dialog is open.
-            // We do NOT set a timeout here, so the user can take their time.
+            // Wait indefinitely for user response (Native Dialog)
             await html5QrCode.start(
                 constraints,
                 config,
@@ -121,13 +121,12 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                     handleBarcodeDetected(decodedText);
                 },
                 (errorMessage) => {
-                    // ignore
+                    // Start failed or scanning error, ignore frame errors
                 }
             );
 
-            log("Camera started successfully.");
+            log("Camera started successfully");
 
-            // Flash Capability Check
             try {
                 const track = html5QrCode.getRunningTrackCameraCapabilities();
                 // @ts-ignore
@@ -135,17 +134,14 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                     setHasFlash(true);
                 }
             } catch (e) {
-                // ignore
+                // Flash check failed, non-critical
             }
 
-        } catch (err: any) {
-            console.error("Failed to start scanner:", err);
-            log(`Error: ${err}`);
-
-            // Only show error screen if we are still mounted and in scanning state
+        } catch (err) {
+            // Only show error if component is still mounted
             if (isMountedRef.current && scanState === 'scanning') {
-                // Check if it's a permission denied error specifically to give better feedback?
-                // For now, generic error is fine as long as it doesn't show prematurely.
+                console.error("Scanner failed to start:", err);
+                log(`Error: ${err}`);
                 setScanState('error');
             }
         }
@@ -158,12 +154,10 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
         if (scanState === 'scanning') {
             startScanner();
         } else {
-            // If not scanning, ensure camera is stopped
             cleanupScanner();
         }
 
         return () => {
-            log("Effect cleanup.");
             isMountedRef.current = false;
             cleanupScanner();
         };
