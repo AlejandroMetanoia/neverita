@@ -17,12 +17,23 @@ function App() {
    const [loading, setLoading] = useState(true);
    const [currentView, setCurrentView] = useState<View>('dashboard');
    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+   const [autoOpenAdd, setAutoOpenAdd] = useState(false);
 
    // Persistent State
    const [userFoods, setUserFoods] = useState<Food[]>([]);
    const foods = [...INITIAL_FOODS, ...userFoods]; // Combine static and user foods
 
    const [logs, setLogs] = useState<LogEntry[]>([]);
+
+   const handleNavigateToLibraryAdd = () => {
+      setCurrentView('library');
+      setAutoOpenAdd(true);
+   };
+
+   const handleChangeView = (view: View) => {
+      setCurrentView(view);
+      setAutoOpenAdd(false);
+   };
 
    useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -158,7 +169,7 @@ function App() {
             </div>
 
             <button
-               onClick={() => setCurrentView('dashboard')}
+               onClick={() => handleChangeView('dashboard')}
                className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'dashboard' ? 'bg-indigo-50 text-indigo-500 shadow-sm' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'}`}
             >
                <Icons.Dashboard size={28} className={`transition-transform duration-300 ${currentView === 'dashboard' ? 'scale-110' : 'group-hover:scale-110'}`} />
@@ -166,7 +177,7 @@ function App() {
             </button>
 
             <button
-               onClick={() => setCurrentView('library')}
+               onClick={() => handleChangeView('library')}
                className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'library' ? 'bg-sky-50 text-sky-500 shadow-sm' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'}`}
             >
                <Icons.Library size={28} className={`transition-transform duration-300 ${currentView === 'library' ? 'scale-110' : 'group-hover:scale-110'}`} />
@@ -174,7 +185,7 @@ function App() {
             </button>
 
             <button
-               onClick={() => setCurrentView('stats')}
+               onClick={() => handleChangeView('stats')}
                className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'stats' ? 'bg-fuchsia-50 text-fuchsia-500 shadow-sm' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'}`}
             >
                <Icons.Stats size={28} className={`transition-transform duration-300 ${currentView === 'stats' ? 'scale-110' : 'group-hover:scale-110'}`} />
@@ -183,7 +194,7 @@ function App() {
 
             {/* Profile */}
             <button
-               onClick={() => setCurrentView('profile')}
+               onClick={() => handleChangeView('profile')}
                className="hidden md:flex mt-auto w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-md hover:shadow-lg transition-transform hover:scale-105"
             >
                {user?.photoURL ? (
@@ -197,7 +208,7 @@ function App() {
 
             {/* Mobile Profile Link */}
             <button
-               onClick={() => setCurrentView('profile')}
+               onClick={() => handleChangeView('profile')}
                className={`md:hidden p-3 rounded-full transition-all ${currentView === 'profile' ? 'ring-2 ring-secondary shadow-md' : 'opacity-80'}`}
             >
                <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 ring-2 ring-white shadow-sm">
@@ -217,6 +228,7 @@ function App() {
                      onDeleteLog={deleteLog}
                      selectedDate={selectedDate}
                      onDateChange={setSelectedDate}
+                     onNavigateToLibrary={handleNavigateToLibraryAdd}
                   />
                )}
                {currentView === 'library' && (
@@ -224,6 +236,7 @@ function App() {
                      foods={foods}
                      onAddFood={addFood}
                      onDeleteFood={deleteFood}
+                     autoOpenAdd={autoOpenAdd}
                   />
                )}
                {currentView === 'stats' && (

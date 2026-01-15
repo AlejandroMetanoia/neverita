@@ -38,7 +38,10 @@ import {
   Coffee,
   Calendar,
   Sparkles,
-  Edit2
+  Edit2,
+  ScanBarcode,
+  Check,
+  AlertCircle
 } from 'lucide-react';
 
 export const Icons = {
@@ -82,5 +85,8 @@ export const Icons = {
   Coffee,
   Calendar,
   Sparkles,
-  Edit2
+  Edit2,
+  ScanBarcode,
+  Check,
+  AlertCircle
 };

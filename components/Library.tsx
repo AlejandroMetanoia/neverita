@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Food } from '../types';
+import { Food, LogEntry } from '../types';
 import { FOOD_CATEGORIES, SUB_CATEGORIES } from '../constants';
 import { Icons } from './ui/Icons';
 
 interface LibraryProps {
   foods: Food[];
+  onAddLog?: (log: LogEntry) => void;
   onAddFood: (food: Food) => void;
   onDeleteFood: (id: string) => void;
+  autoOpenAdd?: boolean;
 }
 
-const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => {
+const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoOpenAdd = false }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
-  const [isAdding, setIsAdding] = useState(false);
+  const [isAdding, setIsAdding] = useState(autoOpenAdd);
 
   const [newFood, setNewFood] = useState<Omit<Food, 'id' | 'userId'>>({
     name: '',
@@ -34,6 +36,11 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood }) => 
     }, 300);
     return () => clearTimeout(handler);
   }, [searchTerm]);
+
+  // Sync autoOpenAdd prop
+  useEffect(() => {
+    if (autoOpenAdd) setIsAdding(true);
+  }, [autoOpenAdd]);
 
   // Filter Logic
   const filteredFoods = foods.filter((f) => {

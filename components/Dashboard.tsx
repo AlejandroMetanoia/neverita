@@ -3,6 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Food, LogEntry, MealType } from '../types';
 import { MEAL_TYPES, MEAL_COLORS } from '../constants';
 import { Icons } from './ui/Icons';
+import BarcodeScanner from './BarcodeScanner';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 interface DashboardProps {
@@ -12,10 +13,11 @@ interface DashboardProps {
     onDeleteLog: (id: string) => void;
     selectedDate: string;
     onDateChange: (date: string) => void;
+    onNavigateToLibrary: () => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLog, selectedDate, onDateChange }) => {
-    const [entryMode, setEntryMode] = useState<'search' | 'manual' | 'ai' | null>(null);
+const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLog, selectedDate, onDateChange, onNavigateToLibrary }) => {
+    const [entryMode, setEntryMode] = useState<'search' | 'scan' | 'manual' | 'ai' | null>(null);
 
     // AI State
     const [aiDescription, setAiDescription] = useState('');
@@ -292,7 +294,17 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                <button
+                    onClick={() => setEntryMode('scan')}
+                    className="w-full py-4 bg-white hover:bg-gray-50 rounded-2xl border border-gray-100 text-gray-600 hover:text-indigo-500 font-bold text-sm shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3"
+                >
+                    <div className="p-2 bg-indigo-50 rounded-lg group-hover:scale-110 transition-transform">
+                        <Icons.ScanBarcode size={18} className="text-indigo-400" />
+                    </div>
+                    <span>Escanear</span>
+                </button>
+
                 <button
                     onClick={() => setEntryMode('search')}
                     className="group relative w-full py-4 bg-white hover:bg-gray-50 rounded-2xl border border-gray-100 text-gray-600 hover:text-indigo-500 font-bold text-sm shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3"
@@ -648,6 +660,15 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                         </div>
                     </div>
                 </div>
+            )}
+            {entryMode === 'scan' && (
+                <BarcodeScanner
+                    onClose={() => setEntryMode(null)}
+                    onAddLog={onAddLog}
+                    selectedDate={selectedDate}
+                    onNavigateToManual={() => setEntryMode('manual')}
+                    onNavigateToNewFood={onNavigateToLibrary}
+                />
             )}
         </div>
     );
