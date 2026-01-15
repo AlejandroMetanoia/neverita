@@ -666,7 +666,12 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                     onClose={() => setEntryMode(null)}
                     onAddLog={onAddLog}
                     selectedDate={selectedDate}
-                    onNavigateToManual={() => setEntryMode('manual')}
+                    onNavigateToManual={(code) => {
+                        if (code) {
+                            setManualEntry(prev => ({ ...prev, name: `Producto desconocido (${code})` }));
+                        }
+                        setEntryMode('manual');
+                    }}
                     onNavigateToNewFood={onNavigateToLibrary}
                 />
             )}
