@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 import { Icons } from './ui/Icons';
-import { LogEntry, Food } from '../types';
+import { LogEntry } from '../types';
 
 interface BarcodeScannerProps {
     onClose: () => void;
@@ -11,7 +11,7 @@ interface BarcodeScannerProps {
     selectedDate: string;
 }
 
-type ScanState = 'scanning' | 'modifying' | 'searching' | 'found' | 'not-found' | 'error';
+type ScanState = 'scanning' | 'searching' | 'found' | 'not-found' | 'error';
 
 interface ScannedProduct {
     code: string;
@@ -40,12 +40,22 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
     const [isFlashOn, setIsFlashOn] = useState(false);
     const [mountNodeId] = useState(`reader-${Date.now()}`);
 
+    // Cleanup function to stop camera
+    const stopScanner = async () => {
+        if (scannerRef.current && scannerRef.current.isScanning) {
+            try {
+                await scannerRef.current.stop();
+                scannerRef.current.clear();
+            } catch (err) {
+                console.error("Error stopping scanner", err);
+            }
+        }
+    };
+
     useEffect(() => {
         // Only initialize scanner if we are in 'scanning' state
         if (scanState !== 'scanning') {
-            if (scannerRef.current?.isScanning) {
-                scannerRef.current.stop().catch(console.error);
-            }
+            stopScanner();
             return;
         }
 
@@ -75,16 +85,13 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                         handleBarcodeDetected(decodedText);
                     },
                     (errorMessage) => {
-                        // console.log(errorMessage); // Ignore parse errors
+                        // Ignore parse errors
                     }
                 );
 
                 // Check flash capability
                 try {
-                    // Get the track and capabilities from the running stream
-                    // Only works if the scanner has started
                     const track = scannerRef.current.getRunningTrackCameraCapabilities();
-                    // Note: html5-qrcode types might be slightly off or strict
                     // @ts-ignore
                     if (track && track.torchFeature && track.torchFeature.isSupported()) {
                         setHasFlash(true);
@@ -102,9 +109,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
         initializeScanner();
 
         return () => {
-            if (scannerRef.current?.isScanning) {
-                scannerRef.current.stop().catch(console.error);
-            }
+            stopScanner();
         };
     }, [scanState, mountNodeId]);
 
@@ -123,24 +128,39 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
     const handleBarcodeDetected = async (barcode: string) => {
         if (scanState !== 'scanning') return;
 
+        // 1. Debug Alert (Safety Check)
+        window.alert('Barcode detected: ' + barcode);
+
         // Haptic feedback
         if (navigator.vibrate) navigator.vibrate(200);
 
         setScanState('searching');
-        try {
-            const response = await fetch(`https://world.openfoodfacts.org/api/v2/product/${barcode}`);
-            const data = await response.json();
 
+        // 2. Hardcoded Safety Timeout (5 seconds)
+        const timeoutId = setTimeout(() => {
+            console.warn("API Timeout - redirecting to manual");
+            // Automatically redirect to manual entry if API hangs
+            onNavigateToManual();
+        }, 5000);
+
+        try {
+            // 3. Fallback API URL (.json)
+            const response = await fetch(`https://world.openfoodfacts.org/api/v2/product/${barcode}.json`);
+
+            // Clear timeout if fetch succeeds
+            clearTimeout(timeoutId);
+
+            const data = await response.json();
             console.log('API Response:', data);
 
-            // Robust check: ensure status is success and product object exists
-            if (data.status === 1 && data.product) {
+            // Robust check using optional chaining
+            if ((data.status === 1 || data.status === 'success') && data.product) {
                 const p = data.product;
                 const newProduct: ScannedProduct = {
                     code: barcode,
                     name: p.product_name || 'Producto Desconocido',
                     brand: p.brands || '',
-                    // Use optional chaining and fallback to 0 to prevent crashes
+                    // Safety chain
                     calories: p.nutriments?.['energy-kcal_100g'] || p.nutriments?.['energy-kcal'] || 0,
                     protein: p.nutriments?.proteins_100g || p.nutriments?.proteins || 0,
                     carbs: p.nutriments?.carbohydrates_100g || p.nutriments?.carbohydrates || 0,
@@ -151,12 +171,12 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                 setProduct(newProduct);
                 setScanState('found');
             } else {
-                console.warn("Product found but incomplete or status not 1");
+                console.warn("Product not found in API");
                 setScanState('not-found');
             }
         } catch (error) {
-            console.error("API Error or Parse Error", error);
-            // On error, we don't want a blank screen. We go to not-found (Plan B)
+            clearTimeout(timeoutId);
+            console.error("API Error", error);
             setScanState('not-found');
         }
     };
@@ -194,15 +214,14 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                     <Icons.Plus className="rotate-45" size={24} />
                 </button>
                 <h3 className="text-white font-bold text-lg drop-shadow-md">Escanear Código</h3>
-                <div className="w-10" /> {/* Spacer */}
+                <div className="w-10" />
             </div>
 
-            {/* Viewfinder Scope - Only visible when scanning */}
+            {/* Viewfinder Scope */}
             {scanState === 'scanning' && (
                 <div className="relative w-full h-full flex flex-col items-center justify-center">
                     <div id={mountNodeId} className="w-full h-full object-cover [&>video]:object-cover [&>video]:w-full [&>video]:h-full" />
 
-                    {/* Overlay Frame */}
                     <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
                         <div className="w-64 h-64 border-2 border-white/80 rounded-3xl relative shadow-[0_0_0_9999px_rgba(0,0,0,0.5)]">
                             <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-indigo-500 -mt-0.5 -ml-0.5 rounded-tl-xl" />
@@ -212,7 +231,6 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                         </div>
                     </div>
 
-                    {/* Controls */}
                     {hasFlash && (
                         <button
                             onClick={toggleFlash}
@@ -232,92 +250,100 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                 </div>
             )}
 
-            {/* Found Product Card */}
-            {scanState === 'found' && product && (
-                <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-[2rem] p-6 animate-in slide-in-from-bottom duration-300 z-30 h-[80vh] flex flex-col overflow-y-auto">
-                    <div className="w-16 h-1.5 bg-gray-200 rounded-full mx-auto mb-6" />
+            {/* Found Product Card - Render SAFELY using conditional rendering */}
+            {scanState === 'found' ? (
+                product ? (
+                    <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-[2rem] p-6 animate-in slide-in-from-bottom duration-300 z-30 h-[80vh] flex flex-col overflow-y-auto">
+                        <div className="w-16 h-1.5 bg-gray-200 rounded-full mx-auto mb-6" />
 
-                    <div className="flex items-start gap-4 mb-6">
-                        {product.image_url ? (
-                            <img src={product.image_url} alt={product.name} className="w-24 h-24 rounded-2xl object-cover bg-gray-100 shadow-md" />
-                        ) : (
-                            <div className="w-24 h-24 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-400">
-                                <Icons.Package size={32} />
-                            </div>
-                        )}
-                        <div className="flex-1">
-                            <h2 className="text-2xl font-bold text-gray-800 leading-tight mb-1">{product.name}</h2>
-                            <p className="text-gray-500 font-medium">{product.brand}</p>
-                            <div className="flex gap-2 mt-2">
-                                <span className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-xs font-bold border border-blue-100">{product.protein}g Prot</span>
-                                <span className="bg-orange-50 text-orange-600 px-2 py-0.5 rounded text-xs font-bold border border-orange-100">{product.calories} kcal</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-4 gap-2 mb-8 bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                        <div className="text-center">
-                            <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Kcal</p>
-                            <p className="text-gray-800 font-black text-lg">{product.calories}</p>
-                        </div>
-                        <div className="text-center">
-                            <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Prot</p>
-                            <p className="text-protein font-black text-lg">{product.protein}</p>
-                        </div>
-                        <div className="text-center">
-                            <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Carb</p>
-                            <p className="text-carbs font-black text-lg">{product.carbs}</p>
-                        </div>
-                        <div className="text-center">
-                            <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Grasa</p>
-                            <p className="text-fat font-black text-lg">{product.fat}</p>
-                        </div>
-                    </div>
-
-                    <div className="space-y-6 flex-1">
-                        <div>
-                            <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Cantidad (g)</label>
-                            <input
-                                type="number"
-                                value={grams}
-                                onChange={(e) => setGrams(parseFloat(e.target.value) || 0)}
-                                className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-2xl font-bold text-gray-800 focus:outline-none focus:border-indigo-500 transition-all font-mono"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Comida</label>
-                            <div className="relative">
-                                <select
-                                    value={mealType}
-                                    onChange={(e) => setMealType(e.target.value)}
-                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 font-medium appearance-none focus:outline-none focus:border-indigo-500"
-                                >
-                                    {['Desayuno', 'Almuerzo', 'Cena', 'Snack', 'Pre-Entreno', 'Post-Entreno'].map(m => (
-                                        <option key={m} value={m}>{m}</option>
-                                    ))}
-                                </select>
-                                <Icons.ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                        <div className="flex items-start gap-4 mb-6">
+                            {product.image_url ? (
+                                <img src={product.image_url} alt={product.name} className="w-24 h-24 rounded-2xl object-cover bg-gray-100 shadow-md" />
+                            ) : (
+                                <div className="w-24 h-24 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-400">
+                                    <Icons.Package size={32} />
+                                </div>
+                            )}
+                            <div className="flex-1">
+                                <h2 className="text-2xl font-bold text-gray-800 leading-tight mb-1">{product.name}</h2>
+                                <p className="text-gray-500 font-medium">{product.brand}</p>
+                                <div className="flex gap-2 mt-2">
+                                    <span className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-xs font-bold border border-blue-100">{product.protein}g Prot</span>
+                                    <span className="bg-orange-50 text-orange-600 px-2 py-0.5 rounded text-xs font-bold border border-orange-100">{product.calories} kcal</span>
+                                </div>
                             </div>
                         </div>
+
+                        <div className="grid grid-cols-4 gap-2 mb-8 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                            <div className="text-center">
+                                <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Kcal</p>
+                                <p className="text-gray-800 font-black text-lg">{product.calories}</p>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Prot</p>
+                                <p className="text-protein font-black text-lg">{product.protein}</p>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Carb</p>
+                                <p className="text-carbs font-black text-lg">{product.carbs}</p>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Grasa</p>
+                                <p className="text-fat font-black text-lg">{product.fat}</p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-6 flex-1">
+                            <div>
+                                <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Cantidad (g)</label>
+                                <input
+                                    type="number"
+                                    value={grams}
+                                    onChange={(e) => setGrams(parseFloat(e.target.value) || 0)}
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-2xl font-bold text-gray-800 focus:outline-none focus:border-indigo-500 transition-all font-mono"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Comida</label>
+                                <div className="relative">
+                                    <select
+                                        value={mealType}
+                                        onChange={(e) => setMealType(e.target.value)}
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 font-medium appearance-none focus:outline-none focus:border-indigo-500"
+                                    >
+                                        {['Desayuno', 'Almuerzo', 'Cena', 'Snack', 'Pre-Entreno', 'Post-Entreno'].map(m => (
+                                            <option key={m} value={m}>{m}</option>
+                                        ))}
+                                    </select>
+                                    <Icons.ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={handleSaveLog}
+                            className="w-full bg-gray-900 text-white font-bold py-4 rounded-xl mt-8 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                        >
+                            <Icons.Check size={20} />
+                            Registrar Comida
+                        </button>
+
+                        <button
+                            onClick={() => setScanState('scanning')}
+                            className="w-full bg-transparent text-gray-500 font-bold py-4 rounded-xl mt-2 hover:text-gray-800 transition-all"
+                        >
+                            Cancelar
+                        </button>
                     </div>
-
-                    <button
-                        onClick={handleSaveLog}
-                        className="w-full bg-gray-900 text-white font-bold py-4 rounded-xl mt-8 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
-                    >
-                        <Icons.Check size={20} />
-                        Registrar Comida
-                    </button>
-
-                    <button
-                        onClick={() => setScanState('scanning')}
-                        className="w-full bg-transparent text-gray-500 font-bold py-4 rounded-xl mt-2 hover:text-gray-800 transition-all"
-                    >
-                        Cancelar
-                    </button>
-                </div>
-            )}
+                ) : (
+                    // Fallback if state is found but product is null (Shouldn't happen but safe)
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/90 z-30">
+                        <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin mb-4" />
+                        <p className="text-white">Cargando datos...</p>
+                    </div>
+                )
+            ) : null}
 
             {/* Not Found View */}
             {scanState === 'not-found' && (
@@ -326,7 +352,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                         <Icons.AlertCircle size={40} />
                     </div>
                     <h2 className="text-2xl font-bold text-gray-800 mb-2">Producto no encontrado</h2>
-                    <p className="text-gray-500 mb-8 max-w-xs">El código de barras no existe en la base de datos pública.</p>
+                    <p className="text-gray-500 mb-8 max-w-xs">El código de barras no existe en la base de datos pública o hubo un error.</p>
 
                     <div className="w-full space-y-3">
                         <button
