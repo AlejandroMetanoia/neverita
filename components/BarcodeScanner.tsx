@@ -11,7 +11,7 @@ interface BarcodeScannerProps {
     selectedDate: string;
 }
 
-type ScanState = 'scanning' | 'searching' | 'found' | 'not-found' | 'error';
+type ScanState = 'scanning' | 'searching' | 'found' | 'not-found';
 
 interface ScannedProduct {
     code: string;
@@ -31,141 +31,76 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
     onNavigateToNewFood,
     selectedDate
 }) => {
-    // Unique ID for the scanner container
-    const [mountNodeId] = useState(`reader-${Date.now()}`);
-
-    // Refs
+    const mountNodeId = "reader-camera";
     const scannerRef = useRef<Html5Qrcode | null>(null);
-    const isMountedRef = useRef(true);
-    const processingScanRef = useRef(false);
-
-    // State
     const [scanState, setScanState] = useState<ScanState>('scanning');
     const [product, setProduct] = useState<ScannedProduct | null>(null);
+
+    // Form State
     const [grams, setGrams] = useState<number>(100);
     const [mealType, setMealType] = useState<string>('Desayuno');
-    const [hasFlash, setHasFlash] = useState(false);
-    const [isFlashOn, setIsFlashOn] = useState(false);
-
-    const cleanupScanner = async () => {
-        if (scannerRef.current) {
-            try {
-                if (scannerRef.current.isScanning) {
-                    await scannerRef.current.stop();
-                }
-                scannerRef.current.clear();
-            } catch (err) {
-                console.warn("Cleanup error:", err);
-            }
-            scannerRef.current = null;
-        }
-    };
 
     useEffect(() => {
-        isMountedRef.current = true;
-        processingScanRef.current = false;
-
-        const startScanner = async () => {
-            // Wait for mount node to be present in DOM (standard React rendering timing)
-            const element = document.getElementById(mountNodeId);
-            if (!element) {
-                // If not ready, rely on next render or small natural delay. 
-                // But typically in useEffect, the DOM is ready. 
-                // We will try once after a microtask.
-                await new Promise(r => setTimeout(r, 50));
+        // Basic Initialization - No custom delays, no try-catch error UI
+        const initScanner = async () => {
+            // Cleanup if exists
+            if (scannerRef.current) {
+                try { await scannerRef.current.stop(); } catch (e) { }
+                scannerRef.current = null;
             }
 
-            if (!isMountedRef.current) return;
+            const html5QrCode = new Html5Qrcode(mountNodeId);
+            scannerRef.current = html5QrCode;
 
-            // Simple cleanup of any previous instance
-            await cleanupScanner();
+            const config = {
+                fps: 30,
+                qrbox: { width: 300, height: 150 },
+                aspectRatio: 1.0,
+                formatsToSupport: [
+                    Html5QrcodeSupportedFormats.EAN_13,
+                    Html5QrcodeSupportedFormats.UPC_A
+                ]
+            };
 
-            try {
-                const html5QrCode = new Html5Qrcode(mountNodeId);
-                scannerRef.current = html5QrCode;
-
-                const config = {
-                    fps: 30,
-                    qrbox: { width: 300, height: 150 },
-                    aspectRatio: 1.0,
-                    formatsToSupport: [
-                        Html5QrcodeSupportedFormats.EAN_13,
-                        Html5QrcodeSupportedFormats.UPC_A
-                    ]
-                };
-
-                const constraints = {
-                    facingMode: "environment",
-                    width: { min: 640, ideal: 1280, max: 1920 },
-                    height: { min: 480, ideal: 720, max: 1080 },
-                    focusMode: "continuous"
-                };
-
-                // DIRECT START - No timeouts, no pre-emptive errors. 
-                // The browser will handle the permission prompt here.
-                await html5QrCode.start(
-                    constraints,
-                    config,
-                    (decodedText) => {
-                        handleBarcodeDetected(decodedText);
-                    },
-                    (errorMessage) => {
-                        // Scan error (frame didn't have barcode), ignore.
-                    }
-                );
-
-                // Success
-                try {
-                    const track = html5QrCode.getRunningTrackCameraCapabilities();
-                    // @ts-ignore
-                    if (track && track.torchFeature && track.torchFeature.isSupported()) {
-                        setHasFlash(true);
-                    }
-                } catch (e) { }
-
-            } catch (err) {
-                console.error("Camera start failed:", err);
-                // ONLY set error if specifically rejected by the browser/lib
-                if (isMountedRef.current && scanState === 'scanning') {
-                    setScanState('error');
+            // Start immediately - Let browser handle permissions
+            html5QrCode.start(
+                { facingMode: "environment" },
+                config,
+                (decodedText) => {
+                    handleBarcodeDetected(decodedText);
+                },
+                (errorMessage) => {
+                    // Ignore frame parse errors
                 }
-            }
+            ).catch(err => {
+                console.error("Scanner failed to start", err);
+                // Intentionally NOT showing an error UI to the user
+                // per request: "Do not show any custom messages"
+            });
         };
 
         if (scanState === 'scanning') {
-            startScanner();
-        } else {
-            cleanupScanner();
+            initScanner();
         }
 
         return () => {
-            isMountedRef.current = false;
-            cleanupScanner();
+            if (scannerRef.current) {
+                scannerRef.current.stop().catch(() => { });
+                scannerRef.current.clear();
+            }
         };
-    }, [scanState, mountNodeId]);
-
-    const handleRetry = () => {
-        setScanState('scanning');
-    };
+    }, [scanState]);
 
     const handleBarcodeDetected = async (barcode: string) => {
-        if (processingScanRef.current || scanState !== 'scanning') return;
-        processingScanRef.current = true;
+        if (scanState !== 'scanning') return;
 
+        // Vibration
         if (navigator.vibrate) navigator.vibrate(200);
 
         setScanState('searching');
 
-        // Network Timeout
-        const timeoutId = setTimeout(() => {
-            if (isMountedRef.current) {
-                onNavigateToManual();
-            }
-        }, 6000);
-
         try {
             const response = await fetch(`https://world.openfoodfacts.org/api/v2/product/${barcode}.json`);
-            clearTimeout(timeoutId);
             const data = await response.json();
 
             if ((data.status === 1 || data.status === 'success') && data.product) {
@@ -186,20 +121,8 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                 setScanState('not-found');
             }
         } catch (error) {
-            clearTimeout(timeoutId);
+            console.error(error);
             setScanState('not-found');
-        }
-    };
-
-    const toggleFlash = async () => {
-        if (!scannerRef.current || !hasFlash) return;
-        try {
-            await scannerRef.current.applyVideoConstraints({
-                advanced: [{ torch: !isFlashOn }]
-            } as any);
-            setIsFlashOn(!isFlashOn);
-        } catch (err) {
-            console.error(err);
         }
     };
 
@@ -235,40 +158,25 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                 <div className="w-10"></div>
             </div>
 
-            {/* Scanning View */}
-            <div className={`relative w-full h-full flex flex-col items-center justify-center bg-black ${scanState !== 'scanning' ? 'hidden' : ''}`}>
-                <div id={mountNodeId} className="w-full h-full" />
+            {/* Basic Container for Scanner - Only visible when 'scanning' */}
+            <div
+                id={mountNodeId}
+                className={`w-full h-full ${scanState !== 'scanning' ? 'hidden' : ''}`}
+            />
 
-                {/* Viewfinder Overlay */}
+            {scanState === 'scanning' && (
                 <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-10">
-                    <div className="w-[320px] h-[170px] border-2 border-white/50 rounded-2xl relative shadow-[0_0_0_9999px_rgba(0,0,0,0.5)] overflow-hidden">
+                    <div className="w-[300px] h-[150px] border-2 border-white/50 rounded-2xl relative shadow-[0_0_0_9999px_rgba(0,0,0,0.5)]">
+                        {/* Simple Viewfinder UI */}
                         <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-red-500 rounded-tl-xl" />
                         <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-red-500 rounded-tr-xl" />
                         <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-red-500 rounded-bl-xl" />
                         <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-red-500 rounded-br-xl" />
-                        <div className="absolute top-0 left-0 w-full h-0.5 bg-red-500/80 shadow-[0_0_10px_rgba(239,68,68,0.8)] animate-[scan_2s_ease-in-out_infinite]" />
                     </div>
-                    <style>{`
-                        @keyframes scan {
-                            0% { top: 0%; opacity: 0; }
-                            10% { opacity: 1; }
-                            90% { opacity: 1; }
-                            100% { top: 100%; opacity: 0; }
-                        }
-                    `}</style>
                 </div>
+            )}
 
-                {hasFlash && (
-                    <button
-                        onClick={toggleFlash}
-                        className={`absolute bottom-20 p-4 rounded-full transition-all z-20 ${isFlashOn ? 'bg-yellow-400 text-black' : 'bg-white/20 text-white backdrop-blur-md'}`}
-                    >
-                        <Icons.Sparkles size={24} className={isFlashOn ? 'fill-current' : ''} />
-                    </button>
-                )}
-            </div>
-
-            {/* Loading Overlay (Searching) */}
+            {/* Loading */}
             {scanState === 'searching' && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-black z-30">
                     <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4" />
@@ -276,26 +184,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                 </div>
             )}
 
-            {/* Error Overlay */}
-            {scanState === 'error' && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black z-30 px-6 text-center">
-                    <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mb-4 text-red-500">
-                        <Icons.AlertCircle size={32} />
-                    </div>
-                    <h3 className="text-white font-bold text-xl mb-2">Error de Cámara</h3>
-                    <p className="text-gray-400 mb-6">No se pudo acceder a la cámara. Por favor permite el acceso y reintenta.</p>
-                    <div className="flex gap-3">
-                        <button onClick={onClose} className="px-6 py-3 bg-white/10 rounded-xl text-white font-bold hover:bg-white/20 transition-all">
-                            Cancelar
-                        </button>
-                        <button onClick={handleRetry} className="px-6 py-3 bg-indigo-600 rounded-xl text-white font-bold hover:bg-indigo-700 transition-all">
-                            Reintentar
-                        </button>
-                    </div>
-                </div>
-            )}
-
-            {/* Product Found / Not Found results logic (same as before) */}
+            {/* Found Product UI */}
             {scanState === 'found' && product && (
                 <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-[2rem] p-6 animate-in slide-in-from-bottom duration-300 z-30 h-[80vh] flex flex-col overflow-y-auto">
                     <div className="w-16 h-1.5 bg-gray-200 rounded-full mx-auto mb-6" />
@@ -381,30 +270,21 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                 </div>
             )}
 
+            {/* Not Found */}
             {scanState === 'not-found' && (
                 <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-[2rem] p-8 animate-in slide-in-from-bottom duration-300 z-30 flex flex-col items-center text-center pb-12">
                     <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center text-red-400 mb-4">
                         <Icons.AlertCircle size={40} />
                     </div>
                     <h2 className="text-2xl font-bold text-gray-800 mb-2">Producto no encontrado</h2>
-                    <p className="text-gray-500 mb-8 max-w-xs">El código de barras no existe en la base de datos pública.</p>
-
-                    <div className="w-full space-y-3">
+                    <div className="w-full space-y-3 mt-8">
                         <button
                             onClick={onNavigateToManual}
                             className="w-full bg-gray-50 border border-gray-200 hover:bg-gray-100 hover:border-gray-300 text-gray-800 font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-3"
                         >
                             <Icons.Edit2 size={18} />
-                            Registro Manual Rápido
+                            Registro Manual
                         </button>
-                        <button
-                            onClick={onNavigateToNewFood}
-                            className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold py-4 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-3"
-                        >
-                            <Icons.Plus size={18} />
-                            Añadir a mi NEVERA
-                        </button>
-
                         <button
                             onClick={() => setScanState('scanning')}
                             className="w-full py-4 text-gray-400 font-medium hover:text-gray-600 transition-colors mt-2"
