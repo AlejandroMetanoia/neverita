@@ -69,8 +69,8 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                 }
 
                 const config = {
-                    fps: 10,
-                    qrbox: { width: 250, height: 250 },
+                    fps: 30, // Increased FPS for faster scanning
+                    qrbox: { width: 300, height: 150 }, // Rectangular box fits barcodes better
                     aspectRatio: 1.0,
                     formatsToSupport: [
                         Html5QrcodeSupportedFormats.EAN_13,
@@ -78,8 +78,15 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                     ]
                 };
 
+                const constraints = {
+                    facingMode: "environment",
+                    width: { min: 640, ideal: 1280, max: 1920 },
+                    height: { min: 480, ideal: 720, max: 1080 },
+                    focusMode: "continuous" // Attempt to force autofocus
+                };
+
                 await scannerRef.current.start(
-                    { facingMode: "environment" },
+                    constraints,
                     config,
                     (decodedText) => {
                         handleBarcodeDetected(decodedText);
@@ -129,7 +136,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
         if (scanState !== 'scanning') return;
 
         // 1. Debug Alert (Safety Check)
-        window.alert('Barcode detected: ' + barcode);
+        // window.alert('Barcode detected: ' + barcode); // Comment out for production/speed
 
         // Haptic feedback
         if (navigator.vibrate) navigator.vibrate(200);
@@ -223,12 +230,25 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                     <div id={mountNodeId} className="w-full h-full object-cover [&>video]:object-cover [&>video]:w-full [&>video]:h-full" />
 
                     <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                        <div className="w-64 h-64 border-2 border-white/80 rounded-3xl relative shadow-[0_0_0_9999px_rgba(0,0,0,0.5)]">
-                            <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-indigo-500 -mt-0.5 -ml-0.5 rounded-tl-xl" />
-                            <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-indigo-500 -mt-0.5 -mr-0.5 rounded-tr-xl" />
-                            <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-indigo-500 -mb-0.5 -ml-0.5 rounded-bl-xl" />
-                            <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-indigo-500 -mb-0.5 -mr-0.5 rounded-br-xl" />
+                        {/* Modified Rectangular Frame for Barcodes */}
+                        <div className="w-[320px] h-[170px] border-2 border-white/50 rounded-2xl relative shadow-[0_0_0_9999px_rgba(0,0,0,0.5)] overflow-hidden">
+                            {/* Corner Accents */}
+                            <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-red-500 rounded-tl-xl" />
+                            <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-red-500 rounded-tr-xl" />
+                            <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-red-500 rounded-bl-xl" />
+                            <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-red-500 rounded-br-xl" />
+
+                            {/* Red Scanning Line Animation */}
+                            <div className="absolute top-0 left-0 w-full h-0.5 bg-red-500/80 shadow-[0_0_10px_rgba(239,68,68,0.8)] animate-[scan_2s_ease-in-out_infinite]" />
                         </div>
+                        <style>{`
+                            @keyframes scan {
+                                0% { top: 0%; opacity: 0; }
+                                10% { opacity: 1; }
+                                90% { opacity: 1; }
+                                100% { top: 100%; opacity: 0; }
+                            }
+                        `}</style>
                     </div>
 
                     {hasFlash && (
