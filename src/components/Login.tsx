@@ -50,22 +50,25 @@ const Login: React.FC<LoginProps> = ({ user }) => {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-[50vh] gap-6">
-            <div className="text-center space-y-2">
-                <h1 className="text-3xl font-bold text-white">Welcome Back</h1>
-                <p className="text-gray-400">Sign in to track your macros</p>
+        <div className="flex flex-col items-center justify-center min-h-[50vh] gap-6 w-full h-screen bg-[url('/login-bg-mobile.png')] md:bg-[url('/login-bg-desktop.png')] bg-cover bg-center bg-no-repeat fixed top-0 left-0 z-50">
+            {/* Dark overlay for text readability */}
+            <div className="absolute inset-0 bg-black/10 pointer-events-none" />
+
+            <div className="text-center space-y-2 relative z-10 p-6 rounded-2xl backdrop-blur-sm bg-white/10 border border-white/20 shadow-xl">
+                <h1 className="text-4xl font-bold text-white drop-shadow-md font-['Outfit'] tracking-tight">Bienvenido</h1>
+                <p className="text-gray-100 font-medium drop-shadow-sm">Inicia sesión para registrar tus macros</p>
             </div>
 
             <button
                 onClick={handleLogin}
-                className="flex items-center gap-3 px-6 py-3 bg-white text-black rounded-xl hover:bg-gray-100 transition-all font-medium shadow-lg shadow-white/5"
+                className="relative z-10 flex items-center gap-3 px-8 py-4 bg-white text-gray-800 rounded-2xl hover:bg-gray-50 transition-all font-bold shadow-2xl hover:scale-105 active:scale-95 text-lg"
             >
                 <img
                     src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                     alt="Google"
-                    className="w-5 h-5"
+                    className="w-6 h-6"
                 />
-                Sign in with Google
+                Inicia Sesión con Google
             </button>
         </div>
     );
