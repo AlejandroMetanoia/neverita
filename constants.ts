@@ -41,8 +41,10 @@ export const FOOD_CATEGORIES = {
     "Azúcares y Dulces",
     "Bebidas",
     "Alimentos Fermentados",
-    "Procesados"
+    "Procesados",
+    "Comida Preparada"
   ]
+
 };
 
 export const SUB_CATEGORIES: Record<string, string[]> = {
@@ -51,6 +53,11 @@ export const SUB_CATEGORIES: Record<string, string[]> = {
     "Cereal Procesado",
     "Cereal Molido",
     "Cereal Fermentado"
+  ],
+  "Carnes Rojas": [
+    "Ternera",
+    "Cerdo",
+    "Vacuno Mayor"
   ]
 };
 

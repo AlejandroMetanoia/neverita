@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { User, onAuthStateChanged } from 'firebase/auth';
 import { collection, query, where, onSnapshot, setDoc, deleteDoc, doc } from 'firebase/firestore';
 import { auth, db } from './src/firebase';
@@ -22,7 +22,13 @@ function App() {
 
    // Persistent State
    const [userFoods, setUserFoods] = useState<Food[]>([]);
-   const foods = [...INITIAL_FOODS, ...userFoods]; // Combine static and user foods
+   const [baseFoods, setBaseFoods] = useState<Food[]>([]);
+
+   // Combine static, base, and user foods and sort alphabetically
+   const foods = useMemo(() => {
+      const allFoods = [...INITIAL_FOODS, ...baseFoods, ...userFoods];
+      return allFoods.sort((a, b) => a.name.localeCompare(b.name));
+   }, [baseFoods, userFoods]);
 
    const [logs, setLogs] = useState<LogEntry[]>([]);
 
@@ -93,6 +99,24 @@ function App() {
 
       return () => unsubscribe();
    }, [user]);
+
+
+
+   // Listen for base_foods from Firestore
+   useEffect(() => {
+      // Base foods are global, so we don't filter by user, or maybe we do if we want to restrict? 
+      // User requested "general database", implying global.
+      const q = query(collection(db, 'base_foods'));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+         const fetchedFoods: Food[] = [];
+         snapshot.forEach((doc) => {
+            fetchedFoods.push(doc.data() as Food);
+         });
+         setBaseFoods(fetchedFoods);
+      });
+
+      return () => unsubscribe();
+   }, []);
 
    // Handlers
    const addFood = async (food: Food) => {
