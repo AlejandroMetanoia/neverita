@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Food, LogEntry, MealType } from '../types';
 import { MEAL_TYPES, MEAL_COLORS } from '../constants';
@@ -14,10 +14,17 @@ interface DashboardProps {
     selectedDate: string;
     onDateChange: (date: string) => void;
     onNavigateToLibrary: () => void;
+    onToggleMenu: (hidden: boolean) => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLog, selectedDate, onDateChange, onNavigateToLibrary }) => {
+const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLog, selectedDate, onDateChange, onNavigateToLibrary, onToggleMenu }) => {
     const [entryMode, setEntryMode] = useState<'search' | 'scan' | 'manual' | 'ai' | null>(null);
+
+    // Toggle Menu Visibility
+    useEffect(() => {
+        onToggleMenu(entryMode !== null);
+        return () => onToggleMenu(false); // Reset on unmount
+    }, [entryMode, onToggleMenu]);
 
     // AI State
     const [aiDescription, setAiDescription] = useState('');

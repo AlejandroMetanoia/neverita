@@ -9,14 +9,21 @@ interface LibraryProps {
   onAddFood: (food: Food) => void;
   onDeleteFood: (id: string) => void;
   autoOpenAdd?: boolean;
+  onToggleMenu: (hidden: boolean) => void;
 }
 
-const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoOpenAdd = false }) => {
+const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoOpenAdd = false, onToggleMenu }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(autoOpenAdd);
+
+  // Toggle Menu Visibility
+  useEffect(() => {
+    onToggleMenu(isAdding);
+    return () => onToggleMenu(false);
+  }, [isAdding, onToggleMenu]);
 
   const [newFood, setNewFood] = useState<Omit<Food, 'id' | 'userId'>>({
     name: '',
