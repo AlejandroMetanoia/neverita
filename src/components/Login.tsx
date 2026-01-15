@@ -56,7 +56,7 @@ const Login: React.FC<LoginProps> = ({ user }) => {
 
             <div className="text-center space-y-2 relative z-10 p-6 rounded-2xl backdrop-blur-sm bg-white/10 border border-white/20 shadow-xl">
                 <h1 className="text-4xl font-bold text-white drop-shadow-md font-['Outfit'] tracking-tight">Bienvenido</h1>
-                <p className="text-gray-100 font-medium drop-shadow-sm">Inicia sesión para registrar tus macros</p>
+                <p className="text-gray-100 font-medium drop-shadow-sm">Inicia sesión para registrar tus comidas</p>
             </div>
 
             <button

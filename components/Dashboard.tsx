@@ -222,80 +222,97 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                 </div>
             </div>
 
-            {/* Unified Summary Card (Ethereal Light Glass) */}
-            <div className="bg-surface backdrop-blur-xl p-6 rounded-3xl border border-white/60 shadow-glass relative overflow-hidden mb-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                {/* Soft background blob */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50/50 blur-[80px] rounded-full pointer-events-none translate-x-1/2 -translate-y-1/2" />
+            {/* Refactored Stats Grid - Matching Reference Design */}
+            <div className="flex flex-col gap-4 mb-8">
+                {/* Calories Card - Hero */}
+                <div className="bg-white/90 backdrop-blur-2xl p-6 rounded-[2rem] border border-white/60 shadow-lg relative overflow-hidden">
+                    {/* Background blob */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-orange-100/40 blur-[60px] rounded-full pointer-events-none translate-x-12 -translate-y-12" />
 
-                {/* Chart Side */}
-                <div className="relative w-40 h-40 md:w-56 md:h-56 mx-auto flex-shrink-0">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                            <Pie
-                                data={macroData}
-                                cx="50%"
-                                cy="50%"
-                                innerRadius="80%"
-                                outerRadius="100%"
-                                paddingAngle={5}
-                                dataKey="value"
-                                stroke="none"
-                            >
-                                {macroData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={entry.color} />
-                                ))}
-                            </Pie>
-                        </PieChart>
-                    </ResponsiveContainer>
-                    {/* Center Text */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                        <Icons.Calories size={24} className="text-gray-400 mb-1" />
-                        <span className="text-4xl font-black text-gray-800 tracking-tighter leading-none">{Math.round(totals.calories)}</span>
-                        <span className="text-[10px] font-bold text-gray-500 tracking-[0.2em] uppercase mt-1">kcal</span>
+                    <div className="flex justify-between items-center relative z-10">
+                        <div className="flex flex-col">
+                            <p className="text-gray-500 font-bold mb-1 ml-1 text-sm">Calorías Consumidas</p>
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-6xl font-black text-gray-800 tracking-tighter leading-none">{Math.round(totals.calories)}</span>
+                                <span className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Kcal</span>
+                            </div>
+                        </div>
+
+                        {/* Chart */}
+                        <div className="w-28 h-28 relative">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={macroData}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius="75%"
+                                        outerRadius="100%"
+                                        paddingAngle={5}
+                                        dataKey="value"
+                                        stroke="none"
+                                        cornerRadius={4}
+                                        startAngle={90}
+                                        endAngle={-270}
+                                    >
+                                        {macroData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.color} />
+                                        ))}
+                                    </Pie>
+                                </PieChart>
+                            </ResponsiveContainer>
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400">
+                                <Icons.Calories size={22} className="opacity-50" />
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {/* Macros List Side */}
-                <div className="flex flex-col gap-3 w-full">
+                {/* Macros Row */}
+                <div className="grid grid-cols-3 gap-3">
                     {/* Protein */}
-                    <div className="bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-white/60 hover:bg-white/80 transition-colors group flex items-center justify-between shadow-sm">
-                        <div>
-                            <p className="text-xs text-protein font-bold uppercase tracking-wider mb-0.5">Proteína</p>
-                            <div className="flex items-baseline gap-1">
-                                <span className="text-xl font-bold text-gray-800 group-hover:scale-105 transition-transform">{Math.round(totals.protein)}</span>
-                                <span className="text-xs text-gray-500 font-bold">g</span>
+                    <div className="bg-white/80 backdrop-blur-xl p-4 rounded-[1.8rem] border border-white/60 shadow-md flex flex-col justify-between aspect-square relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-16 h-16 bg-blue-50/80 rounded-full blur-xl -mr-4 -mt-4 transition-transform group-hover:scale-110" />
+                        <div className="relative z-10">
+                            <div className="flex items-center gap-1.5 mb-1">
+                                <div className="w-1.5 h-1.5 rounded-full bg-protein" />
+                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Proteína</span>
                             </div>
+                            <p className="text-2xl font-black text-gray-800">{Math.round(totals.protein)}<span className="text-[10px] text-gray-400 font-bold ml-0.5">g</span></p>
                         </div>
-                        <div className="w-24 h-1.5 rounded-full bg-protein/20 overflow-hidden">
-                            <div className="h-full bg-protein" style={{ width: `${Math.min((totals.protein / 200) * 100, 100)}%` }} />
+                        {/* Ring or Bar? Using Bar for space efficiency in small boxes */}
+                        <div className="w-full bg-gray-100/80 h-1.5 rounded-full overflow-hidden mt-2">
+                            <div className="h-full bg-protein rounded-full" style={{ width: `${Math.min((totals.protein / 150) * 100, 100)}%` }} />
                         </div>
                     </div>
 
                     {/* Carbs */}
-                    <div className="bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-white/60 hover:bg-white/80 transition-colors group flex items-center justify-between shadow-sm">
-                        <div>
-                            <p className="text-xs text-carbs font-bold uppercase tracking-wider mb-0.5">Carbs</p>
-                            <div className="flex items-baseline gap-1">
-                                <span className="text-xl font-bold text-gray-800 group-hover:scale-105 transition-transform">{Math.round(totals.carbs)}</span>
-                                <span className="text-xs text-gray-500 font-bold">g</span>
+                    <div className="bg-white/80 backdrop-blur-xl p-4 rounded-[1.8rem] border border-white/60 shadow-md flex flex-col justify-between aspect-square relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-16 h-16 bg-indigo-50/80 rounded-full blur-xl -mr-4 -mt-4 transition-transform group-hover:scale-110" />
+                        <div className="relative z-10">
+                            <div className="flex items-center gap-1.5 mb-1">
+                                <div className="w-1.5 h-1.5 rounded-full bg-carbs" />
+                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Carbs</span>
                             </div>
+                            <p className="text-2xl font-black text-gray-800">{Math.round(totals.carbs)}<span className="text-[10px] text-gray-400 font-bold ml-0.5">g</span></p>
                         </div>
-                        <div className="w-24 h-1.5 rounded-full bg-carbs/20 overflow-hidden">
-                            <div className="h-full bg-carbs" style={{ width: `${Math.min((totals.carbs / 300) * 100, 100)}%` }} />
+                        <div className="w-full bg-gray-100/80 h-1.5 rounded-full overflow-hidden mt-2">
+                            <div className="h-full bg-carbs rounded-full" style={{ width: `${Math.min((totals.carbs / 200) * 100, 100)}%` }} />
                         </div>
                     </div>
 
                     {/* Fat */}
-                    <div className="bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-white/60 hover:bg-white/80 transition-colors group flex items-center justify-between shadow-sm">
-                        <div>
-                            <p className="text-xs text-fat font-bold uppercase tracking-wider mb-0.5">Grasas</p>
-                            <div className="flex items-baseline gap-1">
-                                <span className="text-xl font-bold text-gray-800 group-hover:scale-105 transition-transform">{Math.round(totals.fat)}</span>
-                                <span className="text-xs text-gray-500 font-bold">g</span>
+                    <div className="bg-white/80 backdrop-blur-xl p-4 rounded-[1.8rem] border border-white/60 shadow-md flex flex-col justify-between aspect-square relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-16 h-16 bg-fuchsia-50/80 rounded-full blur-xl -mr-4 -mt-4 transition-transform group-hover:scale-110" />
+                        <div className="relative z-10">
+                            <div className="flex items-center gap-1.5 mb-1">
+                                <div className="w-1.5 h-1.5 rounded-full bg-fat" />
+                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Grasas</span>
                             </div>
+                            <p className="text-2xl font-black text-gray-800">{Math.round(totals.fat)}<span className="text-[10px] text-gray-400 font-bold ml-0.5">g</span></p>
                         </div>
-                        <div className="w-24 h-1.5 rounded-full bg-fat/20 overflow-hidden">
-                            <div className="h-full bg-fat" style={{ width: `${Math.min((totals.fat / 100) * 100, 100)}%` }} />
+                        <div className="w-full bg-gray-100/80 h-1.5 rounded-full overflow-hidden mt-2">
+                            <div className="h-full bg-fat rounded-full" style={{ width: `${Math.min((totals.fat / 80) * 100, 100)}%` }} />
                         </div>
                     </div>
                 </div>
