@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { BrowserMultiFormatReader, BarcodeFormat, DecodeHintType } from '@zxing/library';
 import { Icons } from './ui/Icons';
 import { LogEntry } from '../types';
+import { MEAL_TYPES } from '../constants';
 
 interface BarcodeScannerProps {
     onClose: () => void;
@@ -269,7 +270,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                                     onChange={(e) => setMealType(e.target.value)}
                                     className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 font-medium appearance-none focus:outline-none focus:border-red-500 transition-colors"
                                 >
-                                    {['Desayuno', 'Almuerzo', 'Cena', 'Snack', 'Pre-Entreno', 'Post-Entreno'].map(m => (
+                                    {MEAL_TYPES.map(m => (
                                         <option key={m} value={m}>{m}</option>
                                     ))}
                                 </select>
