@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Food, LogEntry } from '../types';
 import { FOOD_CATEGORIES, SUB_CATEGORIES } from '../constants';
 import { Icons } from './ui/Icons';
+import { seedBaseFoods } from '../src/utils/seeder';
+import { BATCH_1 } from '../src/data/foods_batch_1';
 
 interface LibraryProps {
   foods: Food[];
@@ -151,6 +153,13 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
             </p>
           </div>
         </div>
+        <button
+          onClick={() => seedBaseFoods(BATCH_1)}
+          className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl flex items-center gap-2 transition-all shadow-lg hover:shadow-xl hover:scale-105"
+        >
+          <Icons.Plus size={20} />
+          Upload Batch 1
+        </button>
         <button
           onClick={() => setIsAdding(!isAdding)}
           className="bg-gray-900 hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-xl flex items-center gap-2 transition-all shadow-lg hover:shadow-xl hover:scale-105"
