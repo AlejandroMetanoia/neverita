@@ -83,7 +83,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
     switch (categoryName) {
       // Vegetal
       case "Frutas": return Icons.Apple;
-      case "Verduras y Hortalizas": return Icons.Carrot;
+      case "Verduras": return Icons.Carrot;
       case "Legumbres": return Icons.Bean;
       case "Cereales": return Icons.Carbs; // Wheat
       case "Pseudocereales": return Icons.Carbs;

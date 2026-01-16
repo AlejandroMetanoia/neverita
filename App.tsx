@@ -117,44 +117,6 @@ function App() {
       return () => unsubscribe();
    }, []);
 
-   // BATCH 4 IMPORT (IDs 44-51)
-   useEffect(() => {
-      const importBatch4 = async () => {
-         console.log("Starting Batch 4 Operations...");
-
-         const batch4: Food[] = [
-            { id: '44', name: 'Avellanas Tostadas', brand: '', category: 'Frutos Secos', subCategory: '', calories: 650, protein: 17, carbs: 0.5, fat: 67 },
-            { id: '45', name: 'Cacahuetes Tostados', brand: '', category: 'Frutos Secos', subCategory: '', calories: 600, protein: 24, carbs: 12, fat: 50 },
-            { id: '46', name: 'Almendras Tostadas', brand: '', category: 'Frutos Secos', subCategory: '', calories: 620, protein: 23, carbs: 4, fat: 56 },
-            { id: '47', name: 'Pistachos Tostados', brand: '', category: 'Frutos Secos', subCategory: '', calories: 610, protein: 22, carbs: 10, fat: 53 },
-            { id: '48', name: 'Cacahuetes Repelados', brand: '', category: 'Frutos Secos', subCategory: '', calories: 610, protein: 26, carbs: 12, fat: 52 },
-            { id: '49', name: 'Almendras Crudas', brand: '', category: 'Frutos Secos', subCategory: '', calories: 630, protein: 22, carbs: 17, fat: 50 },
-            { id: '50', name: 'Crema Cacahuete 100%', brand: 'Hacendado', category: 'Frutos Secos', subCategory: '', calories: 618, protein: 29.1, carbs: 6.1, fat: 50 },
-            { id: '51', name: 'Acelga', brand: '', category: 'Verduras', subCategory: '', calories: 19, protein: 1.8, carbs: 3.7, fat: 0.2 },
-         ];
-
-         for (const item of batch4) {
-            try {
-               const docRef = doc(db, 'base_foods', item.id);
-               const docSnap = await getDoc(docRef);
-
-               if (docSnap.exists()) {
-                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
-                  continue;
-               }
-
-               await setDoc(docRef, item);
-               console.log(`Imported: ${item.name} (ID: ${item.id})`);
-            } catch (error) {
-               console.error(`Error importing ${item.name}:`, error);
-            }
-         }
-         console.log("Batch 4 Import complete.");
-      };
-
-      importBatch4();
-   }, []);
-
 
    // Handlers
    const addFood = async (food: Food) => {
