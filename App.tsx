@@ -117,57 +117,7 @@ function App() {
       return () => unsubscribe();
    }, []);
 
-   // BATCH 7 IMPORT (IDs 100-120)
-   useEffect(() => {
-      const importBatch7 = async () => {
-         console.log("Starting Batch 7 Operations (Pasta & Cereales)...");
 
-         const batch7: Food[] = [
-            { name: "Trottole (Pasta)", id: "100", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 353, protein: 11.2, carbs: 72.2, fat: 1.4 },
-            { name: "Plumas (Macarrones)", id: "101", brand: "Gallo", category: "Cereales", subCategory: "Grano Entero", calories: 344, protein: 12, carbs: 68, fat: 2 },
-            { name: "Plumas integrales (Macarrones)", id: "102", brand: "Gallo", category: "Cereales", subCategory: "Grano Entero", calories: 335, protein: 13, carbs: 60, fat: 2.6 },
-            { name: "Plumas Sin Gluten (Macarrones)", id: "103", brand: "Gallo", category: "Cereales", subCategory: "Grano Entero", calories: 341, protein: 6.2, carbs: 74, fat: 1.7 },
-            { name: "Pasta +Proteína", id: "104", brand: "Gallo", category: "Cereales", subCategory: "Grano Entero", calories: 350, protein: 17, carbs: 64, fat: 2 },
-            { name: "Maccheroni al Huevo", id: "105", brand: "Gallo", category: "Cereales", subCategory: "Grano Entero", calories: 350, protein: 13, carbs: 67, fat: 2.7 },
-            { name: "Espagueti", id: "106", brand: "Gallo", category: "Cereales", subCategory: "Grano Entero", calories: 344, protein: 12, carbs: 68, fat: 2 },
-            { name: "Espagueti", id: "107", brand: "Armando", category: "Cereales", subCategory: "Grano Entero", calories: 354, protein: 14, carbs: 70.2, fat: 1.3 },
-            { name: "Espagueti", id: "108", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 366, protein: 12, carbs: 74, fat: 1.5 },
-            { name: "Espagueti Fino", id: "109", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 361, protein: 13, carbs: 72, fat: 1.5 },
-            { name: "Espagueti Integral", id: "110", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 345, protein: 13.5, carbs: 62, fat: 2.4 },
-            { name: "Espagueti Sin Gluten", id: "111", brand: "Felicia", category: "Cereales", subCategory: "Grano Entero", calories: 341, protein: 6.3, carbs: 73, fat: 2 },
-            { name: "Espagueti al Huevo", id: "112", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 359, protein: 12, carbs: 68, fat: 3.3 },
-            { name: "Cous Cous Mediano", id: "113", brand: "Bia", category: "Cereales", subCategory: "Grano Entero", calories: 351, protein: 12, carbs: 70, fat: 1.5 },
-            { name: "Fideo Caballo de Ángel", id: "114", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 354, protein: 13, carbs: 71, fat: 2 },
-            { name: "Fideo Mediano / Grueso", id: "115", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 366, protein: 12, carbs: 74, fat: 1.5 },
-            { name: "Fideuá", id: "116", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 366, protein: 12, carbs: 74, fat: 1.5 },
-            { name: "Fusili", id: "117", brand: "Armando", category: "Cereales", subCategory: "Grano Entero", calories: 354, protein: 14, carbs: 70.2, fat: 1.3 },
-            { name: "Linguini (Tallarines)", id: "118", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 361, protein: 13, carbs: 72, fat: 1.5 },
-            { name: "Noodles de Arroz", id: "119", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 347, protein: 5.3, carbs: 79, fat: 5.7 },
-            { name: "Sémola de Trigo", id: "120", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 329, protein: 11, carbs: 69, fat: 1.4 }
-         ];
-
-         for (const item of batch7) {
-            try {
-               const { getDoc, doc, setDoc } = await import('firebase/firestore');
-               const docRef = doc(db, 'base_foods', item.id);
-               const docSnap = await getDoc(docRef);
-
-               if (docSnap.exists()) {
-                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
-                  continue;
-               }
-
-               await setDoc(docRef, item);
-               console.log(`Imported: ${item.name} (ID: ${item.id})`);
-            } catch (error) {
-               console.error(`Error importing ${item.name}:`, error);
-            }
-         }
-         console.log("Batch 7 Import complete.");
-      };
-
-      importBatch7();
-   }, []);
 
 
 
