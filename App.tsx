@@ -104,8 +104,7 @@ function App() {
 
    // Listen for base_foods from Firestore
    useEffect(() => {
-      // Base foods are global, so we don't filter by user, or maybe we do if we want to restrict? 
-      // User requested "general database", implying global.
+      // Base foods are global
       const q = query(collection(db, 'base_foods'));
       const unsubscribe = onSnapshot(q, (snapshot) => {
          const fetchedFoods: Food[] = [];

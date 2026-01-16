@@ -20,7 +20,8 @@ export const FOOD_CATEGORIES = {
     "Tubérculos y Raíces",
     "Frutos Secos",
     "Semillas",
-    "Hongos y Setas"
+    "Hongos y Setas",
+    "Postres Vegetales"
   ],
   "Alimentos de Origen Animal": [
     "Carnes Blancas",
@@ -29,7 +30,8 @@ export const FOOD_CATEGORIES = {
     "Pescado Azul",
     "Mariscos",
     "Huevos",
-    "Lácteos"
+    "Lácteos",
+    "Embutidos y Charcutería"
   ],
   "Grasas, Aceites y Condimentos": [
     "Aceites Vegetales",
@@ -57,17 +59,11 @@ export const SUB_CATEGORIES: Record<string, string[]> = {
   "Carnes Rojas": [
     "Ternera",
     "Cerdo",
-    "Vacuno Mayor"
+    "Vacuno"
+  ],
+  "Lácteos": [
+    "Postres Lácteos"
   ]
 };
 
-export const INITIAL_FOODS: Food[] = [
-  { id: '1', name: 'Filetes de Pollo', category: 'Carnes Blancas', calories: 110, protein: 23, carbs: 0, fat: 1.9 },
-  { id: '2', name: 'Arroz Blanco (Cocido)', category: 'Cereales', subCategory: 'Cereal Procesado', calories: 130, protein: 2.7, carbs: 28, fat: 0.3 },
-  { id: '3', name: 'Huevo Mediano', category: 'Huevos', calories: 155, protein: 13, carbs: 1.1, fat: 11 },
-  { id: '4', name: 'Avena', category: 'Cereales', subCategory: 'Grano Entero', calories: 389, protein: 16.9, carbs: 66, fat: 6.9 },
-  { id: '5', name: 'Aguacate', category: 'Grasas de Frutas', calories: 160, protein: 2, carbs: 8.5, fat: 15 },
-  { id: '6', name: 'Proteína Whey (Polvo)', category: 'Procesados', calories: 370, protein: 78, carbs: 6, fat: 4 },
-  { id: '7', name: 'Manzana', category: 'Frutas', calories: 52, protein: 0.3, carbs: 14, fat: 0.2 },
-  { id: '8', name: 'Atún en lata', category: 'Pescado Azul', calories: 100, protein: 23, carbs: 0, fat: 1 },
-];
+export const INITIAL_FOODS: Food[] = [];
