@@ -117,59 +117,7 @@ function App() {
       return () => unsubscribe();
    }, []);
 
-   // BATCH 8 IMPORT (IDs 121-143)
-   useEffect(() => {
-      const importBatch8 = async () => {
-         console.log("Starting Batch 8 Operations (Arroz, Quinoa y Harinas)...");
 
-         const batch8: Food[] = [
-            { name: "Arroz Basmati", id: "121", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 355, protein: 9, carbs: 78, fat: 0.6 },
-            { name: "Arroz Cocido Basmati (Tarrina)", id: "122", brand: "Sabroz", category: "Cereales", subCategory: "Grano Entero", calories: 164, protein: 3.5, carbs: 31, fat: 2.2 },
-            { name: "Arroz Cocido Integral (Tarrina)", id: "123", brand: "Sabroz", category: "Cereales", subCategory: "Grano Entero", calories: 168, protein: 4, carbs: 30, fat: 3 },
-            { name: "Arroz Cocido Redondo (Tarrina)", id: "124", brand: "Sabroz", category: "Cereales", subCategory: "Grano Entero", calories: 132, protein: 3, carbs: 24, fat: 2.3 },
-            { name: "Arroz Largo Integral", id: "125", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 350, protein: 7.6, carbs: 72, fat: 2.8 },
-            { name: "Arroz Largo", id: "126", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 347, protein: 6.5, carbs: 78, fat: 0.8 },
-            { name: "Arroz Redondo J. Sendra", id: "127", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 349, protein: 6.7, carbs: 78, fat: 0.9 },
-            { name: "Arroz Redondo", id: "128", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 344, protein: 8.2, carbs: 75, fat: 1 },
-            { name: "Arroz Vaporizado Largo", id: "129", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 345, protein: 7.9, carbs: 76, fat: 0.7 },
-            { name: "Arroz Vaporizado Redondo", id: "130", brand: "La Cigala", category: "Cereales", subCategory: "Grano Entero", calories: 351, protein: 7.3, carbs: 77, fat: 1.4 },
-            { name: "Quinoa Cocida Blanca y Roja (Tarrina)", id: "131", brand: "Sabroz", category: "Cereales", subCategory: "Grano Entero", calories: 153, protein: 6, carbs: 25, fat: 3 },
-            { name: "Quinoa", id: "132", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 389, protein: 14, carbs: 66, fat: 6.1 },
-            { name: "Arroz Largo", id: "133", brand: "SOS", category: "Cereales", subCategory: "Grano Entero", calories: 351, protein: 7.3, carbs: 77, fat: 1.3 },
-            { name: "Harina de Avena (Neutro)", id: "134", brand: "Vitobest", category: "Cereales", subCategory: "Cereal Molido", calories: 345, protein: 13.5, carbs: 57, fat: 7 },
-            { name: "Harina de Avena (Brownie)", id: "135", brand: "Vitobest", category: "Cereales", subCategory: "Cereal Molido", calories: 362, protein: 13, carbs: 62, fat: 5.9 },
-            { name: "Harina de Avena (Chocolate)", id: "136", brand: "Vitobest", category: "Cereales", subCategory: "Cereal Molido", calories: 361, protein: 13, carbs: 60, fat: 5.9 },
-            { name: "Harina de Avena (Fresa)", id: "137", brand: "Vitobest", category: "Cereales", subCategory: "Cereal Molido", calories: 370, protein: 12.2, carbs: 64.2, fat: 5.8 },
-            { name: "Harina de Avena (Galleta María)", id: "138", brand: "Vitobest", category: "Cereales", subCategory: "Cereal Molido", calories: 369, protein: 12, carbs: 64, fat: 5.8 },
-            { name: "Harina de Avena (Tarta de Queso)", id: "139", brand: "Vitobest", category: "Cereales", subCategory: "Cereal Molido", calories: 370, protein: 12, carbs: 64, fat: 5.8 },
-            { name: "Crema de Arroz (Neutro)", id: "140", brand: "Vitobest", category: "Cereales", subCategory: "Cereal Molido", calories: 373, protein: 8, carbs: 83, fat: 1 },
-            { name: "Crema de Arroz (Chocolate)", id: "141", brand: "Vitobest", category: "Cereales", subCategory: "Cereal Molido", calories: 361, protein: 11, carbs: 71, fat: 2.3 },
-            { name: "Crema de Arroz (Vainilla)", id: "142", brand: "Vitobest", category: "Cereales", subCategory: "Cereal Molido", calories: 371, protein: 7.7, carbs: 83, fat: 1 },
-            { name: "Avena Molida", id: "143", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Molido", calories: 384, protein: 12, carbs: 60, fat: 7 }
-         ];
-
-         for (const item of batch8) {
-            try {
-               const { getDoc, doc, setDoc } = await import('firebase/firestore');
-               const docRef = doc(db, 'base_foods', item.id);
-               const docSnap = await getDoc(docRef);
-
-               if (docSnap.exists()) {
-                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
-                  continue;
-               }
-
-               await setDoc(docRef, item);
-               console.log(`Imported: ${item.name} (ID: ${item.id})`);
-            } catch (error) {
-               console.error(`Error importing ${item.name}:`, error);
-            }
-         }
-         console.log("Batch 8 Import complete.");
-      };
-
-      importBatch8();
-   }, []);
 
 
 
