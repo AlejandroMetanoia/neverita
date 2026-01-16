@@ -13,7 +13,7 @@ export const MEAL_COLORS: Record<MealType, { border: string; text: string; bg: s
 export const FOOD_CATEGORIES = {
   "Alimentos de Origen Vegetal": [
     "Frutas",
-    "Verduras y Hortalizas",
+    "Verduras",
     "Legumbres",
     "Cereales",
     "Pseudocereales",
