@@ -117,6 +117,56 @@ function App() {
       return () => unsubscribe();
    }, []);
 
+   // BATCH 6 IMPORT (IDs 81-99)
+   useEffect(() => {
+      const importBatch6 = async () => {
+         console.log("Starting Batch 6 Operations (Cereales)...");
+
+         const batch6: Food[] = [
+            { name: "Macarrones", id: "81", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 354, protein: 13, carbs: 71, fat: 2 },
+            { name: "Hélices Pasta (Macarrones)", id: "82", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 366, protein: 12, carbs: 74, fat: 1.5 },
+            { name: "Hélices Pasta Vegetal", id: "83", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 346, protein: 13, carbs: 68, fat: 1.5 },
+            { name: "Macarrón al Huevo", id: "84", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 359, protein: 12, carbs: 68, fat: 3.3 },
+            { name: "Penne Rigate", id: "85", brand: "Armando", category: "Cereales", subCategory: "Grano Entero", calories: 354, protein: 14, carbs: 70.2, fat: 1.3 },
+            { name: "Penne Rigate", id: "86", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 361, protein: 13, carbs: 72, fat: 1.5 },
+            { name: "Penne Rigate Integral", id: "87", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 345, protein: 13.5, carbs: 62, fat: 2.4 },
+            { name: "Pasta Fresca Tagliatelle", id: "88", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 290, protein: 11, carbs: 54, fat: 3.2 },
+            { name: "Pasta Fresca Carrilera", id: "89", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 236, protein: 9.1, carbs: 28, fat: 9.6 },
+            { name: "Pasta Fresca Quesos", id: "90", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 225, protein: 10, carbs: 34, fat: 5.2 },
+            { name: "Pasta Fresca Queso Cabra Cebolla Caramelizada", id: "91", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 273, protein: 9.2, carbs: 35, fat: 11 },
+            { name: "Pasta Fresca Calabaza y Crema de Quesos", id: "92", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 286, protein: 7.9, carbs: 32, fat: 13 },
+            { name: "Pasta Fresca Parmigiano, Reggiano y Trufa", id: "93", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 268, protein: 11, carbs: 30, fat: 12 },
+            { name: "Pasta Fresca Ricotta y Espinacas", id: "94", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 214, protein: 7.8, carbs: 29, fat: 7.3 },
+            { name: "Pasta Fresca Carne", id: "95", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 266, protein: 12, carbs: 38, fat: 7.3 },
+            { name: "Pasta Fresca Gnocchi", id: "96", brand: "Hacendado", category: "Cereales", subCategory: "Grano Entero", calories: 174, protein: 4.5, carbs: 37.6, fat: 0.4 },
+            { name: "Tortellini con Queso (Pasta)", id: "97", brand: "Pagani", category: "Cereales", subCategory: "Grano Entero", calories: 378, protein: 15, carbs: 58, fat: 8.5 },
+            { name: "Tortellini con Carne (Pasta)", id: "98", brand: "Pagani", category: "Cereales", subCategory: "Grano Entero", calories: 394, protein: 14, carbs: 61, fat: 10 },
+            { name: "Tortiglioni (Pasta)", id: "99", brand: "Armando", category: "Cereales", subCategory: "Grano Entero", calories: 354, protein: 14, carbs: 70.2, fat: 1.3 }
+         ];
+
+         for (const item of batch6) {
+            try {
+               const { getDoc, doc, setDoc } = await import('firebase/firestore');
+               const docRef = doc(db, 'base_foods', item.id);
+               const docSnap = await getDoc(docRef);
+
+               if (docSnap.exists()) {
+                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
+                  continue;
+               }
+
+               await setDoc(docRef, item);
+               console.log(`Imported: ${item.name} (ID: ${item.id})`);
+            } catch (error) {
+               console.error(`Error importing ${item.name}:`, error);
+            }
+         }
+         console.log("Batch 6 Import complete.");
+      };
+
+      importBatch6();
+   }, []);
+
 
 
 
