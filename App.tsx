@@ -117,72 +117,7 @@ function App() {
       return () => unsubscribe();
    }, []);
 
-   // BATCH 24 IMPORT (IDs 550-585 - Prepared & Drinks)
-   useEffect(() => {
-      const importBatch24 = async () => {
-         console.log("Starting Batch 24 Operations (Prepared & Drinks)...");
 
-         const batch24: Food[] = [
-            { name: "Ensaladilla Rusa", id: "550", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 206, protein: 4.9, carbs: 7.6, fat: 17 },
-            { name: "Pasta Fresca Serrana", id: "551", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 256, protein: 10, carbs: 35, fat: 8 },
-            { name: "Muslo de Pato en Confit", id: "552", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 269, protein: 23, carbs: 1.1, fat: 19 },
-            { name: "Sopa Hortelana", id: "553", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 72, protein: 1.3, carbs: 11, fat: 2.4 },
-            { name: "Tortilla Fresca de Patata con Cebolla", id: "554", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 193, protein: 5.7, carbs: 17, fat: 11 },
-            { name: "Tortilla Fresca de Patata con Chorizo", id: "555", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 226, protein: 7.1, carbs: 15, fat: 15 },
-            { name: "Tortilla de Patata", id: "556", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 157, protein: 5.7, carbs: 11, fat: 9.8 },
-            { name: "Verduras Asadas (Escalivada)", id: "557", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 69, protein: 1.2, carbs: 5.2, fat: 4.3 },
-            { name: "Sandwich de Atún, Huevo y Tomate", id: "558", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 197, protein: 10.9, carbs: 20, fat: 7.7 },
-            { name: "Sandwich de Jamón y Queso", id: "559", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 248, protein: 14.2, carbs: 29.4, fat: 8.2 },
-            { name: "Sandwich de Pollo y Queso", id: "560", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 307, protein: 12.6, carbs: 19.5, fat: 19.8 },
-            { name: "Albóndigas de Pollo", id: "561", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 111, protein: 8.5, carbs: 7, fat: 5.2 },
-            { name: "Albóndigas en Salsa", id: "562", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 132, protein: 8.8, carbs: 6.3, fat: 8 },
-            { name: "Alubias con Tomate", id: "563", brand: "Heinz", category: "Comida Preparada", subCategory: "", calories: 79, protein: 4.7, carbs: 12.9, fat: 0.2 },
-            { name: "Alubias a la Jardinera", id: "564", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 85, protein: 4.8, carbs: 10.3, fat: 1.9 },
-            { name: "Callos a la Madrileña", id: "565", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 138, protein: 14.4, carbs: 1.7, fat: 8.2 },
-            { name: "Chili con Carne", id: "566", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 114, protein: 8.2, carbs: 7.7, fat: 4.7 },
-            { name: "Cocido", id: "567", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 118, protein: 6, carbs: 9.5, fat: 5.7 },
-            { name: "Fabada Asturiana", id: "568", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 145, protein: 6.5, carbs: 7.6, fat: 8.7 },
-            { name: "Fabada", id: "569", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 140, protein: 7.3, carbs: 9.3, fat: 7.4 },
-            { name: "Garbanzos a la Jardinera", id: "570", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 76, protein: 3.8, carbs: 9, fat: 2.1 },
-            { name: "Lentejas a la Jardinera", id: "571", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 65, protein: 4.2, carbs: 7.9, fat: 1.3 },
-            { name: "Oreja Guisada", id: "572", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 138, protein: 10.3, carbs: 1.7, fat: 10 },
-            { name: "Batido Sabor Chocolate +Proteínas", id: "573", brand: "Hacendado", category: "Bebidas", subCategory: "", calories: 48, protein: 9.1, carbs: 2.2, fat: 0.3 },
-            { name: "Batido Sabor Vainilla +Proteínas", id: "574", brand: "Hacendado", category: "Bebidas", subCategory: "", calories: 46, protein: 9.1, carbs: 2, fat: 0.2 },
-            { name: "Bebida de Almendras 0% Azúcares", id: "575", brand: "Hacendado", category: "Bebidas", subCategory: "", calories: 16, protein: 0.5, carbs: 0, fat: 1.5 },
-            { name: "Bebida de Arroz", id: "576", brand: "Hacendado", category: "Bebidas", subCategory: "", calories: 38, protein: 0.4, carbs: 6.4, fat: 1.2 },
-            { name: "Bebida de Avellanas", id: "577", brand: "Hacendado", category: "Bebidas", subCategory: "", calories: 50, protein: 0.6, carbs: 6.9, fat: 2.1 },
-            { name: "Bebida de Avena 0% Azúcares", id: "578", brand: "Hacendado", category: "Bebidas", subCategory: "", calories: 35, protein: 0.7, carbs: 4.7, fat: 1.4 },
-            { name: "Bebida de Avena Calcio y Vitaminas", id: "579", brand: "Hacendado", category: "Bebidas", subCategory: "", calories: 52, protein: 0, carbs: 6.8, fat: 2.5 },
-            { name: "Bebida de Avena y Chocolate", id: "580", brand: "Hacendado", category: "Bebidas", subCategory: "", calories: 44, protein: 1.2, carbs: 5.1, fat: 1.9 },
-            { name: "Bebida de Avena", id: "581", brand: "Alitey", category: "Bebidas", subCategory: "", calories: 47, protein: 1.6, carbs: 8.2, fat: 0.7 },
-            { name: "Bebida de Soja 0% Azúcares", id: "582", brand: "Hacendado", category: "Bebidas", subCategory: "", calories: 32, protein: 3.1, carbs: 0.9, fat: 1.7 },
-            { name: "Bebida de Soja Calcio y Vitaminas", id: "583", brand: "Hacendado", category: "Bebidas", subCategory: "", calories: 36, protein: 3.4, carbs: 1.2, fat: 1.9 },
-            { name: "Bebida de Soja Vainilla", id: "584", brand: "Hacendado", category: "Bebidas", subCategory: "", calories: 31, protein: 3, carbs: 0.9, fat: 1.6 },
-            { name: "Horchata de Chufa", id: "585", brand: "Hacendado", category: "Bebidas", subCategory: "", calories: 76, protein: 0.5, carbs: 12.9, fat: 2.5 }
-         ];
-
-         for (const item of batch24) {
-            try {
-               const { getDoc, doc, setDoc } = await import('firebase/firestore');
-               const docRef = doc(db, 'base_foods', item.id);
-               const docSnap = await getDoc(docRef);
-
-               if (docSnap.exists()) {
-                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
-                  continue;
-               }
-
-               await setDoc(docRef, item);
-               console.log(`Imported: ${item.name} (ID: ${item.id})`);
-            } catch (error) {
-               console.error(`Error importing ${item.name}:`, error);
-            }
-         }
-         console.log("Batch 24 Import complete.");
-      };
-
-      importBatch24();
-   }, []);
 
 
 
