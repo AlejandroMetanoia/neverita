@@ -117,63 +117,7 @@ function App() {
       return () => unsubscribe();
    }, []);
 
-   // BATCH 10 IMPORT (IDs 169-196 - Legumbres, Semillas, Postres)
-   useEffect(() => {
-      const importBatch10 = async () => {
-         console.log("Starting Batch 10 Operations (Legumbres y otros)...");
 
-         const batch10: Food[] = [
-            { name: "Pasta Lenteja Roja", id: "169", brand: "Felicia", category: "Legumbres", subCategory: "", calories: 334, protein: 26, carbs: 50, fat: 1.7 },
-            { name: "Pasta 100% Lenteja Roja", id: "170", brand: "Gallo", category: "Legumbres", subCategory: "", calories: 347, protein: 26, carbs: 49, fat: 2.5 },
-            { name: "Pasta 100% Garbanzo", id: "171", brand: "Gallo", category: "Legumbres", subCategory: "", calories: 370, protein: 21, carbs: 52, fat: 6.5 },
-            { name: "Pasta 100% Guisante", id: "172", brand: "Gallo", category: "Legumbres", subCategory: "", calories: 354, protein: 18, carbs: 60, fat: 2.6 },
-            { name: "Alubia Cocida Blanca (Tarro)", id: "173", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 83, protein: 5.8, carbs: 10.7, fat: 0.4 },
-            { name: "Alubia Cocida Granja (Tarro)", id: "174", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 74, protein: 5.1, carbs: 9.9, fat: 0.4 },
-            { name: "Alubia Cocida Pinta (Tarro)", id: "175", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 93, protein: 6.2, carbs: 13.1, fat: 0.4 },
-            { name: "Garbanzo Cocido Pedrosillano (Tarro)", id: "176", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 90, protein: 5.5, carbs: 9.5, fat: 2.2 },
-            { name: "Garbanzo Cocido (Tarro)", id: "177", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 90, protein: 5.5, carbs: 9.5, fat: 2.2 },
-            { name: "Garbanzo Riojana (Bote)", id: "178", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 120, protein: 5.8, carbs: 11, fat: 5.3 },
-            { name: "Lenteja Cocida (Tarro)", id: "179", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 89, protein: 8.2, carbs: 10.7, fat: 0.4 },
-            { name: "Lenteja Riojana (Bote)", id: "180", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 132, protein: 5.1, carbs: 8, fat: 8.4 },
-            { name: "Alubia Blanca", id: "181", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 292, protein: 21.4, carbs: 40, fat: 1 },
-            { name: "Alubia Granja", id: "182", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 292, protein: 21.4, carbs: 40, fat: 1 },
-            { name: "Alubia Negra", id: "183", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 292, protein: 21.4, carbs: 40, fat: 1 },
-            { name: "Alubia Pinta", id: "184", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 349, protein: 19, carbs: 53, fat: 1 },
-            { name: "Alubia Roja", id: "185", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 292, protein: 21.4, carbs: 40, fat: 1 },
-            { name: "Garbanzo Lechoso Andaluz", id: "186", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 348, protein: 18.6, carbs: 47.5, fat: 6.1 },
-            { name: "Garbanzo Pedrosillano", id: "187", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 348, protein: 18.6, carbs: 47.5, fat: 6.1 },
-            { name: "Garbanzo", id: "188", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 348, protein: 18.6, carbs: 47.5, fat: 6.1 },
-            { name: "Lenteja Castellana", id: "189", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 320, protein: 24.5, carbs: 48.1, fat: 1.2 },
-            { name: "Lenteja Pardina", id: "190", brand: "Hacendado", category: "Legumbres", subCategory: "", calories: 320, protein: 24.5, carbs: 48.1, fat: 1.2 },
-            { name: "Soja Texturizada", id: "191", brand: "Luengo", category: "Legumbres", subCategory: "", calories: 361, protein: 50, carbs: 13, fat: 8.8 },
-            { name: "Cacao en Polvo Puro (Sin Azúcar)", id: "192", brand: "La Chocolatera", category: "Semillas", subCategory: "", calories: 375, protein: 25.5, carbs: 16.3, fat: 16 },
-            { name: "Alpro Arándanos", id: "194", brand: "Alpro", category: "Postres Vegetales", subCategory: "", calories: 69, protein: 3.7, carbs: 8.1, fat: 2.2 },
-            { name: "Alpro Lima Limón", id: "195", brand: "Alpro", category: "Postres Vegetales", subCategory: "", calories: 77, protein: 3.6, carbs: 10.1, fat: 2 },
-            { name: "Alpro Mango", id: "196", brand: "Alpro", category: "Postres Vegetales", subCategory: "", calories: 61, protein: 3.7, carbs: 5.8, fat: 2 }
-         ];
-
-         for (const item of batch10) {
-            try {
-               const { getDoc, doc, setDoc } = await import('firebase/firestore');
-               const docRef = doc(db, 'base_foods', item.id);
-               const docSnap = await getDoc(docRef);
-
-               if (docSnap.exists()) {
-                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
-                  continue;
-               }
-
-               await setDoc(docRef, item);
-               console.log(`Imported: ${item.name} (ID: ${item.id})`);
-            } catch (error) {
-               console.error(`Error importing ${item.name}:`, error);
-            }
-         }
-         console.log("Batch 10 Import complete.");
-      };
-
-      importBatch10();
-   }, []);
 
 
 
