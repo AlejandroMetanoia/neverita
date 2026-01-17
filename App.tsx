@@ -117,61 +117,7 @@ function App() {
       return () => unsubscribe();
    }, []);
 
-   // BATCH 17 IMPORT (IDs 351-375 - Aún Más Quesos)
-   useEffect(() => {
-      const importBatch17 = async () => {
-         console.log("Starting Batch 17 Operations (Aún Más Quesos)...");
 
-         const batch17: Food[] = [
-            { name: "Quesitos", id: "351", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 192, protein: 11.8, carbs: 3.9, fat: 14.3 },
-            { name: "Queso Rallado 4 Quesos", id: "352", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 354, protein: 23, carbs: 2.5, fat: 28 },
-            { name: "Queso Rallado Emmental", id: "353", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 369, protein: 27, carbs: 0.5, fat: 29 },
-            { name: "Queso Rallado Especial Fundir", id: "354", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 284, protein: 19, carbs: 7, fat: 20 },
-            { name: "Queso Rallado Mozzarella", id: "355", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 283, protein: 21, carbs: 2.5, fat: 21 },
-            { name: "Queso Rallado sin Lactosa", id: "356", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 357, protein: 24, carbs: 0, fat: 29 },
-            { name: "Queso Rallado Grana Padano", id: "357", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 398, protein: 33, carbs: 0, fat: 29 },
-            { name: "Queso en Polvo Especial Pasta", id: "358", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 292, protein: 20, carbs: 17, fat: 16 },
-            { name: "Queso Semicurado de Cabra", id: "359", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 419, protein: 23.2, carbs: 2.5, fat: 35.1 },
-            { name: "Queso Semicurado Cortado", id: "360", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 421, protein: 25, carbs: 1.6, fat: 35 },
-            { name: "Queso Semicurado de Oveja", id: "361", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 472, protein: 27, carbs: 1, fat: 40 },
-            { name: "Queso Semicurado sin Lactosa", id: "362", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 410, protein: 25, carbs: 1, fat: 34 },
-            { name: "Queso Arzua Ulloa", id: "363", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 297, protein: 17, carbs: 0.7, fat: 25 },
-            { name: "Queso Burrata", id: "364", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 243, protein: 14, carbs: 1.7, fat: 20 },
-            { name: "Queso de Cabra Madurado con Pimentón", id: "365", brand: "Villa Noble", category: "Lácteos", subCategory: "", calories: 407, protein: 21.9, carbs: 2.1, fat: 34.5 },
-            { name: "Queso Tierno Bajo en Sal", id: "366", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 385, protein: 21, carbs: 3.2, fat: 32 },
-            { name: "Queso Tierno de Cabra", id: "367", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 409, protein: 20.8, carbs: 1, fat: 35.7 },
-            { name: "Queso Tierno Cortado", id: "368", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 363, protein: 21, carbs: 0.5, fat: 31 },
-            { name: "Queso Tierno", id: "369", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 372, protein: 21, carbs: 0.5, fat: 32 },
-            { name: "Queso Tierno Tronchón", id: "370", brand: "Montesinos", category: "Lácteos", subCategory: "", calories: 366, protein: 24.5, carbs: 1.4, fat: 29.2 },
-            { name: "Queso de Vaca Cortado", id: "371", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 382, protein: 23, carbs: 2.7, fat: 31 },
-            { name: "Queso Maasdam", id: "372", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 354, protein: 26.5, carbs: 0, fat: 27 },
-            { name: "Queso Bola Edam Tierno", id: "373", brand: "Holland Corona", category: "Lácteos", subCategory: "", calories: 324, protein: 26.3, carbs: 0, fat: 24 },
-            { name: "Queso Mini Babybel", id: "374", brand: "Babybel", category: "Lácteos", subCategory: "", calories: 308, protein: 23, carbs: 0.5, fat: 24 },
-            { name: "Queso de Oveja Añejo Fuerte", id: "375", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 464, protein: 25, carbs: 1, fat: 40 }
-         ];
-
-         for (const item of batch17) {
-            try {
-               const { getDoc, doc, setDoc } = await import('firebase/firestore');
-               const docRef = doc(db, 'base_foods', item.id);
-               const docSnap = await getDoc(docRef);
-
-               if (docSnap.exists()) {
-                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
-                  continue;
-               }
-
-               await setDoc(docRef, item);
-               console.log(`Imported: ${item.name} (ID: ${item.id})`);
-            } catch (error) {
-               console.error(`Error importing ${item.name}:`, error);
-            }
-         }
-         console.log("Batch 17 Import complete.");
-      };
-
-      importBatch17();
-   }, []);
 
 
 
