@@ -117,69 +117,7 @@ function App() {
       return () => unsubscribe();
    }, []);
 
-   // BATCH 19 IMPORT (IDs 411-443 - Postres Lácteos)
-   useEffect(() => {
-      const importBatch19 = async () => {
-         console.log("Starting Batch 19 Operations (Postres Lácteos)...");
 
-         const batch19: Food[] = [
-            { name: "Coulant de Chocolate", id: "411", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 384, protein: 6.5, carbs: 40, fat: 21.2 },
-            { name: "Mousse de Chocolate", id: "412", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 178, protein: 4.8, carbs: 24, fat: 6.7 },
-            { name: "Copa de Chocolate y Nata", id: "413", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 147, protein: 3.2, carbs: 17, fat: 7.4 },
-            { name: "Crema Catalana", id: "414", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 218, protein: 4.1, carbs: 21.7, fat: 12.8 },
-            { name: "Cuajada", id: "415", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 94, protein: 4.9, carbs: 7.2, fat: 5 },
-            { name: "Flan +Proteínas", id: "416", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 62, protein: 10, carbs: 5.9, fat: 0.2 },
-            { name: "Flan de Café", id: "417", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 151, protein: 5, carbs: 21.2, fat: 5 },
-            { name: "Flan de Huevo", id: "418", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 143, protein: 4.6, carbs: 22.3, fat: 3.9 },
-            { name: "Flan de Huevo sin Azúcares Añadidos", id: "419", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 68, protein: 6.3, carbs: 8.2, fat: 1.5 },
-            { name: "Flan de Queso", id: "420", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 148, protein: 4.6, carbs: 18.7, fat: 6 },
-            { name: "Flan de Vainilla", id: "421", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 95, protein: 2.4, carbs: 17.7, fat: 1.6 },
-            { name: "Natilla de Chocolate Danet", id: "422", brand: "Danone", category: "Postres Lácteos", subCategory: "", calories: 121, protein: 3.2, carbs: 19.9, fat: 3 },
-            { name: "Natilla de Chocolate", id: "423", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 125, protein: 3.7, carbs: 19, fat: 3.7 },
-            { name: "Natilla con Galleta", id: "424", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 146, protein: 3.9, carbs: 23.9, fat: 3.8 },
-            { name: "Natilla de Vainilla +Proteínas", id: "425", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 77, protein: 10, carbs: 5.8, fat: 1.5 },
-            { name: "Natilla de Vainilla Danet", id: "426", brand: "Danone", category: "Postres Lácteos", subCategory: "", calories: 109, protein: 3.1, carbs: 17.7, fat: 2.9 },
-            { name: "Natilla de Vainilla", id: "427", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 127, protein: 3.8, carbs: 18.1, fat: 4.4 },
-            { name: "Kéfir Líquido Natural", id: "428", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 36, protein: 3.9, carbs: 4.8, fat: 0.5 },
-            { name: "Kéfir Líquido Coco", id: "429", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 62, protein: 1.3, carbs: 8.9, fat: 2.3 },
-            { name: "Kéfir Líquido Fresa y Plátano", id: "430", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 57, protein: 3.1, carbs: 4.7, fat: 2.8 },
-            { name: "Kéfir Natural Sabor Suave", id: "431", brand: "Arteláctico", category: "Postres Lácteos", subCategory: "", calories: 74, protein: 3.9, carbs: 5.1, fat: 4.2 },
-            { name: "Bebida Sabor Fresa +Proteínas", id: "432", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 51, protein: 7.1, carbs: 4.8, fat: 0.4 },
-            { name: "Bebida Sabor Fresa y Plátano +Proteínas", id: "433", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 48, protein: 7, carbs: 4.2, fat: 0.4 },
-            { name: "Yogur Líquido Frutas del Bosque", id: "434", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 76, protein: 2.3, carbs: 12.4, fat: 1.9 },
-            { name: "Yogur Líquido Natural Azucarado", id: "435", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 73, protein: 2.4, carbs: 11.3, fat: 2 },
-            { name: "Bebida Sabor Açai y Plátano +Proteínas", id: "436", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 50, protein: 7.2, carbs: 4.6, fat: 0.3 },
-            { name: "Bebida Sabor Tropical +Proteínas", id: "437", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 51, protein: 7.1, carbs: 4.7, fat: 0.4 },
-            { name: "Actimel Desnatado", id: "438", brand: "Danone", category: "Postres Lácteos", subCategory: "", calories: 33, protein: 3, carbs: 3.6, fat: 0.4 },
-            { name: "Actimel", id: "439", brand: "Danone", category: "Postres Lácteos", subCategory: "", calories: 73, protein: 3, carbs: 10.8, fat: 1.6 },
-            { name: "Yogur Líquido Piña y Coco", id: "440", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 76, protein: 2.3, carbs: 12.3, fat: 1.9 },
-            { name: "Yogur Líquido Desnatado Frutos Silvestres", id: "441", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 33, protein: 3.3, carbs: 4.4, fat: 0.3 },
-            { name: "Yogur Líquido Desnatado Piña y Coco", id: "442", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 34, protein: 3.3, carbs: 4.4, fat: 0.4 },
-            { name: "Yogur Líquido Fresa y Plátano", id: "443", brand: "Arteláctico", category: "Postres Lácteos", subCategory: "", calories: 76, protein: 2.3, carbs: 12.4, fat: 1.9 }
-         ];
-
-         for (const item of batch19) {
-            try {
-               const { getDoc, doc, setDoc } = await import('firebase/firestore');
-               const docRef = doc(db, 'base_foods', item.id);
-               const docSnap = await getDoc(docRef);
-
-               if (docSnap.exists()) {
-                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
-                  continue;
-               }
-
-               await setDoc(docRef, item);
-               console.log(`Imported: ${item.name} (ID: ${item.id})`);
-            } catch (error) {
-               console.error(`Error importing ${item.name}:`, error);
-            }
-         }
-         console.log("Batch 19 Import complete.");
-      };
-
-      importBatch19();
-   }, []);
 
 
 
