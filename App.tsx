@@ -117,6 +117,42 @@ function App() {
       return () => unsubscribe();
    }, []);
 
+   // BATCH 21 IMPORT (IDs 476-480 - Fats & Oils)
+   useEffect(() => {
+      const importBatch21 = async () => {
+         console.log("Starting Batch 21 Operations (Fats & Oils)...");
+
+         const batch21: Food[] = [
+            { name: "Aceite de Oliva Virgen Extra", id: "476", brand: "Carbonell", category: "Aceites Vegetales", subCategory: "", calories: 900, protein: 0, carbs: 0, fat: 100 },
+            { name: "Mantequilla con Sal", id: "477", brand: "Hacendado", category: "Grasas Animales", subCategory: "", calories: 734, protein: 0.5, carbs: 0.8, fat: 81 },
+            { name: "Mantequilla Light", id: "478", brand: "Hacendado", category: "Grasas Animales", subCategory: "", calories: 384, protein: 1.8, carbs: 1.9, fat: 41 },
+            { name: "Mantequilla sin Lactosa", id: "479", brand: "Hacendado", category: "Grasas Animales", subCategory: "", calories: 743, protein: 0.5, carbs: 0.8, fat: 82 },
+            { name: "Mantequilla sin Sal", id: "480", brand: "Hacendado", category: "Grasas Animales", subCategory: "", calories: 742, protein: 0.6, carbs: 0.4, fat: 82 }
+         ];
+
+         for (const item of batch21) {
+            try {
+               const { getDoc, doc, setDoc } = await import('firebase/firestore');
+               const docRef = doc(db, 'base_foods', item.id);
+               const docSnap = await getDoc(docRef);
+
+               if (docSnap.exists()) {
+                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
+                  continue;
+               }
+
+               await setDoc(docRef, item);
+               console.log(`Imported: ${item.name} (ID: ${item.id})`);
+            } catch (error) {
+               console.error(`Error importing ${item.name}:`, error);
+            }
+         }
+         console.log("Batch 21 Import complete.");
+      };
+
+      importBatch21();
+   }, []);
+
 
 
 
