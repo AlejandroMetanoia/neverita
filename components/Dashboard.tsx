@@ -405,28 +405,28 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                             </h4>
                             <div className="grid gap-3">
                                 {mealLogs.map(log => (
-                                    <div key={log.id} className={`${cardGradient} p-5 rounded-[1.5rem] flex justify-between items-center group relative overflow-hidden`}>
+                                    <div key={log.id} className={`${cardGradient} p-4 rounded-2xl flex justify-between items-center group relative overflow-hidden shadow-sm`}>
 
-
-
-                                        <div className="pl-1 relative z-10">
-                                            <p className="font-bold text-lg text-white mb-0.5">{log.foodName}</p>
-                                            <p className="text-sm text-white/90 font-medium">{log.grams}g</p>
-                                        </div>
-                                        <div className="flex items-center gap-6 relative z-10">
-                                            <div className="text-right">
-                                                <p className="font-black text-xl text-white">{log.calculated.calories} <span className="text-sm text-white/80 font-medium">kcal</span></p>
-                                                <div className="flex gap-2 text-[10px] font-bold mt-1">
-                                                    <span className="bg-white/20 backdrop-blur-md px-2 py-1 rounded-lg text-white border border-white/20">P: {log.calculated.protein}</span>
-                                                    <span className="bg-white/20 backdrop-blur-md px-2 py-1 rounded-lg text-white border border-white/20">C: {log.calculated.carbs}</span>
-                                                    <span className="bg-white/20 backdrop-blur-md px-2 py-1 rounded-lg text-white border border-white/20">G: {log.calculated.fat}</span>
+                                        <div className="flex-1 min-w-0 pr-3 relative z-10">
+                                            <p className="font-bold text-base text-white truncate leading-tight mb-1">{log.foodName}</p>
+                                            <div className="flex items-center gap-2 text-xs text-white/90 font-medium">
+                                                <span>{log.grams}g</span>
+                                                <span className="opacity-60">•</span>
+                                                <div className="flex gap-2">
+                                                    <span>P: {log.calculated.protein}</span>
+                                                    <span>C: {log.calculated.carbs}</span>
+                                                    <span>G: {log.calculated.fat}</span>
                                                 </div>
                                             </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-4 relative z-10 flex-shrink-0">
+                                            <p className="font-black text-lg text-white">{log.calculated.calories} <span className="text-xs text-white/80 font-medium">kcal</span></p>
                                             <button
                                                 onClick={() => onDeleteLog(log.id)}
-                                                className="w-10 h-10 rounded-full flex items-center justify-center bg-white/20 hover:bg-white/30 text-white transition-all"
+                                                className="w-8 h-8 rounded-full flex items-center justify-center bg-white/20 hover:bg-white/30 text-white transition-all shadow-sm"
                                             >
-                                                <Icons.Trash size={18} />
+                                                <Icons.Trash size={16} />
                                             </button>
                                         </div>
                                     </div>
