@@ -405,10 +405,9 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                             </h4>
                             <div className="grid gap-3">
                                 {mealLogs.map(log => (
-                                    <div key={log.id} className={`${cardGradient} p-5 rounded-[1.5rem] shadow-lg ${shadowColor} flex justify-between items-center group relative overflow-hidden transition-transform hover:scale-[1.02] duration-200`}>
+                                    <div key={log.id} className={`${cardGradient} p-5 rounded-[1.5rem] flex justify-between items-center group relative overflow-hidden`}>
 
-                                        {/* Decorative gloss effect */}
-                                        <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 blur-3xl rounded-full pointer-events-none" />
+
 
                                         <div className="pl-1 relative z-10">
                                             <p className="font-bold text-lg text-white mb-0.5">{log.foodName}</p>
