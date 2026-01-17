@@ -117,61 +117,7 @@ function App() {
       return () => unsubscribe();
    }, []);
 
-   // BATCH 16 IMPORT (IDs 326-350 - Quesos y Más Lácteos)
-   useEffect(() => {
-      const importBatch16 = async () => {
-         console.log("Starting Batch 16 Operations (Quesos y Más Lácteos)...");
 
-         const batch16: Food[] = [
-            { name: "Lonchas de Queso Havarti Light", id: "326", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 267, protein: 27, carbs: 1.6, fat: 17 },
-            { name: "Lonchas de Queso Mozzarella", id: "327", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 290, protein: 22, carbs: 1, fat: 22 },
-            { name: "Lonchas de Queso Oveja", id: "328", brand: "Entrepinares", category: "Lácteos", subCategory: "", calories: 374, protein: 21, carbs: 0.6, fat: 32 },
-            { name: "Lonchas de Queso Semicurado", id: "329", brand: "Entrepinares", category: "Lácteos", subCategory: "", calories: 389, protein: 22, carbs: 1.1, fat: 33 },
-            { name: "Lonchas de Queso Tierno de Vaca", id: "330", brand: "Entrepinares", category: "Lácteos", subCategory: "", calories: 371, protein: 22, carbs: 1.1, fat: 31 },
-            { name: "Lonchas de Queso Cheddar", id: "331", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 415, protein: 25, carbs: 0, fat: 35 },
-            { name: "Lonchas de Queso Edam", id: "332", brand: "Holland Corona", category: "Lácteos", subCategory: "", calories: 321, protein: 25.4, carbs: 0, fat: 24 },
-            { name: "Lonchas de Queso Fundido Sandwich", id: "333", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 288, protein: 17, carbs: 9.9, fat: 20 },
-            { name: "Lonchas de Queso Fundido (Sabor Suave)", id: "334", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 231, protein: 10.5, carbs: 13.5, fat: 15 },
-            { name: "Lonchas de Queso Fundido (Burger)", id: "335", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 240, protein: 12.4, carbs: 12.2, fat: 15.7 },
-            { name: "Lonchas de Queso Gouda", id: "336", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 345, protein: 23.4, carbs: 0, fat: 27.9 },
-            { name: "Lonchas de Queso Tierno", id: "337", brand: "Entrepinares", category: "Lácteos", subCategory: "", calories: 362, protein: 20, carbs: 0.7, fat: 31 },
-            { name: "Lonchas de Queso Ahumadas Raclette", id: "338", brand: "Riches Monts", category: "Lácteos", subCategory: "", calories: 328, protein: 23, carbs: 0.5, fat: 26 },
-            { name: "Queso Crema Viejo Tostado", id: "339", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 249, protein: 13, carbs: 4.2, fat: 20 },
-            { name: "Queso Mousse de Ajo y Finas Hierbas", id: "340", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 208, protein: 3.8, carbs: 5.5, fat: 19 },
-            { name: "Queso de Untar Blanco con Finas Hierbas", id: "341", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 50, protein: 1.8, carbs: 1.9, fat: 3.9 },
-            { name: "Queso de Untar Blanco con Queso Azul", id: "342", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 67, protein: 1.4, carbs: 1.1, fat: 6.3 },
-            { name: "Queso de Untar Blanco Light", id: "343", brand: "Philadelphia", category: "Lácteos", subCategory: "", calories: 154, protein: 5.9, carbs: 4.4, fat: 12 },
-            { name: "Queso de Untar Blanco Light", id: "344", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 39, protein: 2.7, carbs: 1.4, fat: 2.5 },
-            { name: "Queso de Untar Blanco Suave", id: "345", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 72, protein: 1.3, carbs: 1.1, fat: 6.9 },
-            { name: "Queso de Untar Blanco", id: "346", brand: "Philadelphia", category: "Lácteos", subCategory: "", calories: 249, protein: 3.7, carbs: 2.9, fat: 25 },
-            { name: "Queso de Untar Blanco Sin Lactosa", id: "347", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 253, protein: 4.1, carbs: 3, fat: 25 },
-            { name: "Queso Crema Camembert", id: "348", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 218, protein: 13, carbs: 1, fat: 18 },
-            { name: "Queso Grana Padano", id: "349", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 398, protein: 33, carbs: 0, fat: 29 },
-            { name: "Quesitos Light", id: "350", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 151, protein: 12, carbs: 6, fat: 9 }
-         ];
-
-         for (const item of batch16) {
-            try {
-               const { getDoc, doc, setDoc } = await import('firebase/firestore');
-               const docRef = doc(db, 'base_foods', item.id);
-               const docSnap = await getDoc(docRef);
-
-               if (docSnap.exists()) {
-                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
-                  continue;
-               }
-
-               await setDoc(docRef, item);
-               console.log(`Imported: ${item.name} (ID: ${item.id})`);
-            } catch (error) {
-               console.error(`Error importing ${item.name}:`, error);
-            }
-         }
-         console.log("Batch 16 Import complete.");
-      };
-
-      importBatch16();
-   }, []);
 
 
 
