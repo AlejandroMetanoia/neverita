@@ -117,6 +117,62 @@ function App() {
       return () => unsubscribe();
    }, []);
 
+   // BATCH 9 IMPORT (IDs 144-168)
+   useEffect(() => {
+      const importBatch9 = async () => {
+         console.log("Starting Batch 9 Operations (Cereal Procesado)...");
+
+         const batch9: Food[] = [
+            { name: "Cereal Copos Arroz y Trigo Integral (0% AA)", id: "144", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 364, protein: 9.6, carbs: 76, fat: 1.7 },
+            { name: "Cereal Copos Arroz y Trigo Integral (Chocolate)", id: "145", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 397, protein: 8.6, carbs: 71, fat: 6.6 },
+            { name: "Cereal Copos Avena (Chocolate)", id: "146", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 400, protein: 10.8, carbs: 59.5, fat: 11 },
+            { name: "Cereal Copos Avena (Sin Gluten)", id: "147", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 370, protein: 14, carbs: 58, fat: 6.5 },
+            { name: "Cereal Copos Avena (Bruggen)", id: "148", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 375, protein: 14, carbs: 59, fat: 7 },
+            { name: "Cereal Copos Maíz (0% AA)", id: "149", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 373, protein: 6.7, carbs: 82, fat: 1.1 },
+            { name: "Cereal Muesli Crujiente (0% E y AA)", id: "150", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 401, protein: 8.8, carbs: 52, fat: 12 },
+            { name: "Cereal Muesli Crujiente (Chocolate)", id: "151", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 441, protein: 8.4, carbs: 61, fat: 17 },
+            { name: "Cereal Muesli Crujiente (Frutas)", id: "152", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 427, protein: 6.3, carbs: 66, fat: 14 },
+            { name: "Cereal Muesli Crujiente (Frutos Secos)", id: "153", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 458, protein: 8, carbs: 63, fat: 18 },
+            { name: "Cereal Muesli (Frutas y Frutos Secos)", id: "154", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 416, protein: 10, carbs: 56, fat: 15 },
+            { name: "Cereal Muesli (Quinoa, Chía y Chocolate Negro)", id: "155", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 416, protein: 9.8, carbs: 60, fat: 13 },
+            { name: "Cereal Relleno de Chocolate y Avellanas (Sin Gluten)", id: "156", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 461, protein: 6, carbs: 69, fat: 17.3 },
+            { name: "Cereal de Salvado de Trigo Fibra Sticks (Palitos)", id: "157", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 342, protein: 16, carbs: 46, fat: 3.3 },
+            { name: "Granola (Bajo en Azúcar)", id: "158", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 477, protein: 13.6, carbs: 50.2, fat: 22.7 },
+            { name: "Choco Krispies", id: "159", brand: "Kellogg's", category: "Cereales", subCategory: "Cereal Procesado", calories: 386, protein: 6.3, carbs: 84, fat: 1.9 },
+            { name: "Special K Classic", id: "160", brand: "Kellogg's", category: "Cereales", subCategory: "Cereal Procesado", calories: 392, protein: 8, carbs: 84, fat: 1.3 },
+            { name: "Corn Flakes", id: "161", brand: "Kellogg's", category: "Cereales", subCategory: "Cereal Procesado", calories: 378, protein: 7, carbs: 84, fat: 0.9 },
+            { name: "Chocodays", id: "162", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 372, protein: 8, carbs: 70, fat: 4.8 },
+            { name: "Cereal Relleno Crema de Chocolate y Avellanas", id: "163", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 440, protein: 7.3, carbs: 72, fat: 13 },
+            { name: "Cereal Relleno Leche", id: "164", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 447, protein: 10, carbs: 65, fat: 15.4 },
+            { name: "Tortillas de Maíz", id: "165", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 226, protein: 4.1, carbs: 44, fat: 2.6 },
+            { name: "Tortillas Integrales", id: "166", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 273, protein: 9.2, carbs: 41, fat: 6 },
+            { name: "Tortillas de Trigo", id: "167", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 303, protein: 8, carbs: 51, fat: 6.4 },
+            { name: "Tortillas de Trigo MAXI", id: "168", brand: "Hacendado", category: "Cereales", subCategory: "Cereal Procesado", calories: 294, protein: 8, carbs: 53, fat: 5.3 }
+         ];
+
+         for (const item of batch9) {
+            try {
+               const { getDoc, doc, setDoc } = await import('firebase/firestore');
+               const docRef = doc(db, 'base_foods', item.id);
+               const docSnap = await getDoc(docRef);
+
+               if (docSnap.exists()) {
+                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
+                  continue;
+               }
+
+               await setDoc(docRef, item);
+               console.log(`Imported: ${item.name} (ID: ${item.id})`);
+            } catch (error) {
+               console.error(`Error importing ${item.name}:`, error);
+            }
+         }
+         console.log("Batch 9 Import complete.");
+      };
+
+      importBatch9();
+   }, []);
+
 
 
 
