@@ -117,61 +117,7 @@ function App() {
       return () => unsubscribe();
    }, []);
 
-   // BATCH 13 IMPORT (IDs 251-275 - Hamburguesas, Pollo, Embutidos)
-   useEffect(() => {
-      const importBatch13 = async () => {
-         console.log("Starting Batch 13 Operations (Hamburguesas, Pollo, Embutidos)...");
 
-         const batch13: Food[] = [
-            { name: "Hamburguesa de Vacuno", id: "251", brand: "ECMedina", category: "Carnes Rojas", subCategory: "Vacuno", calories: 206, protein: 17, carbs: 2.9, fat: 14 },
-            { name: "Hamburguesa de Vacuno / Cerdo", id: "252", brand: "CB Mediterranean Foods", category: "Carnes Rojas", subCategory: "Vacuno", calories: 223, protein: 17, carbs: 2.7, fat: 16 },
-            { name: "Filetes de Pollo", id: "253", brand: "", category: "Carnes Blancas", subCategory: "", calories: 110, protein: 22, carbs: 0, fat: 2 },
-            { name: "Escalope de Pollo Empanado", id: "254", brand: "", category: "Carnes Blancas", subCategory: "", calories: 220, protein: 14, carbs: 18, fat: 10 },
-            { name: "Alas de Pollo", id: "255", brand: "", category: "Carnes Blancas", subCategory: "", calories: 210, protein: 18, carbs: 0, fat: 15 },
-            { name: "Hamburguesas de Pollo", id: "256", brand: "", category: "Carnes Blancas", subCategory: "", calories: 160, protein: 18, carbs: 0, fat: 9 },
-            { name: "Contramuslos de Pollo Entero", id: "257", brand: "", category: "Carnes Blancas", subCategory: "", calories: 215, protein: 17, carbs: 0, fat: 15 },
-            { name: "Contramuslos de Pollo Sin Piel", id: "258", brand: "", category: "Carnes Blancas", subCategory: "", calories: 125, protein: 19, carbs: 0, fat: 5 },
-            { name: "Jamoncitos de Pollo", id: "259", brand: "", category: "Carnes Blancas", subCategory: "", calories: 150, protein: 18, carbs: 0, fat: 8 },
-            { name: "Alitas de Pollo Barbacoa", id: "260", brand: "CB Mediterranean Foods", category: "Carnes Blancas", subCategory: "", calories: 177, protein: 16.2, carbs: 2.8, fat: 11.2 },
-            { name: "Salmón Ahumado", id: "261", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 171, protein: 22, carbs: 0.5, fat: 9.1 },
-            { name: "Salmón Marinado", id: "262", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 221, protein: 21, carbs: 0.5, fat: 15 },
-            { name: "Bacon Adobado Curado", id: "263", brand: "La Alegria Riojana", category: "Embutidos y Charcutería", subCategory: "", calories: 264, protein: 11.9, carbs: 3.3, fat: 22.6 },
-            { name: "Bacon Ahumado", id: "264", brand: "Monells", category: "Embutidos y Charcutería", subCategory: "", calories: 289, protein: 15, carbs: 1, fat: 25 },
-            { name: "Bacon Ahumado", id: "265", brand: "Oscar Mayer", category: "Embutidos y Charcutería", subCategory: "", calories: 366, protein: 16, carbs: 1.3, fat: 33 },
-            { name: "Bacon Cintas", id: "266", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 293, protein: 16.6, carbs: 0.5, fat: 25 },
-            { name: "Pechuga de Pavo Maxi", id: "267", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 78, protein: 12.8, carbs: 6.8, fat: 0.5 },
-            { name: "Pechuga de Pavo (92%)", id: "268", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 89, protein: 19.5, carbs: 1, fat: 1.3 },
-            { name: "Pechuga de Pavo", id: "269", brand: "Campofrío", category: "Embutidos y Charcutería", subCategory: "", calories: 82, protein: 16, carbs: 2.2, fat: 1 },
-            { name: "Pechuga de Pavo", id: "270", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 78, protein: 17.8, carbs: 0.6, fat: 0.5 },
-            { name: "Pechuga de Pollo (92%)", id: "271", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 89, protein: 18.1, carbs: 1, fat: 1.7 },
-            { name: "Pechuga de Pollo Braseada", id: "272", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 84, protein: 16.9, carbs: 1.3, fat: 1.2 },
-            { name: "Tiras de Pollo al Horno", id: "273", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 115, protein: 23, carbs: 3.1, fat: 1.2 },
-            { name: "Tiras de Pollo", id: "274", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 107, protein: 23.4, carbs: 0.6, fat: 1.2 },
-            { name: "Jamón Cocido (92%)", id: "275", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 101, protein: 18.6, carbs: 0.9, fat: 2.5 }
-         ];
-
-         for (const item of batch13) {
-            try {
-               const { getDoc, doc, setDoc } = await import('firebase/firestore');
-               const docRef = doc(db, 'base_foods', item.id);
-               const docSnap = await getDoc(docRef);
-
-               if (docSnap.exists()) {
-                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
-                  continue;
-               }
-
-               await setDoc(docRef, item);
-               console.log(`Imported: ${item.name} (ID: ${item.id})`);
-            } catch (error) {
-               console.error(`Error importing ${item.name}:`, error);
-            }
-         }
-         console.log("Batch 13 Import complete.");
-      };
-
-      importBatch13();
-   }, []);
 
 
 
