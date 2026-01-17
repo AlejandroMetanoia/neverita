@@ -117,6 +117,71 @@ function App() {
       return () => unsubscribe();
    }, []);
 
+   // BATCH 23 IMPORT (IDs 516-549 - More Prepared Foods)
+   useEffect(() => {
+      const importBatch23 = async () => {
+         console.log("Starting Batch 23 Operations (More Prepared Foods)...");
+
+         const batch23: Food[] = [
+            { name: "Pizza Fresca Romana", id: "516", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 212, protein: 11.7, carbs: 26.5, fat: 6.6 },
+            { name: "Rosca Jamón Serrano y Queso Emmental", id: "517", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 259, protein: 15.2, carbs: 30, fat: 8.2 },
+            { name: "Rosca Lomo, Bacon y Queso Emmental", id: "518", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 236, protein: 12.9, carbs: 29, fat: 7 },
+            { name: "Canelones de Carne", id: "519", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 144, protein: 7.3, carbs: 15, fat: 5.7 },
+            { name: "Lasaña de Atún", id: "520", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 161, protein: 9.6, carbs: 15, fat: 6.7 },
+            { name: "Lasaña Boloñesa (Congelada)", id: "521", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 154, protein: 8.2, carbs: 16, fat: 6.2 },
+            { name: "Pasta con Pollo al Pesto", id: "522", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 160, protein: 9.8, carbs: 19, fat: 4.7 },
+            { name: "Gnocchi Pollo y Verduras", id: "523", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 149, protein: 6.3, carbs: 20, fat: 4.4 },
+            { name: "Gazpacho Fresco", id: "524", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 75, protein: 0.6, carbs: 2.5, fat: 7 },
+            { name: "Gazpacho Tradicional", id: "525", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 44, protein: 0.8, carbs: 3.6, fat: 2.4 },
+            { name: "Salmorejo Fresco", id: "526", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 89, protein: 0.7, carbs: 8, fat: 6 },
+            { name: "Albóndigas Guisadas", id: "527", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 171, protein: 12, carbs: 7.8, fat: 10.1 },
+            { name: "Arroz de Verduras", id: "528", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 122, protein: 3.1, carbs: 16, fat: 4.4 },
+            { name: "Arroz de Secreto Ibérico con Setas", id: "529", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 207, protein: 6.5, carbs: 24.5, fat: 8.8 },
+            { name: "Canelones de Carne y Boletus", id: "530", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 158, protein: 8.7, carbs: 12, fat: 8 },
+            { name: "Codillo de Cerdo Asado", id: "531", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 199, protein: 17, carbs: 3, fat: 13 },
+            { name: "Empanados a base de Vegetales", id: "532", brand: "Tivall", category: "Comida Preparada", subCategory: "", calories: 235, protein: 12.3, carbs: 17.6, fat: 11.7 },
+            { name: "Spaghetti Carbonara", id: "533", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 142, protein: 4.8, carbs: 15, fat: 6.7 },
+            { name: "Lasaña Boloñesa", id: "534", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 143, protein: 7.4, carbs: 14, fat: 6.1 },
+            { name: "Lasaña de Espinacas y Requesón", id: "535", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 165, protein: 5.9, carbs: 12, fat: 10 },
+            { name: "Lasaña de Pollo", id: "536", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 170, protein: 6.6, carbs: 13, fat: 10 },
+            { name: "Mac & Cheese Bacon", id: "537", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 189, protein: 6.1, carbs: 20, fat: 9.2 },
+            { name: "Migas", id: "538", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 311, protein: 7.5, carbs: 35, fat: 15 },
+            { name: "Pastel de Atún", id: "539", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 245, protein: 8.5, carbs: 14.8, fat: 16.7 },
+            { name: "Patatas con Alioli", id: "540", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 222, protein: 1.7, carbs: 12, fat: 19 },
+            { name: "Patatas Bravas", id: "541", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 168, protein: 2, carbs: 14, fat: 11 },
+            { name: "Pollo al Curry", id: "542", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 136, protein: 8.2, carbs: 14, fat: 5 },
+            { name: "Pollo Asado", id: "543", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 183, protein: 22, carbs: 0.8, fat: 10 },
+            { name: "Pollo Asado Troceado", id: "544", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 171, protein: 26, carbs: 3, fat: 5.9 },
+            { name: "Pulled Pork BBQ", id: "545", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 194, protein: 21, carbs: 6.3, fat: 10 },
+            { name: "Roti de Pollo Relleno de Jamón y Queso", id: "546", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 144, protein: 12, carbs: 5.8, fat: 8.2 },
+            { name: "Tabulé Oriental", id: "547", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 167, protein: 3.9, carbs: 25.4, fat: 5.2 },
+            { name: "Ensaladilla Americana", id: "548", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 156, protein: 0.8, carbs: 8, fat: 13 },
+            { name: "Ensaladilla Cangrejo", id: "549", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 234, protein: 5.2, carbs: 14.6, fat: 17 }
+         ];
+
+         for (const item of batch23) {
+            try {
+               const { getDoc, doc, setDoc } = await import('firebase/firestore');
+               const docRef = doc(db, 'base_foods', item.id);
+               const docSnap = await getDoc(docRef);
+
+               if (docSnap.exists()) {
+                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
+                  continue;
+               }
+
+               await setDoc(docRef, item);
+               console.log(`Imported: ${item.name} (ID: ${item.id})`);
+            } catch (error) {
+               console.error(`Error importing ${item.name}:`, error);
+            }
+         }
+         console.log("Batch 23 Import complete.");
+      };
+
+      importBatch23();
+   }, []);
+
 
 
 
