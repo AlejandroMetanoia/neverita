@@ -117,6 +117,65 @@ function App() {
       return () => unsubscribe();
    }, []);
 
+   // BATCH 12 IMPORT (IDs 223-250 - Vacuno, Cerdo, Pollo)
+   useEffect(() => {
+      const importBatch12 = async () => {
+         console.log("Starting Batch 12 Operations (Carnes)...");
+
+         const batch12: Food[] = [
+            { name: "Lomo Bajo de Vaca Madurada", id: "223", brand: "", category: "Carnes Rojas", subCategory: "Vacuno", calories: 230, protein: 21, carbs: 0, fat: 15 },
+            { name: "Chuletón de Vacuno Mayor", id: "224", brand: "", category: "Carnes Rojas", subCategory: "Vacuno", calories: 260, protein: 18, carbs: 0, fat: 21 },
+            { name: "Solomillo de Vacuno Mayor", id: "225", brand: "", category: "Carnes Rojas", subCategory: "Vacuno", calories: 190, protein: 21, carbs: 0, fat: 11 },
+            { name: "Hamburguesa de Vacuno Mayor", id: "226", brand: "", category: "Carnes Rojas", subCategory: "Vacuno", calories: 210, protein: 15, carbs: 0, fat: 16 },
+            { name: "Carne Picada de Vacuno Mayor", id: "227", brand: "", category: "Carnes Rojas", subCategory: "Vacuno", calories: 210, protein: 15, carbs: 0, fat: 16 },
+            { name: "Cinta de Lomo Adobada", id: "228", brand: "", category: "Carnes Rojas", subCategory: "Cerdo", calories: 130, protein: 20, carbs: 0, fat: 5 },
+            { name: "Solomillo de Cerdo", id: "229", brand: "", category: "Carnes Rojas", subCategory: "Cerdo", calories: 140, protein: 22, carbs: 0, fat: 5 },
+            { name: "Panceta Ibérica Salada", id: "230", brand: "", category: "Carnes Rojas", subCategory: "Cerdo", calories: 550, protein: 15, carbs: 1, fat: 54 },
+            { name: "Chorizo de Cerdo", id: "231", brand: "", category: "Carnes Rojas", subCategory: "Cerdo", calories: 350, protein: 20, carbs: 1, fat: 30 },
+            { name: "Chuletas de Lomo de Cerdo", id: "232", brand: "", category: "Carnes Rojas", subCategory: "Cerdo", calories: 160, protein: 21, carbs: 0, fat: 8 },
+            { name: "Chuleta de Aguja de Cerdo", id: "233", brand: "", category: "Carnes Rojas", subCategory: "Cerdo", calories: 200, protein: 18, carbs: 0, fat: 14 },
+            { name: "Chuletas de Sajonia", id: "234", brand: "", category: "Carnes Rojas", subCategory: "Cerdo", calories: 130, protein: 17, carbs: 0, fat: 6 },
+            { name: "Cintas de Lomo de Cerdo", id: "235", brand: "", category: "Carnes Rojas", subCategory: "Cerdo", calories: 150, protein: 21, carbs: 0, fat: 7 },
+            { name: "Morcilla de Arroz", id: "236", brand: "", category: "Carnes Rojas", subCategory: "Cerdo", calories: 320, protein: 5, carbs: 20, fat: 25 },
+            { name: "Morcilla de Cebolla", id: "237", brand: "", category: "Carnes Rojas", subCategory: "Cerdo", calories: 300, protein: 11, carbs: 5, fat: 22 },
+            { name: "Panceta", id: "238", brand: "", category: "Carnes Rojas", subCategory: "Cerdo", calories: 400, protein: 16, carbs: 0, fat: 36 },
+            { name: "Salchicha de Cerdo", id: "239", brand: "", category: "Carnes Rojas", subCategory: "Cerdo", calories: 200, protein: 13, carbs: 1, fat: 17 },
+            { name: "Albóndigas de Cerdo", id: "240", brand: "Tradigust", category: "Carnes Rojas", subCategory: "Cerdo", calories: 232, protein: 16, carbs: 0.5, fat: 19 },
+            { name: "Albóndigas de Pollo", id: "241", brand: "Aldelís", category: "Carnes Blancas", subCategory: "", calories: 167, protein: 17.9, carbs: 1.4, fat: 9.6 },
+            { name: "Carne Picada de Cerdo", id: "242", brand: "Embutidos Martínez", category: "Carnes Rojas", subCategory: "Cerdo", calories: 195, protein: 17, carbs: 2, fat: 12 },
+            { name: "Carne Picada Mixta Vacuno / Cerdo", id: "243", brand: "Embutidos Martínez", category: "Carnes Rojas", subCategory: "Cerdo", calories: 195, protein: 17, carbs: 2, fat: 12 },
+            { name: "Carne Picada de Pollo", id: "244", brand: "Embutidos Martínez", category: "Carnes Blancas", subCategory: "", calories: 125, protein: 16, carbs: 1, fat: 6.8 },
+            { name: "Carne Picada de Vacuno", id: "245", brand: "ECMedina", category: "Carnes Rojas", subCategory: "Vacuno", calories: 204, protein: 19, carbs: 0.5, fat: 14 },
+            { name: "Carne Picada de Vacuno", id: "246", brand: "Embutidos Martínez", category: "Carnes Rojas", subCategory: "Vacuno", calories: 180, protein: 17, carbs: 3, fat: 12 },
+            { name: "Carpaccio de Vacuno", id: "247", brand: "ECMedina", category: "Carnes Rojas", subCategory: "Vacuno", calories: 108, protein: 20, carbs: 2.2, fat: 2 },
+            { name: "Hamburguesa de Vaca", id: "248", brand: "ECMedina", category: "Carnes Rojas", subCategory: "Vacuno", calories: 250, protein: 17, carbs: 0.5, fat: 20 },
+            { name: "Hamburguesa de Cerdo", id: "249", brand: "CB Mediterranean Foods", category: "Carnes Rojas", subCategory: "Cerdo", calories: 216, protein: 14.6, carbs: 3.5, fat: 16 },
+            { name: "Hamburguesa de Pollo", id: "250", brand: "CB Mediterranean Foods", category: "Carnes Blancas", subCategory: "", calories: 123, protein: 16, carbs: 1.6, fat: 5.8 }
+         ];
+
+         for (const item of batch12) {
+            try {
+               const { getDoc, doc, setDoc } = await import('firebase/firestore');
+               const docRef = doc(db, 'base_foods', item.id);
+               const docSnap = await getDoc(docRef);
+
+               if (docSnap.exists()) {
+                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
+                  continue;
+               }
+
+               await setDoc(docRef, item);
+               console.log(`Imported: ${item.name} (ID: ${item.id})`);
+            } catch (error) {
+               console.error(`Error importing ${item.name}:`, error);
+            }
+         }
+         console.log("Batch 12 Import complete.");
+      };
+
+      importBatch12();
+   }, []);
+
 
 
 
