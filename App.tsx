@@ -117,59 +117,7 @@ function App() {
       return () => unsubscribe();
    }, []);
 
-   // BATCH 15 IMPORT (IDs 303-325 - Pescados y Lácteos)
-   useEffect(() => {
-      const importBatch15 = async () => {
-         console.log("Starting Batch 15 Operations (Pescados y Lácteos)...");
 
-         const batch15: Food[] = [
-            { name: "Lomo de Salmón", id: "303", brand: "", category: "Pescado Azul", subCategory: "", calories: 230, protein: 19, carbs: 0, fat: 16 },
-            { name: "Lomo de Atún", id: "304", brand: "", category: "Pescado Azul", subCategory: "", calories: 130, protein: 22, carbs: 0, fat: 4 },
-            { name: "Salmón", id: "305", brand: "", category: "Pescado Azul", subCategory: "", calories: 200, protein: 20, carbs: 0, fat: 13 },
-            { name: "Angulas", id: "306", brand: "", category: "Pescado Azul", subCategory: "", calories: 160, protein: 10, carbs: 7, fat: 10 },
-            { name: "Pez Espada (Emperador)", id: "307", brand: "", category: "Pescado Azul", subCategory: "", calories: 160, protein: 20, carbs: 0, fat: 6 },
-            { name: "Rodaballo", id: "308", brand: "", category: "Pescado Blanco", subCategory: "", calories: 100, protein: 16, carbs: 0, fat: 4 },
-            { name: "Lomo de Bacalao", id: "309", brand: "", category: "Pescado Blanco", subCategory: "", calories: 60, protein: 14, carbs: 0, fat: 0.5 },
-            { name: "Lubina", id: "310", brand: "", category: "Pescado Blanco", subCategory: "", calories: 100, protein: 18, carbs: 0, fat: 2 },
-            { name: "Rape Negro", id: "311", brand: "", category: "Pescado Blanco", subCategory: "", calories: 90, protein: 17, carbs: 0, fat: 2 },
-            { name: "Cocochas de Merluza", id: "312", brand: "", category: "Pescado Blanco", subCategory: "", calories: 100, protein: 16, carbs: 0, fat: 3 },
-            { name: "Dorada", id: "313", brand: "", category: "Pescado Blanco", subCategory: "", calories: 85, protein: 18, carbs: 0, fat: 1 },
-            { name: "Lomo de Merluza", id: "314", brand: "", category: "Pescado Blanco", subCategory: "", calories: 80, protein: 16, carbs: 0, fat: 2 },
-            { name: "Lenguado", id: "315", brand: "", category: "Pescado Blanco", subCategory: "", calories: 90, protein: 18, carbs: 0, fat: 1 },
-            { name: "Raya", id: "316", brand: "", category: "Pescado Blanco", subCategory: "", calories: 80, protein: 17, carbs: 0, fat: 1 },
-            { name: "Corvina", id: "317", brand: "", category: "Pescado Blanco", subCategory: "", calories: 100, protein: 18, carbs: 0, fat: 4 },
-            { name: "Leche Desnatada", id: "318", brand: "CL Asturiana", category: "Lácteos", subCategory: "", calories: 34, protein: 3.2, carbs: 4.7, fat: 0.3 },
-            { name: "Leche Desnatada", id: "319", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 35, protein: 3.2, carbs: 4.9, fat: 0.3 },
-            { name: "Leche Entera", id: "320", brand: "CL Asturiana", category: "Lácteos", subCategory: "", calories: 63, protein: 3.1, carbs: 4.6, fat: 3.6 },
-            { name: "Leche Entera", id: "321", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 63, protein: 3.1, carbs: 4.6, fat: 3.6 },
-            { name: "Leche Semidesnatada", id: "322", brand: "CL Asturiana", category: "Lácteos", subCategory: "", calories: 45, protein: 3.2, carbs: 4.7, fat: 1.6 },
-            { name: "Leche Semidesnatada", id: "323", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 46, protein: 3.1, carbs: 4.8, fat: 1.6 },
-            { name: "Lonchas de Queso de Cabra", id: "324", brand: "Entrepinares", category: "Lácteos", subCategory: "", calories: 389, protein: 20, carbs: 0.7, fat: 34 },
-            { name: "Lonchas de Queso Havarti", id: "325", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 396, protein: 19, carbs: 1.3, fat: 35 }
-         ];
-
-         for (const item of batch15) {
-            try {
-               const { getDoc, doc, setDoc } = await import('firebase/firestore');
-               const docRef = doc(db, 'base_foods', item.id);
-               const docSnap = await getDoc(docRef);
-
-               if (docSnap.exists()) {
-                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
-                  continue;
-               }
-
-               await setDoc(docRef, item);
-               console.log(`Imported: ${item.name} (ID: ${item.id})`);
-            } catch (error) {
-               console.error(`Error importing ${item.name}:`, error);
-            }
-         }
-         console.log("Batch 15 Import complete.");
-      };
-
-      importBatch15();
-   }, []);
 
 
 
