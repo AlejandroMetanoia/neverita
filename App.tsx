@@ -117,6 +117,63 @@ function App() {
       return () => unsubscribe();
    }, []);
 
+   // BATCH 11 IMPORT (IDs 197-222 - Huevos y Ternera)
+   useEffect(() => {
+      const importBatch11 = async () => {
+         console.log("Starting Batch 11 Operations (Huevos y Ternera)...");
+
+         const batch11: Food[] = [
+            { name: "Clara de Huevo Líquida Pasteurizada", id: "197", brand: "Huevos Guillén", category: "Huevos", subCategory: "", calories: 50, protein: 11, carbs: 0, fat: 0.1 },
+            { name: "Huevo Cocido", id: "198", brand: "Hacendado", category: "Huevos", subCategory: "", calories: 153, protein: 12.5, carbs: 0, fat: 10 },
+            { name: "Huevo Codorniz", id: "199", brand: "Huevos Guillén", category: "Huevos", subCategory: "", calories: 154, protein: 13.1, carbs: 0.4, fat: 11.1 },
+            { name: "Huevo Gallina Campera", id: "200", brand: "Aviman", category: "Huevos", subCategory: "", calories: 150, protein: 12.5, carbs: 0.5, fat: 11.1 },
+            { name: "Huevo", id: "201", brand: "", category: "Huevos", subCategory: "", calories: 150, protein: 12.5, carbs: 0.5, fat: 11.1 },
+            { name: "Chuleta de Ternera", id: "202", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 160, protein: 20.2, carbs: 0, fat: 8.5 },
+            { name: "Cachopo de Ternera (Jamón Ibérico, Queso Brie)", id: "203", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 335, protein: 19, carbs: 13.5, fat: 23.5 },
+            { name: "Solomillo de Ternera", id: "204", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 160, protein: 22, carbs: 0, fat: 8 },
+            { name: "Entraña de Ternera", id: "205", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 190, protein: 18, carbs: 0, fat: 13 },
+            { name: "Cachopo de Ternera (Pimiento Rojo, Queso Azul)", id: "206", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 350, protein: 17, carbs: 15, fat: 26 },
+            { name: "Aguja de Ternera", id: "207", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 190, protein: 20, carbs: 0, fat: 12 },
+            { name: "Hamburguesa de Ternera", id: "208", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 180, protein: 20, carbs: 0, fat: 8 },
+            { name: "Carne Picada de Ternera", id: "209", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 200, protein: 19.5, carbs: 0, fat: 14 },
+            { name: "Carne Picada Mixta (50% Ternera / 50% Cerdo)", id: "210", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 230, protein: 18, carbs: 0, fat: 16 },
+            { name: "Lomo Bajo de Ternera", id: "211", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 160, protein: 21.5, carbs: 0, fat: 7 },
+            { name: "Lomo Alto de Ternera", id: "212", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 200, protein: 20.5, carbs: 0, fat: 13 },
+            { name: "Babilla de Ternera", id: "213", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 120, protein: 21.5, carbs: 0, fat: 4 },
+            { name: "Cadera de Ternera", id: "214", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 130, protein: 21, carbs: 0, fat: 5 },
+            { name: "Contra de Ternera", id: "215", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 120, protein: 21.5, carbs: 0, fat: 4 },
+            { name: "Albóndigas de Ternera", id: "216", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 190, protein: 18.5, carbs: 5, fat: 11 },
+            { name: "Espaldilla de Ternera", id: "217", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 150, protein: 20.5, carbs: 0, fat: 6.5 },
+            { name: "Falda de Ternera", id: "218", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 235, protein: 18.5, carbs: 0, fat: 17 },
+            { name: "Filete Empanado de Ternera", id: "219", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 220, protein: 18, carbs: 22, fat: 6 },
+            { name: "Filetes de Principio de Aguja", id: "220", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 170, protein: 19.5, carbs: 0, fat: 10 },
+            { name: "Picaña de Ternera", id: "221", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 180, protein: 19.5, carbs: 0, fat: 10 },
+            { name: "Redondo de Ternera", id: "222", brand: "", category: "Carnes Rojas", subCategory: "Ternera", calories: 110, protein: 22.5, carbs: 0, fat: 3.5 }
+         ];
+
+         for (const item of batch11) {
+            try {
+               const { getDoc, doc, setDoc } = await import('firebase/firestore');
+               const docRef = doc(db, 'base_foods', item.id);
+               const docSnap = await getDoc(docRef);
+
+               if (docSnap.exists()) {
+                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
+                  continue;
+               }
+
+               await setDoc(docRef, item);
+               console.log(`Imported: ${item.name} (ID: ${item.id})`);
+            } catch (error) {
+               console.error(`Error importing ${item.name}:`, error);
+            }
+         }
+         console.log("Batch 11 Import complete.");
+      };
+
+      importBatch11();
+   }, []);
+
 
 
 
