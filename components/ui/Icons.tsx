@@ -41,7 +41,8 @@ import {
   Edit2,
   ScanBarcode,
   Check,
-  AlertCircle
+  AlertCircle,
+  IceCream
 } from 'lucide-react';
 
 export const Icons = {
@@ -75,6 +76,7 @@ export const Icons = {
   Shell,
   Egg,
   Milk,
+  IceCream,
   Candy,
   GlassWater,
   Wine,

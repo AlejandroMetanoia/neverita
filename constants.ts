@@ -31,6 +31,7 @@ export const FOOD_CATEGORIES = {
     "Mariscos",
     "Huevos",
     "Lácteos",
+    "Postres Lácteos",
     "Embutidos y Charcutería"
   ],
   "Grasas, Aceites y Condimentos": [
@@ -61,9 +62,7 @@ export const SUB_CATEGORIES: Record<string, string[]> = {
     "Cerdo",
     "Vacuno"
   ],
-  "Lácteos": [
-    "Postres Lácteos"
-  ]
+  "Lácteos": []
 };
 
 export const INITIAL_FOODS: Food[] = [];
