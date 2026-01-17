@@ -117,6 +117,64 @@ function App() {
       return () => unsubscribe();
    }, []);
 
+   // BATCH 14 IMPORT (IDs 276-302 - Embutidos y Charcutería)
+   useEffect(() => {
+      const importBatch14 = async () => {
+         console.log("Starting Batch 14 Operations (Embutidos y Charcutería)...");
+
+         const batch14: Food[] = [
+            { name: "Jamón Cocido Braseado", id: "276", brand: "Noel", category: "Embutidos y Charcutería", subCategory: "", calories: 126, protein: 18, carbs: 0.6, fat: 5.2 },
+            { name: "Jamón Cocido Extra", id: "277", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 101, protein: 18.6, carbs: 0.9, fat: 2.5 },
+            { name: "Lomo Asado", id: "278", brand: "La Carloteña", category: "Embutidos y Charcutería", subCategory: "", calories: 142, protein: 26, carbs: 0.5, fat: 4.1 },
+            { name: "Mortadela con Aceitunas", id: "279", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 244, protein: 10.5, carbs: 6.7, fat: 20 },
+            { name: "Mortadela Italiana Finas Lonchas", id: "280", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 318, protein: 16, carbs: 0.5, fat: 28 },
+            { name: "Mortadela", id: "281", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 244, protein: 13.2, carbs: 7.3, fat: 18 },
+            { name: "Mortadela de Pavo con Aceitunas", id: "282", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 169, protein: 10.2, carbs: 5.2, fat: 11.8 },
+            { name: "Mortadela de Pavo", id: "283", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 173, protein: 10.9, carbs: 7.5, fat: 11 },
+            { name: "Chorizo Asturiano", id: "284", brand: "Juntamar", category: "Embutidos y Charcutería", subCategory: "", calories: 376, protein: 19.9, carbs: 6.6, fat: 30 },
+            { name: "Chorizo de Tarancón", id: "285", brand: "Bricio", category: "Embutidos y Charcutería", subCategory: "", calories: 477, protein: 18.2, carbs: 1, fat: 44.9 },
+            { name: "Chorizo de León Dulce", id: "286", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 426, protein: 27, carbs: 2, fat: 35 },
+            { name: "Chorizo Dulce Extra", id: "287", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 443, protein: 25, carbs: 0.2, fat: 38 },
+            { name: "Taquitos de Chorizo", id: "288", brand: "Revilla", category: "Embutidos y Charcutería", subCategory: "", calories: 344, protein: 21, carbs: 2, fat: 28 },
+            { name: "Chorizo de Pamplona Extra", id: "289", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 452, protein: 17, carbs: 1.5, fat: 42 },
+            { name: "Chorizo de Pavo", id: "290", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 252, protein: 26, carbs: 3.3, fat: 15 },
+            { name: "Chorizo de León Picante", id: "291", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 426, protein: 27, carbs: 2, fat: 35 },
+            { name: "Chorizo Picante Extra", id: "292", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 356, protein: 21, carbs: 2.7, fat: 29 },
+            { name: "Chorizo Extra", id: "293", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 341, protein: 24, carbs: 2.7, fat: 26 },
+            { name: "Fuet Espetec", id: "294", brand: "Hacendado", category: "Embutidos y Charcutería", subCategory: "", calories: 421, protein: 27.5, carbs: 1.4, fat: 34 },
+            { name: "Chorizo de Bellota Ibérico", id: "295", brand: "Esenciaúnica Covap", category: "Embutidos y Charcutería", subCategory: "", calories: 471, protein: 25, carbs: 0.6, fat: 41 },
+            { name: "Chorizo Ibérico Extra", id: "296", brand: "La Hacienda del Ibérico", category: "Embutidos y Charcutería", subCategory: "", calories: 462, protein: 32.2, carbs: 1, fat: 36.4 },
+            { name: "Chorizo Ibérico", id: "297", brand: "La Hacienda del Ibérico", category: "Embutidos y Charcutería", subCategory: "", calories: 494, protein: 24, carbs: 1.3, fat: 43.6 },
+            { name: "Jamón de Bellota Ibérico", id: "298", brand: "La Hacienda del Ibérico", category: "Embutidos y Charcutería", subCategory: "", calories: 393, protein: 29.5, carbs: 1, fat: 30.1 },
+            { name: "Jamón de Cebo Ibérico", id: "299", brand: "La Hacienda del Ibérico", category: "Embutidos y Charcutería", subCategory: "", calories: 296, protein: 36.5, carbs: 1, fat: 16.2 },
+            { name: "Salchichón de Cebo Ibérico", id: "300", brand: "La Hacienda del Ibérico", category: "Embutidos y Charcutería", subCategory: "", calories: 490, protein: 25.7, carbs: 2.5, fat: 42 },
+            { name: "Jamón Serrano", id: "301", brand: "Incarlopsa", category: "Embutidos y Charcutería", subCategory: "", calories: 248, protein: 33.5, carbs: 1, fat: 12.2 },
+            { name: "Jamón Curado Mini Taquitos", id: "302", brand: "Incarlopsa", category: "Embutidos y Charcutería", subCategory: "", calories: 234, protein: 33.7, carbs: 1, fat: 10.6 }
+         ];
+
+         for (const item of batch14) {
+            try {
+               const { getDoc, doc, setDoc } = await import('firebase/firestore');
+               const docRef = doc(db, 'base_foods', item.id);
+               const docSnap = await getDoc(docRef);
+
+               if (docSnap.exists()) {
+                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
+                  continue;
+               }
+
+               await setDoc(docRef, item);
+               console.log(`Imported: ${item.name} (ID: ${item.id})`);
+            } catch (error) {
+               console.error(`Error importing ${item.name}:`, error);
+            }
+         }
+         console.log("Batch 14 Import complete.");
+      };
+
+      importBatch14();
+   }, []);
+
 
 
 
