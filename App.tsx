@@ -117,68 +117,7 @@ function App() {
       return () => unsubscribe();
    }, []);
 
-   // BATCH 20 IMPORT (IDs 444-475 - More Postres Lácteos/Yogurts)
-   useEffect(() => {
-      const importBatch20 = async () => {
-         console.log("Starting Batch 20 Operations (More Postres Lácteos/Yogurts)...");
 
-         const batch20: Food[] = [
-            { name: "Yogur Líquido Fresa", id: "444", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 75, protein: 2.3, carbs: 12.3, fat: 1.9 },
-            { name: "Yogur Cremoso con Frutos Silvestres", id: "445", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 98, protein: 3.7, carbs: 13.7, fat: 3.2 },
-            { name: "Yogur Cremoso con Melocotón y Maracuyá", id: "446", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 96, protein: 3.6, carbs: 13.1, fat: 3.2 },
-            { name: "Yogur con Frutas", id: "447", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 91, protein: 3.6, carbs: 13.1, fat: 2.7 },
-            { name: "Yogur Sabor Chocolate +Proteínas", id: "448", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 81, protein: 8.4, carbs: 8.7, fat: 1.1 },
-            { name: "Yogur Sabor Mango y Maracuyá +Proteínas", id: "449", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 56, protein: 8.3, carbs: 5.8, fat: 0.5 },
-            { name: "Yogur Natural +Proteínas", id: "450", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 52, protein: 10, carbs: 3.1, fat: 0.5 },
-            { name: "Yogur Sabor Coco +Proteínas", id: "451", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 61, protein: 8.3, carbs: 5.7, fat: 0.5 },
-            { name: "Yogur Sabor Arándanos +Proteínas", id: "452", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 53, protein: 8.3, carbs: 5, fat: 0.5 },
-            { name: "Yogur Sabor Fresa +Proteínas", id: "453", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 53, protein: 8.3, carbs: 5, fat: 0.5 },
-            { name: "Yogur Natural Cremoso Edulcorado", id: "454", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 42, protein: 4.9, carbs: 5.6, fat: 0 },
-            { name: "Yogur Desnatado Natural Edulcorado", id: "455", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 39, protein: 4.5, carbs: 4.9, fat: 0.1 },
-            { name: "Yogur Desnatado Natural", id: "456", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 36, protein: 4.3, carbs: 4.5, fat: 0.1 },
-            { name: "Yogur Desnatado Sabores", id: "457", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 35, protein: 4.3, carbs: 4.4, fat: 0.1 },
-            { name: "Yogur Griego Ligero Natural", id: "458", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 60, protein: 5.8, carbs: 4.7, fat: 2 },
-            { name: "Yogur Griego Natural con Azúcar Caña", id: "459", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 150, protein: 3.7, carbs: 11.3, fat: 10 },
-            { name: "Yogur Griego Natural", id: "460", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 129, protein: 3.9, carbs: 3.9, fat: 10.8 },
-            { name: "Yogur Natural", id: "461", brand: "Danone", category: "Postres Lácteos", subCategory: "", calories: 60, protein: 3.3, carbs: 4.3, fat: 3.3 },
-            { name: "Yogur Natural con Azúcar de Caña", id: "462", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 94, protein: 3.3, carbs: 11.6, fat: 3.8 },
-            { name: "Yogur Natural Cabra", id: "463", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 73, protein: 4.1, carbs: 3, fat: 4.9 },
-            { name: "Yogur Natural", id: "464", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 62, protein: 3.7, carbs: 4.1, fat: 3.4 },
-            { name: "Yogur Sabor Coco", id: "465", brand: "Danone", category: "Postres Lácteos", subCategory: "", calories: 72, protein: 3, carbs: 10, fat: 2.2 },
-            { name: "Yogur Sabor Coco", id: "466", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 82, protein: 3.6, carbs: 11.4, fat: 2.5 },
-            { name: "Yogur Sabor Fresa sin Lactosa", id: "467", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 86, protein: 3.2, carbs: 11, fat: 3.2 },
-            { name: "Yogur Sabor Fresa", id: "468", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 82, protein: 3.6, carbs: 11.4, fat: 2.5 },
-            { name: "Yogur Sabor Fresa", id: "469", brand: "Danone", category: "Postres Lácteos", subCategory: "", calories: 72, protein: 3, carbs: 10, fat: 2.2 },
-            { name: "Yogur Sabor Galleta", id: "470", brand: "Danone", category: "Postres Lácteos", subCategory: "", calories: 72, protein: 3, carbs: 10, fat: 2.2 },
-            { name: "Yogur Griego Sabor Fresa", id: "471", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 142, protein: 3.2, carbs: 14, fat: 8.1 },
-            { name: "Yogur Griego Sabor Limón", id: "472", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 135, protein: 3.3, carbs: 12.9, fat: 7.8 },
-            { name: "Yogur Griego Sabor Stracciatella", id: "473", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 159, protein: 3.4, carbs: 15.4, fat: 9.3 },
-            { name: "Yogur Sabor Macedonia", id: "474", brand: "Danone", category: "Postres Lácteos", subCategory: "", calories: 72, protein: 3, carbs: 10, fat: 2.2 },
-            { name: "Yogur Sabor Macedonia", id: "475", brand: "Hacendado", category: "Postres Lácteos", subCategory: "", calories: 82, protein: 3.6, carbs: 11.4, fat: 2.5 }
-         ];
-
-         for (const item of batch20) {
-            try {
-               const { getDoc, doc, setDoc } = await import('firebase/firestore');
-               const docRef = doc(db, 'base_foods', item.id);
-               const docSnap = await getDoc(docRef);
-
-               if (docSnap.exists()) {
-                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
-                  continue;
-               }
-
-               await setDoc(docRef, item);
-               console.log(`Imported: ${item.name} (ID: ${item.id})`);
-            } catch (error) {
-               console.error(`Error importing ${item.name}:`, error);
-            }
-         }
-         console.log("Batch 20 Import complete.");
-      };
-
-      importBatch20();
-   }, []);
 
 
 
