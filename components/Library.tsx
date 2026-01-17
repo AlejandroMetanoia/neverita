@@ -114,6 +114,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
       case "Bebidas": return Icons.GlassWater;
       case "Alimentos Fermentados": return Icons.Wine;
       case "Procesados": return Icons.Package;
+      case "Comida Preparada": return Icons.Utensils;
 
       default: return Icons.Folder;
     }

@@ -117,6 +117,72 @@ function App() {
       return () => unsubscribe();
    }, []);
 
+   // BATCH 22 IMPORT (IDs 481-515 - Processed, Sweets, Prepared)
+   useEffect(() => {
+      const importBatch22 = async () => {
+         console.log("Starting Batch 22 Operations (Other Groups)...");
+
+         const batch22: Food[] = [
+            { name: "Crema de Avellanas y Cacao", id: "481", brand: "Hacendado", category: "Procesados", subCategory: "", calories: 547, protein: 6.5, carbs: 54, fat: 33 },
+            { name: "Crema Cacao 1 Sabor", id: "482", brand: "Hacendado", category: "Procesados", subCategory: "", calories: 547, protein: 4.4, carbs: 56, fat: 33 },
+            { name: "Crema Cacao 2 Sabores", id: "483", brand: "Hacendado", category: "Procesados", subCategory: "", calories: 550, protein: 4.5, carbs: 57, fat: 33 },
+            { name: "Crema Cacao Chocoleche", id: "484", brand: "Nocilla", category: "Procesados", subCategory: "", calories: 539, protein: 4.2, carbs: 60, fat: 31 },
+            { name: "Crema Cacao Original", id: "485", brand: "Nocilla", category: "Procesados", subCategory: "", calories: 545, protein: 4.8, carbs: 58, fat: 32 },
+            { name: "Cacao Soluble Instantáneo", id: "486", brand: "Hacendado", category: "Procesados", subCategory: "", calories: 383, protein: 4.8, carbs: 80, fat: 3.2 },
+            { name: "Cacao Soluble Instantáneo", id: "487", brand: "Nesquik", category: "Procesados", subCategory: "", calories: 386, protein: 5.1, carbs: 78.9, fat: 3.6 },
+            { name: "Cacao Soluble", id: "488", brand: "Cola Cao", category: "Procesados", subCategory: "", calories: 377, protein: 6.6, carbs: 78, fat: 2.5 },
+            { name: "Cacao Soluble", id: "489", brand: "Hacendado", category: "Procesados", subCategory: "", calories: 383, protein: 6.9, carbs: 79, fat: 2.6 },
+            { name: "Chocolate Polvo a la Taza", id: "490", brand: "Valor", category: "Azúcares y Dulces", subCategory: "", calories: 383, protein: 5.6, carbs: 80, fat: 3.1 },
+            { name: "Cacao Preparado Líquido a la Taza", id: "491", brand: "Hacendado", category: "Azúcares y Dulces", subCategory: "", calories: 110, protein: 2, carbs: 22, fat: 1.6 },
+            { name: "Flautas de Bacon y Queso", id: "492", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 317, protein: 13.8, carbs: 26.5, fat: 16.9 },
+            { name: "Flautas de Pollo y Queso", id: "493", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 232, protein: 7.9, carbs: 31.5, fat: 7.9 },
+            { name: "Pizza Congelada Masa Fina 4 Quesos", id: "494", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 252, protein: 11.2, carbs: 29.6, fat: 9.9 },
+            { name: "Pizza Congelada Sin Gluten 4 Quesos", id: "495", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 290, protein: 11.3, carbs: 34.3, fat: 11.9 },
+            { name: "Pizza Congelada Americana", id: "496", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 236, protein: 12, carbs: 29, fat: 7.7 },
+            { name: "Pizza Congelada Atún", id: "497", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 262, protein: 12.7, carbs: 25.1, fat: 12.3 },
+            { name: "Pizza Congelada Masa Fina Jamón y Queso", id: "498", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 232, protein: 9.7, carbs: 27.2, fat: 9.4 },
+            { name: "Pizza Congelada Tomate y Queso", id: "499", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 234, protein: 8.7, carbs: 35.7, fat: 6.3 },
+            { name: "Focaccia", id: "500", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 276, protein: 6.1, carbs: 40.5, fat: 9.6 },
+            { name: "Calzone Jamón Cocido y Queso", id: "501", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 235, protein: 13.4, carbs: 21.5, fat: 10.3 },
+            { name: "Pizza Fresca 4 Quesos", id: "502", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 267, protein: 14.4, carbs: 27.6, fat: 11 },
+            { name: "Pizza Fresca Atún y Bacon", id: "503", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 263, protein: 14, carbs: 27, fat: 11 },
+            { name: "Pizza Fresca Barbacoa", id: "504", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 250, protein: 11.9, carbs: 30.1, fat: 9.1 },
+            { name: "Pizza Fresca Carbonara", id: "505", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 253, protein: 12.1, carbs: 29.8, fat: 9.1 },
+            { name: "Pizza Fresca Frankfurt", id: "506", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 254, protein: 12.7, carbs: 23.5, fat: 11.8 },
+            { name: "Pizza Fresca Jamón y Queso Sin Gluten", id: "507", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 206, protein: 9.3, carbs: 26.8, fat: 6.8 },
+            { name: "Pizza Fresca Jamón Serrano", id: "508", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 261, protein: 15.5, carbs: 28.6, fat: 9.4 },
+            { name: "Pizza Fresca Jamón y Queso", id: "509", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 224, protein: 14, carbs: 25.2, fat: 7.5 },
+            { name: "Pizza Fresca Margarita", id: "510", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 253, protein: 14, carbs: 30.2, fat: 8.5 },
+            { name: "Pizza Fresca Pollo y Bacon", id: "511", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 245, protein: 14.7, carbs: 26, fat: 9.1 },
+            { name: "Pizza Fresca Prosciutto", id: "512", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 198, protein: 13.7, carbs: 22.3, fat: 5.6 },
+            { name: "Pizza Fresca Formaggi", id: "513", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 280, protein: 14.7, carbs: 27, fat: 12.3 },
+            { name: "Pizza Fresca Pepperoni", id: "514", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 296, protein: 14.4, carbs: 27.6, fat: 14.2 },
+            { name: "Pizza Fresca Pollo", id: "515", brand: "Hacendado", category: "Comida Preparada", subCategory: "", calories: 229, protein: 11.2, carbs: 31.5, fat: 6.5 }
+         ];
+
+         for (const item of batch22) {
+            try {
+               const { getDoc, doc, setDoc } = await import('firebase/firestore');
+               const docRef = doc(db, 'base_foods', item.id);
+               const docSnap = await getDoc(docRef);
+
+               if (docSnap.exists()) {
+                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
+                  continue;
+               }
+
+               await setDoc(docRef, item);
+               console.log(`Imported: ${item.name} (ID: ${item.id})`);
+            } catch (error) {
+               console.error(`Error importing ${item.name}:`, error);
+            }
+         }
+         console.log("Batch 22 Import complete.");
+      };
+
+      importBatch22();
+   }, []);
+
 
 
 
