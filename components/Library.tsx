@@ -18,6 +18,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(autoOpenAdd);
+  const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
 
   // Toggle Menu Visibility
   useEffect(() => {
@@ -388,7 +389,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
                           {food.brand && <p className="text-xs text-gray-400 mt-0.5">{food.brand}</p>}
                         </div>
                         <button
-                          onClick={() => onDeleteFood(food.id)}
+                          onClick={() => setDeleteConfirmation(food.id)}
                           className="text-gray-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all absolute top-5 right-5 scale-90 hover:scale-110"
                         >
                           <Icons.Trash size={18} />
@@ -424,7 +425,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
                     {isSearching && <span className="text-[10px] text-gray-400 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded-md mt-2 inline-block shadow-sm">{food.category} {food.subCategory ? `> ${food.subCategory}` : ''}</span>}
                   </div>
                   <button
-                    onClick={() => onDeleteFood(food.id)}
+                    onClick={() => setDeleteConfirmation(food.id)}
                     className="text-gray-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all absolute top-5 right-5 scale-90 hover:scale-110"
                   >
                     <Icons.Trash size={18} />
@@ -455,6 +456,45 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
               <button onClick={() => setIsAdding(true)} className="text-indigo-500 hover:text-indigo-600 font-bold text-sm tracking-wide uppercase border-b border-indigo-200 hover:border-indigo-500 transition-all pb-0.5">Crear nuevo alimento aquí</button>
             </div>
           )}
+        </div>
+      )}
+
+
+      {/* Delete Confirmation Dialog */}
+      {deleteConfirmation && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full shadow-2xl animate-in zoom-in-95 duration-200 border border-white/60">
+            <div className="flex flex-col items-center text-center gap-4">
+              <div className="p-4 bg-red-50 text-red-500 rounded-full mb-2">
+                <Icons.AlertCircle size={32} />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">¿Eliminar alimento?</h3>
+                <p className="text-gray-500 text-sm">
+                  ¿Estás seguro de que quieres eliminar este alimento de tu nevera?
+                </p>
+              </div>
+              <div className="flex gap-3 w-full mt-4">
+                <button
+                  onClick={() => setDeleteConfirmation(null)}
+                  className="flex-1 px-4 py-3 rounded-xl font-medium text-gray-600 bg-gray-50 hover:bg-gray-100 transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => {
+                    if (deleteConfirmation) {
+                      onDeleteFood(deleteConfirmation);
+                      setDeleteConfirmation(null);
+                    }
+                  }}
+                  className="flex-1 px-4 py-3 rounded-xl font-bold text-white bg-red-500 hover:bg-red-600 shadow-md hover:shadow-lg transition-all"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
