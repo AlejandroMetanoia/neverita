@@ -117,6 +117,72 @@ function App() {
       return () => unsubscribe();
    }, []);
 
+   // BATCH 18 IMPORT (IDs 376-410 - Quesos Curados y Frescos)
+   useEffect(() => {
+      const importBatch18 = async () => {
+         console.log("Starting Batch 18 Operations (Quesos Curados y Frescos)...");
+
+         const batch18: Food[] = [
+            { name: "Queso Ibérico Añejo", id: "376", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 437, protein: 24, carbs: 2, fat: 37 },
+            { name: "Queso Añejo Tostado", id: "377", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 509, protein: 29, carbs: 1.6, fat: 43 },
+            { name: "Queso Cheddar Curado", id: "378", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 410, protein: 25, carbs: 0.5, fat: 34.4 },
+            { name: "Queso Curado Afrutado Cuñitas", id: "379", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 418, protein: 27, carbs: 1, fat: 34 },
+            { name: "Queso Curado Cortado", id: "380", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 431, protein: 25, carbs: 1.8, fat: 36 },
+            { name: "Queso Curado Media Pieza", id: "381", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 431, protein: 25, carbs: 1.8, fat: 36 },
+            { name: "Queso de Oveja Curado con Jalapeño", id: "382", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 464, protein: 25, carbs: 1, fat: 40 },
+            { name: "Queso Manchego D.O.P. Curado", id: "383", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 435, protein: 25, carbs: 0.5, fat: 37 },
+            { name: "Queso Morbier", id: "384", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 354, protein: 22, carbs: 0, fat: 29 },
+            { name: "Queso Curado Madurado en Madera", id: "385", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 410, protein: 25, carbs: 1, fat: 34 },
+            { name: "Queso de Oveja Viejo Ahumado", id: "386", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 446, protein: 24, carbs: 2, fat: 37 },
+            { name: "Queso Viejo Intenso", id: "387", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 414, protein: 25, carbs: 2, fat: 34 },
+            { name: "Queso Curado con Trufa", id: "388", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 437, protein: 24, carbs: 2, fat: 37 },
+            { name: "Queso de Oveja Viejo", id: "389", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 479, protein: 26, carbs: 1.5, fat: 41 },
+            { name: "Queso Viejo Tostado", id: "390", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 474, protein: 27, carbs: 1.5, fat: 40 },
+            { name: "Dados de Queso", id: "391", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 418, protein: 23, carbs: 2.7, fat: 37 },
+            { name: "Queso Feta (Taquitos)", id: "392", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 277, protein: 16, carbs: 1, fat: 23.2 },
+            { name: "Queso Fresco Batido", id: "393", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 46, protein: 8, carbs: 3.5, fat: 0.5 },
+            { name: "Queso de Burgos Desnatado", id: "394", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 67, protein: 12, carbs: 3.9, fat: 0.4 },
+            { name: "Queso de Burgos Natural", id: "395", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 157, protein: 11, carbs: 3.7, fat: 10.9 },
+            { name: "Queso de Burgos sin Grasa", id: "396", brand: "Burgo de Arias", category: "Lácteos", subCategory: "", calories: 58, protein: 11, carbs: 3.6, fat: 0 },
+            { name: "Queso de Burgos sin Lactosa", id: "397", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 149, protein: 10.3, carbs: 3.3, fat: 10.5 },
+            { name: "Queso de Burgos", id: "398", brand: "Burgo de Arias", category: "Lácteos", subCategory: "", calories: 164, protein: 11, carbs: 3, fat: 12 },
+            { name: "Queso Cottage", id: "399", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 99, protein: 14, carbs: 1.7, fat: 4 },
+            { name: "Queso Fresco de Cabra", id: "400", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 262, protein: 12.7, carbs: 3.4, fat: 21.9 },
+            { name: "Queso Fresco de Vaca Light", id: "401", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 117, protein: 13, carbs: 3.8, fat: 5.7 },
+            { name: "Queso Fresco de Vaca", id: "402", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 168, protein: 11.8, carbs: 4.5, fat: 11.4 },
+            { name: "Queso Fresco Villalón", id: "403", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 183, protein: 11, carbs: 3.3, fat: 14 },
+            { name: "Queso Mascarpone", id: "404", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 482, protein: 3, carbs: 5, fat: 50 },
+            { name: "Queso Fresco Mozzarella de Búfala", id: "405", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 247, protein: 14, carbs: 0.5, fat: 21 },
+            { name: "Queso Fresco Mozzarella Light", id: "406", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 153, protein: 17, carbs: 1, fat: 9 },
+            { name: "Queso Fresco Mozzarella", id: "407", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 202, protein: 17, carbs: 2, fat: 14 },
+            { name: "Queso Ricotta", id: "408", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 162, protein: 9.7, carbs: 3.8, fat: 12 },
+            { name: "Requesón", id: "409", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 139, protein: 9.9, carbs: 2.2, fat: 10 },
+            { name: "Queso Gouda", id: "410", brand: "Hacendado", category: "Lácteos", subCategory: "", calories: 366, protein: 23.5, carbs: 0, fat: 30.3 }
+         ];
+
+         for (const item of batch18) {
+            try {
+               const { getDoc, doc, setDoc } = await import('firebase/firestore');
+               const docRef = doc(db, 'base_foods', item.id);
+               const docSnap = await getDoc(docRef);
+
+               if (docSnap.exists()) {
+                  console.log(`Skipping existing ID: ${item.id} (${item.name})`);
+                  continue;
+               }
+
+               await setDoc(docRef, item);
+               console.log(`Imported: ${item.name} (ID: ${item.id})`);
+            } catch (error) {
+               console.error(`Error importing ${item.name}:`, error);
+            }
+         }
+         console.log("Batch 18 Import complete.");
+      };
+
+      importBatch18();
+   }, []);
+
 
 
 
