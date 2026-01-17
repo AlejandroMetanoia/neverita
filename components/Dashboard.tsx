@@ -360,41 +360,72 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
             </div>
 
             {/* Log List by Meal */}
-            <div className="space-y-8">
+            <div className="space-y-6">
+                <h3 className="text-2xl font-bold text-gray-800 px-1">Resumen de Comidas</h3>
+
                 {MEAL_TYPES.map(meal => {
                     const mealLogs = dailyLogs.filter(l => l.meal === meal);
                     if (mealLogs.length === 0) return null;
 
-                    // Ensure specific colors for Light Mode (overriding mealColors import if needed, or mapping)
-                    // We'll use simple mapping for now
-                    const mealHeaderColor = meal === 'Desayuno' ? 'text-orange-400' : meal === 'Almuerzo' ? 'text-emerald-400' : meal === 'Cena' ? 'text-indigo-400' : 'text-gray-400';
+                    // Color Mapping based on User Request
+                    // Red, Orange, Green (from image), then Blue, Purple
+                    let cardGradient = "";
+                    let shadowColor = "";
+
+                    switch (meal) {
+                        case 'Desayuno':
+                            cardGradient = "bg-gradient-to-br from-[#FF4B4B] to-[#F76B6B]"; // Vibrant Red
+                            shadowColor = "shadow-red-200";
+                            break;
+                        case 'Almuerzo': // Morning Snack / Brunch
+                            cardGradient = "bg-gradient-to-br from-orange-400 to-amber-500"; // Orange
+                            shadowColor = "shadow-orange-200";
+                            break;
+                        case 'Comida': // Lunch
+                            cardGradient = "bg-gradient-to-br from-emerald-500 to-green-600"; // Green
+                            shadowColor = "shadow-emerald-200";
+                            break;
+                        case 'Merienda': // Afternoon Snack
+                            cardGradient = "bg-gradient-to-br from-blue-400 to-sky-500"; // Blue
+                            shadowColor = "shadow-blue-200";
+                            break;
+                        case 'Cena': // Dinner
+                            cardGradient = "bg-gradient-to-br from-purple-500 to-violet-600"; // Purple
+                            shadowColor = "shadow-purple-200";
+                            break;
+                        default:
+                            cardGradient = "bg-gradient-to-br from-gray-500 to-gray-600";
+                            shadowColor = "shadow-gray-200";
+                    }
 
                     return (
-                        <div key={meal} className="space-y-4">
-                            <h4 className={`text-xl font-bold flex items-center gap-3 text-gray-700 pl-2`}>
-                                <span className={`w-3 h-3 rounded-full bg-current shadow-sm ${mealHeaderColor}`}></span>
+                        <div key={meal} className="space-y-3">
+                            <h4 className="text-lg font-bold flex items-center gap-2 text-gray-500 pl-2">
                                 {meal}
                             </h4>
                             <div className="grid gap-3">
                                 {mealLogs.map(log => (
-                                    <div key={log.id} className="bg-white/80 backdrop-blur-md p-5 rounded-2xl border border-white/50 hover:border-blue-200 hover:bg-white hover:shadow-md transition-all flex justify-between items-center group relative overflow-hidden">
+                                    <div key={log.id} className={`${cardGradient} p-5 rounded-[1.5rem] shadow-lg ${shadowColor} flex justify-between items-center group relative overflow-hidden transition-transform hover:scale-[1.02] duration-200`}>
 
-                                        <div className="pl-1">
-                                            <p className="font-bold text-lg text-gray-800 mb-0.5">{log.foodName}</p>
-                                            <p className="text-sm text-gray-500 font-medium">{log.grams}g</p>
+                                        {/* Decorative gloss effect */}
+                                        <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 blur-3xl rounded-full pointer-events-none" />
+
+                                        <div className="pl-1 relative z-10">
+                                            <p className="font-bold text-lg text-white mb-0.5">{log.foodName}</p>
+                                            <p className="text-sm text-white/90 font-medium">{log.grams}g</p>
                                         </div>
-                                        <div className="flex items-center gap-8">
+                                        <div className="flex items-center gap-6 relative z-10">
                                             <div className="text-right">
-                                                <p className="font-bold text-xl text-gray-800">{log.calculated.calories} <span className="text-sm text-gray-400 font-normal">kcal</span></p>
-                                                <div className="flex gap-2 text-xs text-gray-500 font-medium mt-1">
-                                                    <span className="bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100 text-blue-600">P: {log.calculated.protein}</span>
-                                                    <span className="bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100 text-indigo-600">C: {log.calculated.carbs}</span>
-                                                    <span className="bg-fuchsia-50 px-2 py-0.5 rounded-md border border-fuchsia-100 text-fuchsia-600">G: {log.calculated.fat}</span>
+                                                <p className="font-black text-xl text-white">{log.calculated.calories} <span className="text-sm text-white/80 font-medium">kcal</span></p>
+                                                <div className="flex gap-2 text-[10px] font-bold mt-1">
+                                                    <span className="bg-white/20 backdrop-blur-md px-2 py-1 rounded-lg text-white border border-white/20">P: {log.calculated.protein}</span>
+                                                    <span className="bg-white/20 backdrop-blur-md px-2 py-1 rounded-lg text-white border border-white/20">C: {log.calculated.carbs}</span>
+                                                    <span className="bg-white/20 backdrop-blur-md px-2 py-1 rounded-lg text-white border border-white/20">G: {log.calculated.fat}</span>
                                                 </div>
                                             </div>
                                             <button
                                                 onClick={() => onDeleteLog(log.id)}
-                                                className="w-10 h-10 rounded-full flex items-center justify-center bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100"
+                                                className="w-10 h-10 rounded-full flex items-center justify-center bg-white/20 hover:bg-white/30 text-white transition-all"
                                             >
                                                 <Icons.Trash size={18} />
                                             </button>
