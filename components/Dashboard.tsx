@@ -220,31 +220,29 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                 </div>
             </div>
 
-            {/* Refactored Stats Grid - Matching Reference Design */}
-            <div className="flex flex-col gap-4 mb-4">
-                {/* Calories Card - Hero */}
-                {/* Calories Card - Hero */}
-                <div className="bg-white/50 backdrop-blur-xl border border-white/40 p-4 rounded-xl relative overflow-hidden">
-                    {/* Background blob - Removed for flat apple style */}
+            {/* Refactored Stats Grid - Consolidated for Desktop */}
+            <div className="mb-4">
+                <div className="bg-white/50 backdrop-blur-xl border border-white/40 p-5 rounded-3xl relative overflow-hidden flex flex-col md:flex-row items-stretch md:items-center gap-6">
 
-                    <div className="flex justify-between items-center relative z-10">
+                    {/* Left Section: Calories & Chart */}
+                    <div className="flex-1 flex justify-between items-center relative z-10">
                         <div className="flex flex-col">
                             <p className="text-gray-600 font-bold mb-1 ml-1 text-sm">Calorías Consumidas</p>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-5xl font-black text-gray-800 tracking-tighter leading-none">{Math.round(totals.calories)}</span>
+                                <span className="text-6xl font-black text-gray-800 tracking-tighter leading-none">{Math.round(totals.calories)}</span>
                                 <span className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">Kcal</span>
                             </div>
                         </div>
 
                         {/* Chart */}
-                        <div className="w-20 h-20 relative">
+                        <div className="w-24 h-24 relative">
                             <ResponsiveContainer width="100%" height="100%">
                                 <PieChart>
                                     <Pie
                                         data={macroData}
                                         cx="50%"
                                         cy="50%"
-                                        innerRadius="75%"
+                                        innerRadius="70%"
                                         outerRadius="100%"
                                         paddingAngle={5}
                                         dataKey="value"
@@ -260,59 +258,44 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                 </PieChart>
                             </ResponsiveContainer>
                             <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400">
-                                <Icons.Calories size={22} className="opacity-50" />
+                                <Icons.Calories size={24} className="opacity-50" />
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Macros Row */}
-                <div className="grid grid-cols-3 gap-3">
-                    {/* Protein */}
-                    <div className="bg-white/50 backdrop-blur-xl border border-white/40 p-4 rounded-xl flex flex-col justify-between aspect-square relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-16 h-16 bg-stone-300/30 rounded-full blur-xl -mr-4 -mt-4 transition-transform group-hover:scale-110" />
-                        <div className="relative z-10">
-                            <div className="flex items-center gap-1.5 mb-1">
-                                <div className="w-1.5 h-1.5 rounded-full bg-protein" />
-                                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Proteína</span>
-                            </div>
-                            <p className="text-2xl font-black text-gray-800">{Math.round(totals.protein)}<span className="text-[10px] text-gray-500 font-bold ml-0.5">g</span></p>
-                        </div>
-                        {/* Ring or Bar? Using Bar for space efficiency in small boxes */}
-                        <div className="w-full bg-gray-100/80 h-1.5 rounded-full overflow-hidden mt-2">
-                            <div className="h-full bg-protein rounded-full" style={{ width: `${Math.min((totals.protein / 150) * 100, 100)}%` }} />
                         </div>
                     </div>
 
-                    {/* Carbs */}
-                    <div className="bg-white/50 backdrop-blur-xl border border-white/40 p-4 rounded-xl flex flex-col justify-between aspect-square relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-16 h-16 bg-stone-400/30 rounded-full blur-xl -mr-4 -mt-4 transition-transform group-hover:scale-110" />
-                        <div className="relative z-10">
-                            <div className="flex items-center gap-1.5 mb-1">
-                                <div className="w-1.5 h-1.5 rounded-full bg-carbs" />
-                                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Carbs</span>
+                    {/* Divider (Desktop Only) */}
+                    <div className="hidden md:block w-px h-20 bg-gray-200/50"></div>
+
+                    {/* Right Section: Macros List */}
+                    <div className="flex-1 grid grid-cols-3 gap-4 md:gap-8">
+                        {/* Protein */}
+                        <div className="flex flex-col items-center md:items-start">
+                            <div className="flex items-center gap-2 mb-1">
+                                <div className="w-2 h-2 rounded-full bg-stone-300" />
+                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Proteína</span>
                             </div>
-                            <p className="text-2xl font-black text-gray-800">{Math.round(totals.carbs)}<span className="text-[10px] text-gray-500 font-bold ml-0.5">g</span></p>
+                            <p className="text-2xl font-black text-gray-800">{Math.round(totals.protein)}<span className="text-xs text-gray-400 font-bold ml-0.5">g</span></p>
                         </div>
-                        <div className="w-full bg-gray-100/80 h-1.5 rounded-full overflow-hidden mt-2">
-                            <div className="h-full bg-carbs rounded-full" style={{ width: `${Math.min((totals.carbs / 200) * 100, 100)}%` }} />
+
+                        {/* Carbs */}
+                        <div className="flex flex-col items-center md:items-start">
+                            <div className="flex items-center gap-2 mb-1">
+                                <div className="w-2 h-2 rounded-full bg-stone-400" />
+                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Carbs</span>
+                            </div>
+                            <p className="text-2xl font-black text-gray-800">{Math.round(totals.carbs)}<span className="text-xs text-gray-400 font-bold ml-0.5">g</span></p>
+                        </div>
+
+                        {/* Fat */}
+                        <div className="flex flex-col items-center md:items-start">
+                            <div className="flex items-center gap-2 mb-1">
+                                <div className="w-2 h-2 rounded-full bg-stone-500" />
+                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Grasas</span>
+                            </div>
+                            <p className="text-2xl font-black text-gray-800">{Math.round(totals.fat)}<span className="text-xs text-gray-400 font-bold ml-0.5">g</span></p>
                         </div>
                     </div>
 
-                    {/* Fat */}
-                    <div className="bg-white/50 backdrop-blur-xl border border-white/40 p-4 rounded-xl flex flex-col justify-between aspect-square relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-16 h-16 bg-stone-500/20 rounded-full blur-xl -mr-4 -mt-4 transition-transform group-hover:scale-110" />
-                        <div className="relative z-10">
-                            <div className="flex items-center gap-1.5 mb-1">
-                                <div className="w-1.5 h-1.5 rounded-full bg-fat" />
-                                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Grasas</span>
-                            </div>
-                            <p className="text-2xl font-black text-gray-800">{Math.round(totals.fat)}<span className="text-[10px] text-gray-500 font-bold ml-0.5">g</span></p>
-                        </div>
-                        <div className="w-full bg-gray-100/80 h-1.5 rounded-full overflow-hidden mt-2">
-                            <div className="h-full bg-fat rounded-full" style={{ width: `${Math.min((totals.fat / 80) * 100, 100)}%` }} />
-                        </div>
-                    </div>
                 </div>
             </div>
 
