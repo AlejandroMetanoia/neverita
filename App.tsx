@@ -231,7 +231,7 @@ function App() {
             />
             <img
                src={
-                  currentView === 'library' ? "/library-bg-desktop.png" :
+                  currentView === 'library' ? "/library-bg-desktop.jpg" :
                      currentView === 'stats' ? "/stats-bg-desktop.jpg" :
                         "/dashboard-bg-desktop.jpg"
                }
