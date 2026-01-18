@@ -238,7 +238,7 @@ const BarcodeScanner: React.FC<BarcodeScannerProps> = ({
                             <p className="text-protein font-black text-lg">{product.protein}g</p>
                         </div>
                         <div className="text-center">
-                            <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Carbohidratos</p>
+                            <p className="text-gray-400 text-[10px] uppercase font-bold tracking-wider mb-1">Carb</p>
                             <p className="text-carbs font-black text-lg">{product.carbs}g</p>
                         </div>
                         <div className="text-center">

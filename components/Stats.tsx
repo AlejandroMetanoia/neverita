@@ -92,7 +92,7 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
                     <p className="text-xs text-gray-500 mt-1">g/día</p>
                 </div>
                 <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] border border-white/60 hover:border-indigo-300 hover:bg-white/80 transition-all shadow-sm hover:shadow-md group">
-                    <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Carbohidratos Media</p>
+                    <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Carbs Media</p>
                     <p className="text-3xl font-black text-indigo-500 group-hover:scale-105 transition-transform origin-left">{averages.carbs}g</p>
                     <p className="text-xs text-gray-500 mt-1">g/día</p>
                 </div>
@@ -157,7 +157,7 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
                                 <th className="px-6 py-4 rounded-tl-xl font-bold tracking-wider text-gray-500">Día</th>
                                 <th className="px-6 py-4 font-bold tracking-wider text-gray-500">Kcal</th>
                                 <th className="px-6 py-4 font-bold tracking-wider text-gray-500">Prot</th>
-                                <th className="px-6 py-4 font-bold tracking-wider text-gray-500">Carbohidratos</th>
+                                <th className="px-6 py-4 font-bold tracking-wider text-gray-500">Carb</th>
                                 <th className="px-6 py-4 rounded-tr-xl font-bold tracking-wider text-gray-500">Grasa</th>
                             </tr>
                         </thead>
