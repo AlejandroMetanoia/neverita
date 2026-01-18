@@ -231,7 +231,7 @@ function App() {
                className="hidden md:block w-full h-full object-cover opacity-80"
             />
          </div>         {/* Sidebar Navigation - Floating Light Dock */}
-         <aside className={`fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] md:translate-x-0 md:left-6 md:top-1/2 md:-translate-y-1/2 md:w-24 md:h-[90vh] md:bottom-auto bg-black/30 backdrop-blur-xl border border-white/10 rounded-xl z-50 flex md:flex-col justify-around md:justify-center items-center py-2 md:py-8 md:gap-8 transition-all duration-300 ${isMenuHidden ? 'translate-y-[200%] md:translate-y-[-50%] md:-translate-x-[200%]' : ''}`}>
+         <aside className={`fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] md:translate-x-0 md:left-6 md:top-1/2 md:-translate-y-1/2 md:w-24 md:h-[90vh] md:bottom-auto bg-white/50 backdrop-blur-xl border border-white/40 rounded-xl z-50 flex md:flex-col justify-around md:justify-center items-center py-2 md:py-8 md:gap-8 transition-all duration-300 ${isMenuHidden ? 'translate-y-[200%] md:translate-y-[-50%] md:-translate-x-[200%]' : ''}`}>
 
             {/* Logo / Brand */}
             <div className="hidden md:flex flex-col items-center gap-2 mb-auto">
@@ -242,7 +242,7 @@ function App() {
 
             <button
                onClick={() => handleChangeView('dashboard')}
-               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'dashboard' ? 'bg-indigo-500/20 text-indigo-300' : 'text-gray-400 hover:text-gray-200 hover:bg-white/10'}`}
+               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'dashboard' ? 'bg-indigo-50 text-indigo-500' : 'text-gray-400 hover:text-gray-600 hover:bg-white/40'}`}
             >
                <Icons.Dashboard size={28} className={`transition-transform duration-300 ${currentView === 'dashboard' ? 'scale-110' : 'group-hover:scale-110'}`} />
                {currentView === 'dashboard' && <div className="absolute left-0 w-1 h-8 bg-indigo-500 rounded-r-full hidden md:block -ml-[2px]" />}
@@ -250,7 +250,7 @@ function App() {
 
             <button
                onClick={() => handleChangeView('library')}
-               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'library' ? 'bg-sky-500/20 text-sky-300' : 'text-gray-400 hover:text-gray-200 hover:bg-white/10'}`}
+               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'library' ? 'bg-sky-50 text-sky-500' : 'text-gray-400 hover:text-gray-600 hover:bg-white/40'}`}
             >
                <Icons.Library size={28} className={`transition-transform duration-300 ${currentView === 'library' ? 'scale-110' : 'group-hover:scale-110'}`} />
                {currentView === 'library' && <div className="absolute left-0 w-1 h-8 bg-sky-500 rounded-r-full hidden md:block -ml-[2px]" />}
@@ -258,7 +258,7 @@ function App() {
 
             <button
                onClick={() => handleChangeView('stats')}
-               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'stats' ? 'bg-fuchsia-500/20 text-fuchsia-300' : 'text-gray-400 hover:text-gray-200 hover:bg-white/10'}`}
+               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'stats' ? 'bg-fuchsia-50 text-fuchsia-500' : 'text-gray-400 hover:text-gray-600 hover:bg-white/40'}`}
             >
                <Icons.Stats size={28} className={`transition-transform duration-300 ${currentView === 'stats' ? 'scale-110' : 'group-hover:scale-110'}`} />
                {currentView === 'stats' && <div className="absolute left-0 w-1 h-8 bg-fuchsia-500 rounded-r-full hidden md:block -ml-[2px]" />}
