@@ -65,7 +65,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
     const COLORS = ['#ffffff', '#a8a29e', '#78716c'];
     const macroData = [
         { name: 'Proteína', value: totals.protein, color: COLORS[0] },
-        { name: 'Carbs', value: totals.carbs, color: COLORS[1] },
+        { name: 'Carbohidratos', value: totals.carbs, color: COLORS[1] },
         { name: 'Grasas', value: totals.fat, color: COLORS[2] },
     ];
 
@@ -281,7 +281,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                         <div className="flex flex-col items-center md:items-start">
                             <div className="flex items-center gap-2 mb-1">
                                 <div className="w-2 h-2 rounded-full bg-stone-400" />
-                                <span className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Carbs</span>
+                                <span className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Carbohidratos</span>
                             </div>
                             <p className="text-2xl md:text-4xl font-black text-gray-800">{Math.round(totals.carbs)}<span className="text-xs text-gray-400 font-bold ml-0.5">g</span></p>
                         </div>
@@ -531,7 +531,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                                 </div>
                                                 <div>
                                                     <p className="text-2xl font-bold text-carbs">{calculatedMacros.carbs}g</p>
-                                                    <p className="text-[10px] text-gray-400 uppercase font-bold mt-1">Carbs</p>
+                                                    <p className="text-[10px] text-gray-400 uppercase font-bold mt-1">Carbohidratos</p>
                                                 </div>
                                                 <div>
                                                     <p className="text-2xl font-bold text-fat">{calculatedMacros.fat}g</p>
@@ -593,7 +593,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-xs font-bold text-carbs mb-2 uppercase tracking-wider">Carbs (g)</label>
+                                            <label className="block text-xs font-bold text-carbs mb-2 uppercase tracking-wider">Carbohidratos (g)</label>
                                             <input
                                                 type="number"
                                                 value={manualEntry.carbs || ''}
