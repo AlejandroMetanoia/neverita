@@ -358,84 +358,87 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
             </div>
 
             {/* Log List by Meal */}
-            <div className="space-y-6">
-                <h3 className="text-2xl font-bold text-gray-800 px-1 drop-shadow-sm">Resumen de Comidas</h3>
+            {/* Log List by Meal */}
+            <div className="bg-white/60 backdrop-blur-xl border border-white/40 p-6 rounded-3xl mt-8 shadow-sm">
+                <h3 className="text-2xl font-bold text-gray-800 px-1 mb-2">Resumen de Comidas</h3>
 
-                {MEAL_TYPES.map(meal => {
-                    const mealLogs = dailyLogs.filter(l => l.meal === meal);
-                    if (mealLogs.length === 0) return null;
+                <div className="space-y-6">
+                    {MEAL_TYPES.map(meal => {
+                        const mealLogs = dailyLogs.filter(l => l.meal === meal);
+                        if (mealLogs.length === 0) return null;
 
-                    // Color Mapping based on User Request
-                    // Red, Orange, Green (from image), then Blue, Purple
-                    let cardGradient = "";
-                    let shadowColor = "";
+                        // Color Mapping based on User Request
+                        // Red, Orange, Green (from image), then Blue, Purple
+                        let cardGradient = "";
+                        let shadowColor = "";
 
-                    switch (meal) {
-                        case 'Desayuno':
-                            cardGradient = "bg-gradient-to-br from-[#FF4B4B] to-[#F76B6B]"; // Vibrant Red
-                            shadowColor = "shadow-red-200";
-                            break;
-                        case 'Almuerzo': // Morning Snack / Brunch
-                            cardGradient = "bg-gradient-to-br from-orange-400 to-amber-500"; // Orange
-                            shadowColor = "shadow-orange-200";
-                            break;
-                        case 'Comida': // Lunch
-                            cardGradient = "bg-gradient-to-br from-emerald-500 to-green-600"; // Green
-                            shadowColor = "shadow-emerald-200";
-                            break;
-                        case 'Merienda': // Afternoon Snack
-                            cardGradient = "bg-gradient-to-br from-blue-400 to-sky-500"; // Blue
-                            shadowColor = "shadow-blue-200";
-                            break;
-                        case 'Cena': // Dinner
-                            cardGradient = "bg-gradient-to-br from-purple-500 to-violet-600"; // Purple
-                            shadowColor = "shadow-purple-200";
-                            break;
-                        default:
-                            cardGradient = "bg-gradient-to-br from-gray-500 to-gray-600";
-                            shadowColor = "shadow-gray-200";
-                    }
+                        switch (meal) {
+                            case 'Desayuno':
+                                cardGradient = "bg-gradient-to-br from-[#FF4B4B] to-[#F76B6B]"; // Vibrant Red
+                                shadowColor = "shadow-red-200";
+                                break;
+                            case 'Almuerzo': // Morning Snack / Brunch
+                                cardGradient = "bg-gradient-to-br from-orange-400 to-amber-500"; // Orange
+                                shadowColor = "shadow-orange-200";
+                                break;
+                            case 'Comida': // Lunch
+                                cardGradient = "bg-gradient-to-br from-emerald-500 to-green-600"; // Green
+                                shadowColor = "shadow-emerald-200";
+                                break;
+                            case 'Merienda': // Afternoon Snack
+                                cardGradient = "bg-gradient-to-br from-blue-400 to-sky-500"; // Blue
+                                shadowColor = "shadow-blue-200";
+                                break;
+                            case 'Cena': // Dinner
+                                cardGradient = "bg-gradient-to-br from-purple-500 to-violet-600"; // Purple
+                                shadowColor = "shadow-purple-200";
+                                break;
+                            default:
+                                cardGradient = "bg-gradient-to-br from-gray-500 to-gray-600";
+                                shadowColor = "shadow-gray-200";
+                        }
 
-                    return (
-                        <div key={meal} className="space-y-3">
-                            <h4 className="text-lg font-bold flex items-center gap-2 text-gray-600 pl-2">
-                                {meal}
-                            </h4>
-                            <div className="grid gap-3">
-                                {mealLogs.map(log => (
-                                    <div key={log.id} className={`${cardGradient}/80 backdrop-blur-md border border-white/20 p-4 rounded-xl flex justify-between items-center group relative overflow-hidden`}>
+                        return (
+                            <div key={meal} className="space-y-3">
+                                <h4 className="text-lg font-bold flex items-center gap-2 text-gray-600 pl-2">
+                                    {meal}
+                                </h4>
+                                <div className="grid gap-3">
+                                    {mealLogs.map(log => (
+                                        <div key={log.id} className={`${cardGradient}/80 backdrop-blur-md border border-white/20 p-4 rounded-xl flex justify-between items-center group relative overflow-hidden`}>
 
-                                        <div className="flex-1 min-w-0 pr-3 relative z-10">
-                                            <p className="font-bold text-base text-white truncate leading-tight mb-1">{log.foodName}</p>
-                                            <div className="flex items-center gap-2 text-xs text-white/90 font-medium">
-                                                <span>{log.grams}g</span>
-                                                <span className="opacity-60">•</span>
-                                                <div className="flex gap-2">
-                                                    <span>P: {log.calculated.protein}</span>
-                                                    <span>C: {log.calculated.carbs}</span>
-                                                    <span>G: {log.calculated.fat}</span>
+                                            <div className="flex-1 min-w-0 pr-3 relative z-10">
+                                                <p className="font-bold text-base text-white truncate leading-tight mb-1">{log.foodName}</p>
+                                                <div className="flex items-center gap-2 text-xs text-white/90 font-medium">
+                                                    <span>{log.grams}g</span>
+                                                    <span className="opacity-60">•</span>
+                                                    <div className="flex gap-2">
+                                                        <span>P: {log.calculated.protein}</span>
+                                                        <span>C: {log.calculated.carbs}</span>
+                                                        <span>G: {log.calculated.fat}</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div className="flex items-center gap-4 relative z-10 flex-shrink-0">
-                                            <p className="font-black text-lg text-white">{log.calculated.calories} <span className="text-xs text-white/80 font-medium">kcal</span></p>
-                                            <button
-                                                onClick={() => onDeleteLog(log.id)}
-                                                className="w-8 h-8 rounded-full flex items-center justify-center bg-white/20 hover:bg-white/30 text-white transition-all shadow-sm"
-                                            >
-                                                <Icons.Trash size={16} />
-                                            </button>
+                                            <div className="flex items-center gap-4 relative z-10 flex-shrink-0">
+                                                <p className="font-black text-lg text-white">{log.calculated.calories} <span className="text-xs text-white/80 font-medium">kcal</span></p>
+                                                <button
+                                                    onClick={() => onDeleteLog(log.id)}
+                                                    className="w-8 h-8 rounded-full flex items-center justify-center bg-white/20 hover:bg-white/30 text-white transition-all shadow-sm"
+                                                >
+                                                    <Icons.Trash size={16} />
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))
-                                }
+                                    ))
+                                    }
+                                </div>
                             </div>
-                        </div>
-                    )
-                })}
+                        )
+                    })}
+                </div>
                 {dailyLogs.length === 0 && (
-                    <div className="text-center py-20 text-gray-400 border-2 border-dashed border-white/40 rounded-3xl bg-white/30 backdrop-blur-sm">
+                    <div className="text-center py-20 text-gray-400 mt-4 border-2 border-dashed border-white/40 rounded-3xl bg-white/30 backdrop-blur-sm">
                         <Icons.Utensils className="mx-auto mb-4 opacity-30 text-gray-400" size={48} />
                         <p className="text-lg font-medium text-gray-500">No hay registros hoy.</p>
                         <p className="text-sm opacity-60 text-gray-500">¡Empieza añadiendo tu primera comida!</p>
