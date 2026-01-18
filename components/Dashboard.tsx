@@ -206,8 +206,8 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
             {/* Header & Date Picker */}
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
-                    <h2 className="text-3xl font-bold text-gray-800 tracking-tight">Registro Diario</h2>
-                    <p className="text-gray-500 text-sm font-medium">Resumen y seguimiento nutricional</p>
+                    <h2 className="text-3xl font-bold text-gray-800 tracking-tight drop-shadow-md">Registro Diario</h2>
+                    <p className="text-gray-600 text-sm font-medium drop-shadow-sm">Resumen y seguimiento nutricional</p>
                 </div>
                 <div className="relative group">
                     <input
@@ -359,7 +359,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
 
             {/* Log List by Meal */}
             <div className="space-y-6">
-                <h3 className="text-2xl font-bold text-gray-800 px-1">Resumen de Comidas</h3>
+                <h3 className="text-2xl font-bold text-gray-800 px-1 drop-shadow-md">Resumen de Comidas</h3>
 
                 {MEAL_TYPES.map(meal => {
                     const mealLogs = dailyLogs.filter(l => l.meal === meal);

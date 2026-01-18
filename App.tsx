@@ -218,10 +218,19 @@ function App() {
 
    return (
       <div className="min-h-screen text-textMain font-family-sans flex flex-col md:flex-row relative overflow-hidden bg-background">
-         {/* Airy Gradients for Light Mode */}
-
-
-         {/* Sidebar Navigation - Floating Light Dock */}
+         {/* Background Images */}
+         <div className="fixed inset-0 z-0">
+            <img
+               src="/dashboard-bg-mobile.png"
+               alt="Background"
+               className="block md:hidden w-full h-full object-cover opacity-80"
+            />
+            <img
+               src="/dashboard-bg-desktop.png"
+               alt="Background"
+               className="hidden md:block w-full h-full object-cover opacity-80"
+            />
+         </div>         {/* Sidebar Navigation - Floating Light Dock */}
          <aside className={`fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] md:translate-x-0 md:left-6 md:top-1/2 md:-translate-y-1/2 md:w-24 md:h-[90vh] md:bottom-auto bg-white/40 backdrop-blur-xl border border-white/40 rounded-xl z-50 flex md:flex-col justify-around md:justify-center items-center py-2 md:py-8 md:gap-8 transition-all duration-300 ${isMenuHidden ? 'translate-y-[200%] md:translate-y-[-50%] md:-translate-x-[200%]' : ''}`}>
 
             {/* Logo / Brand */}
