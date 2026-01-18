@@ -223,7 +223,8 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
             {/* Refactored Stats Grid - Matching Reference Design */}
             <div className="flex flex-col gap-4 mb-4">
                 {/* Calories Card - Hero */}
-                <div className="bg-white p-4 rounded-[2rem] relative overflow-hidden">
+                {/* Calories Card - Hero */}
+                <div className="bg-white/40 backdrop-blur-xl border border-white/40 p-4 rounded-xl relative overflow-hidden">
                     {/* Background blob - Removed for flat apple style */}
 
                     <div className="flex justify-between items-center relative z-10">
@@ -268,7 +269,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                 {/* Macros Row */}
                 <div className="grid grid-cols-3 gap-3">
                     {/* Protein */}
-                    <div className="bg-white p-4 rounded-[1.8rem] flex flex-col justify-between aspect-square relative overflow-hidden group">
+                    <div className="bg-white/40 backdrop-blur-xl border border-white/40 p-4 rounded-xl flex flex-col justify-between aspect-square relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-16 h-16 bg-blue-50/50 rounded-full blur-xl -mr-4 -mt-4 transition-transform group-hover:scale-110" />
                         <div className="relative z-10">
                             <div className="flex items-center gap-1.5 mb-1">
@@ -284,7 +285,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                     </div>
 
                     {/* Carbs */}
-                    <div className="bg-white p-4 rounded-[1.8rem] flex flex-col justify-between aspect-square relative overflow-hidden group">
+                    <div className="bg-white/40 backdrop-blur-xl border border-white/40 p-4 rounded-xl flex flex-col justify-between aspect-square relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-16 h-16 bg-indigo-50/50 rounded-full blur-xl -mr-4 -mt-4 transition-transform group-hover:scale-110" />
                         <div className="relative z-10">
                             <div className="flex items-center gap-1.5 mb-1">
@@ -299,7 +300,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                     </div>
 
                     {/* Fat */}
-                    <div className="bg-white p-4 rounded-[1.8rem] flex flex-col justify-between aspect-square relative overflow-hidden group">
+                    <div className="bg-white/40 backdrop-blur-xl border border-white/40 p-4 rounded-xl flex flex-col justify-between aspect-square relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-16 h-16 bg-fuchsia-50/50 rounded-full blur-xl -mr-4 -mt-4 transition-transform group-hover:scale-110" />
                         <div className="relative z-10">
                             <div className="flex items-center gap-1.5 mb-1">
@@ -318,7 +319,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 <button
                     onClick={() => setEntryMode('scan')}
-                    className="w-full py-3 bg-white hover:bg-gray-50 rounded-2xl border border-gray-100 text-gray-600 hover:text-indigo-500 font-bold text-sm shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3"
+                    className="w-full py-3 bg-white/40 backdrop-blur-md border border-white/40 hover:bg-white/60 rounded-xl text-gray-600 hover:text-indigo-500 font-bold text-sm shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3"
                 >
                     <div className="p-2 bg-indigo-50 rounded-lg group-hover:scale-110 transition-transform">
                         <Icons.ScanBarcode size={18} className="text-indigo-400" />
@@ -328,7 +329,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
 
                 <button
                     onClick={() => setEntryMode('search')}
-                    className="group relative w-full py-3 bg-white hover:bg-gray-50 rounded-2xl text-gray-600 hover:text-indigo-500 font-bold text-sm transition-all flex items-center justify-center gap-3"
+                    className="group relative w-full py-3 bg-white/40 backdrop-blur-md border border-white/40 hover:bg-white/60 rounded-xl text-gray-600 hover:text-indigo-500 font-bold text-sm transition-all flex items-center justify-center gap-3"
                 >
                     <div className="p-2 bg-indigo-50 rounded-lg group-hover:scale-110 transition-transform">
                         <Icons.Plus size={18} className="text-indigo-400" />
@@ -338,7 +339,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
 
                 <button
                     onClick={() => setEntryMode('manual')}
-                    className="w-full py-3 bg-white hover:bg-gray-50 rounded-2xl text-gray-600 hover:text-gray-800 font-semibold text-sm transition-all flex items-center justify-center gap-3"
+                    className="w-full py-3 bg-white/40 backdrop-blur-md border border-white/40 hover:bg-white/60 rounded-xl text-gray-600 hover:text-gray-800 font-semibold text-sm transition-all flex items-center justify-center gap-3"
                 >
                     <div className="p-2 bg-gray-50 rounded-lg group-hover:scale-110 transition-transform">
                         <Icons.Edit2 size={16} />
@@ -348,7 +349,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
 
                 <button
                     onClick={() => setEntryMode('ai')}
-                    className="group w-full py-3 bg-gradient-to-br from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 rounded-2xl text-white font-bold text-sm transition-all flex items-center justify-center gap-3 relative overflow-hidden"
+                    className="group w-full py-3 bg-gradient-to-br from-indigo-500/80 to-purple-500/80 hover:from-indigo-600 hover:to-purple-600 backdrop-blur-xl rounded-xl text-white font-bold text-sm transition-all flex items-center justify-center gap-3 relative overflow-hidden border border-white/20"
                 >
                     <div className="absolute inset-0 bg-white/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <Icons.Sparkles size={16} className="animate-pulse" />
@@ -402,7 +403,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                             </h4>
                             <div className="grid gap-3">
                                 {mealLogs.map(log => (
-                                    <div key={log.id} className={`${cardGradient} p-4 rounded-2xl flex justify-between items-center group relative overflow-hidden`}>
+                                    <div key={log.id} className={`${cardGradient}/80 backdrop-blur-md border border-white/20 p-4 rounded-xl flex justify-between items-center group relative overflow-hidden`}>
 
                                         <div className="flex-1 min-w-0 pr-3 relative z-10">
                                             <p className="font-bold text-base text-white truncate leading-tight mb-1">{log.foodName}</p>
