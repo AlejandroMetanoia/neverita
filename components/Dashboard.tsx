@@ -59,10 +59,10 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
     }, [dailyLogs]);
 
     // Chart Data
-    // COLORS[0] -> Proteína (Stone-300)
+    // COLORS[0] -> Proteína (White)
     // COLORS[1] -> Carbs (Stone-400)
     // COLORS[2] -> Grasas (Stone-500)
-    const COLORS = ['#d6d3d1', '#a8a29e', '#78716c'];
+    const COLORS = ['#ffffff', '#a8a29e', '#78716c'];
     const macroData = [
         { name: 'Proteína', value: totals.protein, color: COLORS[0] },
         { name: 'Carbs', value: totals.carbs, color: COLORS[1] },
@@ -271,28 +271,28 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                         {/* Protein */}
                         <div className="flex flex-col items-center md:items-start">
                             <div className="flex items-center gap-2 mb-1">
-                                <div className="w-2 h-2 rounded-full bg-stone-300" />
-                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Proteína</span>
+                                <div className="w-2 h-2 rounded-full bg-white ring-1 ring-black/5" />
+                                <span className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Proteína</span>
                             </div>
-                            <p className="text-2xl font-black text-gray-800">{Math.round(totals.protein)}<span className="text-xs text-gray-400 font-bold ml-0.5">g</span></p>
+                            <p className="text-2xl md:text-4xl font-black text-gray-800">{Math.round(totals.protein)}<span className="text-xs text-gray-400 font-bold ml-0.5">g</span></p>
                         </div>
 
                         {/* Carbs */}
                         <div className="flex flex-col items-center md:items-start">
                             <div className="flex items-center gap-2 mb-1">
                                 <div className="w-2 h-2 rounded-full bg-stone-400" />
-                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Carbs</span>
+                                <span className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Carbs</span>
                             </div>
-                            <p className="text-2xl font-black text-gray-800">{Math.round(totals.carbs)}<span className="text-xs text-gray-400 font-bold ml-0.5">g</span></p>
+                            <p className="text-2xl md:text-4xl font-black text-gray-800">{Math.round(totals.carbs)}<span className="text-xs text-gray-400 font-bold ml-0.5">g</span></p>
                         </div>
 
                         {/* Fat */}
                         <div className="flex flex-col items-center md:items-start">
                             <div className="flex items-center gap-2 mb-1">
                                 <div className="w-2 h-2 rounded-full bg-stone-500" />
-                                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Grasas</span>
+                                <span className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Grasas</span>
                             </div>
-                            <p className="text-2xl font-black text-gray-800">{Math.round(totals.fat)}<span className="text-xs text-gray-400 font-bold ml-0.5">g</span></p>
+                            <p className="text-2xl md:text-4xl font-black text-gray-800">{Math.round(totals.fat)}<span className="text-xs text-gray-400 font-bold ml-0.5">g</span></p>
                         </div>
                     </div>
 
