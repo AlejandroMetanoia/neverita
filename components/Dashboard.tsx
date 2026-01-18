@@ -269,7 +269,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                     {/* Right Section: Macros List */}
                     <div className="flex-1 grid grid-cols-3 divide-x-2 divide-stone-300 md:divide-x-0 md:flex md:justify-between">
                         {/* Protein */}
-                        <div className="flex flex-col items-center md:items-start px-1 md:px-0">
+                        <div className="flex flex-col items-start pl-4 md:pl-0 md:items-start pr-1 md:pr-0">
                             <div className="flex items-center gap-2 mb-1">
                                 <div className="w-2 h-2 rounded-full bg-white ring-1 ring-black/5" />
                                 <span className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Proteína</span>
@@ -287,7 +287,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                         </div>
 
                         {/* Fat */}
-                        <div className="flex flex-col items-center md:items-end px-1 md:px-0">
+                        <div className="flex flex-col items-end pr-4 md:pr-0 md:items-end pl-1 md:pl-0">
                             <div className="flex items-center gap-2 mb-1">
                                 <div className="w-2 h-2 rounded-full bg-stone-500" />
                                 <span className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Grasas</span>
