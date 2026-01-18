@@ -267,9 +267,9 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                     <div className="hidden md:block w-px h-20 bg-gray-200/50"></div>
 
                     {/* Right Section: Macros List */}
-                    <div className="flex-1 grid grid-cols-3 divide-x divide-gray-200/50 md:divide-x-0 md:flex md:justify-between gap-2 md:gap-0">
+                    <div className="flex-1 grid grid-cols-3 divide-x-2 divide-stone-300 md:divide-x-0 md:flex md:justify-between">
                         {/* Protein */}
-                        <div className="flex flex-col items-center md:items-start px-2 md:px-0">
+                        <div className="flex flex-col items-center md:items-start px-1 md:px-0">
                             <div className="flex items-center gap-2 mb-1">
                                 <div className="w-2 h-2 rounded-full bg-white ring-1 ring-black/5" />
                                 <span className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Proteína</span>
@@ -278,7 +278,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                         </div>
 
                         {/* Carbs */}
-                        <div className="flex flex-col items-center md:items-center px-2 md:px-0">
+                        <div className="flex flex-col items-center md:items-center px-1 md:px-0">
                             <div className="flex items-center gap-2 mb-1">
                                 <div className="w-2 h-2 rounded-full bg-stone-400" />
                                 <span className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Carbohidratos</span>
@@ -287,7 +287,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                         </div>
 
                         {/* Fat */}
-                        <div className="flex flex-col items-center md:items-end px-2 md:px-0">
+                        <div className="flex flex-col items-center md:items-end px-1 md:px-0">
                             <div className="flex items-center gap-2 mb-1">
                                 <div className="w-2 h-2 rounded-full bg-stone-500" />
                                 <span className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Grasas</span>
