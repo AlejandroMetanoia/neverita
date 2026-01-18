@@ -224,7 +224,7 @@ function App() {
                src={
                   currentView === 'library' ? "/library-bg-mobile.jpg" :
                      currentView === 'stats' ? "/stats-bg-mobile.jpg" :
-                        "/dashboard-bg-mobile.png"
+                        "/dashboard-bg-mobile.jpg"
                }
                alt="Background"
                className="block md:hidden w-full h-full object-cover opacity-80"
@@ -233,7 +233,7 @@ function App() {
                src={
                   currentView === 'library' ? "/library-bg-desktop.png" :
                      currentView === 'stats' ? "/stats-bg-desktop.jpg" :
-                        "/dashboard-bg-desktop.png"
+                        "/dashboard-bg-desktop.jpg"
                }
                alt="Background"
                className="hidden md:block w-full h-full object-cover opacity-80"
