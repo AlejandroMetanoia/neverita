@@ -235,33 +235,33 @@ function App() {
 
             {/* Logo / Brand */}
             <div className="hidden md:flex flex-col items-center gap-2 mb-auto">
-               <div className="w-12 h-12 bg-gradient-to-tr from-secondary to-accent rounded-2xl flex items-center justify-center transition-all hover:scale-105">
+               <div className="w-12 h-12 bg-gradient-to-tr from-stone-400 to-stone-600 rounded-2xl flex items-center justify-center transition-all hover:scale-105">
                   <Icons.Utensils className="text-white" size={24} />
                </div>
             </div>
 
             <button
                onClick={() => handleChangeView('dashboard')}
-               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'dashboard' ? 'bg-indigo-50 text-indigo-500' : 'text-gray-400 hover:text-gray-600 hover:bg-white/40'}`}
+               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'dashboard' ? 'bg-stone-200 text-stone-700' : 'text-gray-400 hover:text-stone-600 hover:bg-white/40'}`}
             >
                <Icons.Dashboard size={28} className={`transition-transform duration-300 ${currentView === 'dashboard' ? 'scale-110' : 'group-hover:scale-110'}`} />
-               {currentView === 'dashboard' && <div className="absolute left-0 w-1 h-8 bg-indigo-500 rounded-r-full hidden md:block -ml-[2px]" />}
+               {currentView === 'dashboard' && <div className="absolute left-0 w-1 h-8 bg-stone-500 rounded-r-full hidden md:block -ml-[2px]" />}
             </button>
 
             <button
                onClick={() => handleChangeView('library')}
-               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'library' ? 'bg-sky-50 text-sky-500' : 'text-gray-400 hover:text-gray-600 hover:bg-white/40'}`}
+               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'library' ? 'bg-stone-200 text-stone-700' : 'text-gray-400 hover:text-stone-600 hover:bg-white/40'}`}
             >
                <Icons.Library size={28} className={`transition-transform duration-300 ${currentView === 'library' ? 'scale-110' : 'group-hover:scale-110'}`} />
-               {currentView === 'library' && <div className="absolute left-0 w-1 h-8 bg-sky-500 rounded-r-full hidden md:block -ml-[2px]" />}
+               {currentView === 'library' && <div className="absolute left-0 w-1 h-8 bg-stone-500 rounded-r-full hidden md:block -ml-[2px]" />}
             </button>
 
             <button
                onClick={() => handleChangeView('stats')}
-               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'stats' ? 'bg-fuchsia-50 text-fuchsia-500' : 'text-gray-400 hover:text-gray-600 hover:bg-white/40'}`}
+               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'stats' ? 'bg-stone-200 text-stone-700' : 'text-gray-400 hover:text-stone-600 hover:bg-white/40'}`}
             >
                <Icons.Stats size={28} className={`transition-transform duration-300 ${currentView === 'stats' ? 'scale-110' : 'group-hover:scale-110'}`} />
-               {currentView === 'stats' && <div className="absolute left-0 w-1 h-8 bg-fuchsia-500 rounded-r-full hidden md:block -ml-[2px]" />}
+               {currentView === 'stats' && <div className="absolute left-0 w-1 h-8 bg-stone-500 rounded-r-full hidden md:block -ml-[2px]" />}
             </button>
 
             {/* Profile */}
