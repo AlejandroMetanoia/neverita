@@ -125,7 +125,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
   const isSearching = debouncedSearchTerm.length > 0;
 
   return (
-    <div className="space-y-8 animate-fade-in pb-20 min-h-screen bg-[url('/library-bg-mobile.jpg')] md:bg-[url('/library-bg-desktop.png')] bg-cover bg-center bg-fixed">
+    <div className="space-y-8 animate-fade-in pb-20">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-4">

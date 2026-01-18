@@ -221,12 +221,12 @@ function App() {
          {/* Background Images */}
          <div className="fixed inset-0 z-0">
             <img
-               src="/dashboard-bg-mobile.png"
+               src={currentView === 'library' ? "/library-bg-mobile.jpg" : "/dashboard-bg-mobile.png"}
                alt="Background"
                className="block md:hidden w-full h-full object-cover opacity-80"
             />
             <img
-               src="/dashboard-bg-desktop.png"
+               src={currentView === 'library' ? "/library-bg-desktop.png" : "/dashboard-bg-desktop.png"}
                alt="Background"
                className="hidden md:block w-full h-full object-cover opacity-80"
             />
