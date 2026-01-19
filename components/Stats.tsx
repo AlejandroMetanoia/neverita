@@ -151,9 +151,9 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
                 </div>
 
                 {/* Table - LIGHT GLASS */}
-                <div className="bg-white/60 backdrop-blur-md p-8 rounded-[2rem] border border-white/60 shadow-glass overflow-hidden h-[500px] flex flex-col">
+                <div className="bg-white/60 backdrop-blur-md p-8 rounded-[2rem] border border-white/60 shadow-glass overflow-hidden flex flex-col">
                     <h3 className="text-xl font-bold text-gray-800 mb-6 flex-shrink-0">Detalle Diario</h3>
-                    <div className="overflow-auto custom-scrollbar flex-1 -mx-4 px-4">
+                    <div className="-mx-4 px-4">
                         <table className="w-full text-sm text-left text-gray-500">
                             <thead className="text-xs text-gray-400 uppercase bg-gray-50/50 border-b border-gray-100 sticky top-0 backdrop-blur-md">
                                 <tr>
