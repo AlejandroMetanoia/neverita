@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { GoogleGenerativeAI } from "@google/generative-ai";
+
 import { Food, LogEntry, MealType } from '../types';
 import { MEAL_TYPES, MEAL_COLORS } from '../constants';
 import { Icons } from './ui/Icons';
@@ -142,64 +142,8 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
     };
 
     const handleAnalyze = async () => {
-        setIsAnalyzing(true);
-        try {
-            const apiKey = import.meta.env.GEMINI_API_NEVERITA;
-            if (!apiKey) {
-                alert("API Key not found (GEMINI_API_NEVERITA)");
-                setIsAnalyzing(false);
-                return;
-            }
-
-            const genAI = new GoogleGenerativeAI(apiKey);
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-            const prompt = `Act as an expert nutritionist. Estimate the macros (kcal, protein, carbs, fat) per 100g of the described or photographed dish.
-            Description: ${aiDescription}
-            
-            IMPORTANT: Return ONLY a raw JSON object (no markdown formatting, no code blocks) with this exact format:
-            {"kcal": 0, "proteinas": 0, "carbohidratos": 0, "grasas": 0}`;
-
-            let result;
-            if (aiImage) {
-                const base64Data = aiImage.split(',')[1];
-                const imagePart = {
-                    inlineData: {
-                        data: base64Data,
-                        mimeType: "image/jpeg"
-                    },
-                };
-                result = await model.generateContent([prompt, imagePart]);
-            } else {
-                result = await model.generateContent(prompt);
-            }
-
-            const response = result.response;
-            const text = response.text();
-
-            // Cleanup
-            const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
-            const data = JSON.parse(jsonStr);
-
-            setManualEntry({
-                name: aiDescription || 'Plato analizado',
-                calories: data.kcal || '',
-                protein: data.proteinas || '',
-                carbs: data.carbohidratos || '',
-                fat: data.grasas || ''
-            });
-            setEntryMode('manual');
-
-            // Reset AI state
-            setAiDescription('');
-            setAiImage(null);
-
-        } catch (error) {
-            console.error("Error analyzing food:", error);
-            alert("Error al analizar. Por favor intenta de nuevo.");
-        } finally {
-            setIsAnalyzing(false);
-        }
+        // AI Logic Removed
+        alert("AI Assistant is currently not configured.");
     };
 
     const filteredFoods = foods.filter(f =>
