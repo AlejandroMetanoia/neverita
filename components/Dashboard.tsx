@@ -223,7 +223,8 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
                         type="date"
                         value={selectedDate}
                         onChange={(e) => onDateChange(e.target.value)}
-                        className="relative z-10 bg-white/50 backdrop-blur-md text-gray-800 border border-white/40 rounded-xl pl-4 pr-10 py-3 focus:outline-none focus:ring-1 focus:ring-stone-400 appearance-none text-right transition-all"
+                        onClick={(e) => (e.currentTarget as HTMLInputElement).showPicker()}
+                        className="relative z-10 bg-white/50 backdrop-blur-md text-gray-800 border border-white/40 rounded-xl pl-4 pr-10 py-3 focus:outline-none focus:ring-1 focus:ring-stone-400 appearance-none text-right transition-all [&::-webkit-calendar-picker-indicator]:hidden cursor-pointer w-full"
                     />
                     <Icons.Calendar size={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none z-20" />
                 </div>
