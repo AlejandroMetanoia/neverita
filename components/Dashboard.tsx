@@ -39,11 +39,17 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
     const [foodSearch, setFoodSearch] = useState('');
 
     // Manual Entry State
-    const [manualEntry, setManualEntry] = useState({
-        calories: 0,
-        protein: 0,
-        carbs: 0,
-        fat: 0,
+    const [manualEntry, setManualEntry] = useState<{
+        calories: string | number;
+        protein: string | number;
+        carbs: string | number;
+        fat: string | number;
+        name: string;
+    }>({
+        calories: '',
+        protein: '',
+        carbs: '',
+        fat: '',
         name: 'Comida Fuera'
     });
 
@@ -108,10 +114,10 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                 meal: mealType,
                 grams: 1, // Dummy value
                 calculated: {
-                    calories: manualEntry.calories,
-                    protein: manualEntry.protein,
-                    carbs: manualEntry.carbs,
-                    fat: manualEntry.fat
+                    calories: Number(manualEntry.calories) || 0,
+                    protein: Number(manualEntry.protein) || 0,
+                    carbs: Number(manualEntry.carbs) || 0,
+                    fat: Number(manualEntry.fat) || 0
                 }
             };
         }
@@ -121,7 +127,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
         // Reset minimal state
         setGrams(100);
         setFoodSearch('');
-        setManualEntry({ calories: 0, protein: 0, carbs: 0, fat: 0, name: 'Comida Fuera' });
+        setManualEntry({ calories: '', protein: '', carbs: '', fat: '', name: 'Comida Fuera' });
     };
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,10 +183,10 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
 
             setManualEntry({
                 name: aiDescription || 'Plato analizado',
-                calories: data.kcal || 0,
-                protein: data.proteinas || 0,
-                carbs: data.carbohidratos || 0,
-                fat: data.grasas || 0
+                calories: data.kcal || '',
+                protein: data.proteinas || '',
+                carbs: data.carbohidratos || '',
+                fat: data.grasas || ''
             });
             setEntryMode('manual');
 
@@ -560,8 +566,8 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                             <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Calorías Total</label>
                                             <input
                                                 type="number"
-                                                value={manualEntry.calories || ''}
-                                                onChange={(e) => setManualEntry({ ...manualEntry, calories: parseFloat(e.target.value) || 0 })}
+                                                value={manualEntry.calories}
+                                                onChange={(e) => setManualEntry({ ...manualEntry, calories: e.target.value })}
                                                 className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 font-mono text-lg font-bold"
                                                 placeholder="0"
                                             />
@@ -586,8 +592,8 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                             <label className="block text-xs font-bold text-protein mb-2 uppercase tracking-wider">Proteína (g)</label>
                                             <input
                                                 type="number"
-                                                value={manualEntry.protein || ''}
-                                                onChange={(e) => setManualEntry({ ...manualEntry, protein: parseFloat(e.target.value) || 0 })}
+                                                value={manualEntry.protein}
+                                                onChange={(e) => setManualEntry({ ...manualEntry, protein: e.target.value })}
                                                 className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-protein focus:ring-4 focus:ring-sky-50 font-mono font-bold"
                                                 placeholder="0"
                                             />
@@ -596,8 +602,8 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                             <label className="block text-xs font-bold text-carbs mb-2 uppercase tracking-wider">Carbs (g)</label>
                                             <input
                                                 type="number"
-                                                value={manualEntry.carbs || ''}
-                                                onChange={(e) => setManualEntry({ ...manualEntry, carbs: parseFloat(e.target.value) || 0 })}
+                                                value={manualEntry.carbs}
+                                                onChange={(e) => setManualEntry({ ...manualEntry, carbs: e.target.value })}
                                                 className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-carbs focus:ring-4 focus:ring-indigo-50 font-mono font-bold"
                                                 placeholder="0"
                                             />
@@ -606,8 +612,8 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                             <label className="block text-xs font-bold text-fat mb-2 uppercase tracking-wider">Grasa (g)</label>
                                             <input
                                                 type="number"
-                                                value={manualEntry.fat || ''}
-                                                onChange={(e) => setManualEntry({ ...manualEntry, fat: parseFloat(e.target.value) || 0 })}
+                                                value={manualEntry.fat}
+                                                onChange={(e) => setManualEntry({ ...manualEntry, fat: e.target.value })}
                                                 className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-fat focus:ring-4 focus:ring-fuchsia-50 font-mono font-bold"
                                                 placeholder="0"
                                             />

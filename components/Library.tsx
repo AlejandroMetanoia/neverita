@@ -26,15 +26,25 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
     return () => onToggleMenu(false);
   }, [isAdding, onToggleMenu]);
 
-  const [newFood, setNewFood] = useState<Omit<Food, 'id' | 'userId'>>({
+  /* MODIFIED: Changed numeric fields to string | number to allow decimal input */
+  const [newFood, setNewFood] = useState<{
+    name: string;
+    brand: string;
+    category: string;
+    subCategory: string;
+    calories: string | number;
+    protein: string | number;
+    carbs: string | number;
+    fat: string | number;
+  }>({
     name: '',
     brand: '',
     category: 'Otros', // Default
     subCategory: '',
-    calories: 0,
-    protein: 0,
-    carbs: 0,
-    fat: 0,
+    calories: '',
+    protein: '',
+    carbs: '',
+    fat: '',
   });
 
   // Debounce logic
@@ -63,10 +73,21 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAddFood({ ...newFood, id: Date.now().toString() });
+    /* MODIFIED: Parse values before submitting */
+    onAddFood({
+      id: Date.now().toString(),
+      name: newFood.name,
+      brand: newFood.brand,
+      category: newFood.category,
+      subCategory: newFood.subCategory,
+      calories: Number(newFood.calories) || 0,
+      protein: Number(newFood.protein) || 0,
+      carbs: Number(newFood.carbs) || 0,
+      fat: Number(newFood.fat) || 0,
+    });
     setIsAdding(false);
-    // Reset form but keep category if user wants to add multiple to same
-    setNewFood({ ...newFood, name: '', brand: '', calories: 0, protein: 0, carbs: 0, fat: 0 });
+    // Reset form but keep category
+    setNewFood({ ...newFood, name: '', brand: '', calories: '', protein: '', carbs: '', fat: '' });
   };
 
   // Effect to reset subCategory when category changes in navigation
@@ -241,8 +262,8 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
               required
               type="number"
               min="0"
-              value={newFood.calories || ''}
-              onChange={(e) => setNewFood({ ...newFood, calories: parseFloat(e.target.value) || 0 })}
+              value={newFood.calories}
+              onChange={(e) => setNewFood({ ...newFood, calories: e.target.value })}
               className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-50 font-mono text-lg font-bold"
               placeholder="0"
             />
@@ -254,8 +275,8 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
               type="number"
               min="0"
               step="0.1"
-              value={newFood.protein || ''}
-              onChange={(e) => setNewFood({ ...newFood, protein: parseFloat(e.target.value) || 0 })}
+              value={newFood.protein}
+              onChange={(e) => setNewFood({ ...newFood, protein: e.target.value })}
               className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-protein focus:ring-4 focus:ring-sky-50 font-bold"
               placeholder="0"
             />
@@ -267,8 +288,8 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
               type="number"
               min="0"
               step="0.1"
-              value={newFood.carbs || ''}
-              onChange={(e) => setNewFood({ ...newFood, carbs: parseFloat(e.target.value) || 0 })}
+              value={newFood.carbs}
+              onChange={(e) => setNewFood({ ...newFood, carbs: e.target.value })}
               className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-carbs focus:ring-4 focus:ring-indigo-50 font-bold"
               placeholder="0"
             />
@@ -280,8 +301,8 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
               type="number"
               min="0"
               step="0.1"
-              value={newFood.fat || ''}
-              onChange={(e) => setNewFood({ ...newFood, fat: parseFloat(e.target.value) || 0 })}
+              value={newFood.fat}
+              onChange={(e) => setNewFood({ ...newFood, fat: e.target.value })}
               className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-fat focus:ring-4 focus:ring-fuchsia-50 font-bold"
               placeholder="0"
             />
