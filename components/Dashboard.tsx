@@ -196,7 +196,8 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
 
         } catch (error) {
             console.error("Error analyzing food:", error);
-            alert("Error al analizar. Por favor intenta de nuevo.");
+            const errorMessage = error instanceof Error ? error.message : "Error desconocido";
+            alert(`Error al analizar: ${errorMessage}`);
         } finally {
             setIsAnalyzing(false);
         }
