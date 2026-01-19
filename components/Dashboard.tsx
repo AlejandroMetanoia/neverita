@@ -435,9 +435,9 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                     <div className="bg-white/90 backdrop-blur-xl w-full max-w-xl rounded-[2rem] border border-white/60 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                         <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white/50">
                             <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
-                                {entryMode === 'search' && <Icons.Search className="text-indigo-500" />}
-                                {entryMode === 'manual' && <Icons.Plus className="text-indigo-500" />}
-                                {entryMode === 'ai' && <Icons.Sparkles className="text-purple-500" />}
+                                {entryMode === 'search' && <Icons.Search className="text-gray-800" />}
+                                {entryMode === 'manual' && <Icons.Plus className="text-gray-800" />}
+                                {entryMode === 'ai' && <Icons.Sparkles className="text-gray-800" />}
                                 {entryMode === 'search' ? 'Calculadora' : entryMode === 'manual' ? 'Comida Fuera' : 'Asistente Nutricional'}
                             </h3>
                             <button onClick={() => setEntryMode(null)} className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"><Icons.Plus className="rotate-45" size={20} /></button>
@@ -451,7 +451,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                     <div>
                                         <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">1. Buscar Alimento</label>
                                         <div className="relative group">
-                                            <Icons.Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-indigo-500 transition-colors" size={20} />
+                                            <Icons.Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-gray-800 transition-colors" size={20} />
                                             <input
                                                 type="text"
                                                 placeholder="Ej. Arroz con pollo..."
@@ -460,7 +460,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                                     setFoodSearch(e.target.value);
                                                     setSelectedFoodId(''); // Reset selection on search
                                                 }}
-                                                className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-12 pr-4 py-4 text-gray-800 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100 transition-all placeholder:text-gray-400 font-medium"
+                                                className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-12 pr-4 py-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 transition-all placeholder:text-gray-400 font-medium"
                                             />
                                         </div>
                                         {foodSearch && !selectedFoodId && (
@@ -492,7 +492,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                                     type="number"
                                                     value={grams}
                                                     onChange={(e) => setGrams(parseFloat(e.target.value) || 0)}
-                                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100 transition-all font-mono text-lg font-bold"
+                                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 transition-all font-mono text-lg font-bold"
                                                 />
                                                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold pointer-events-none">g</span>
                                             </div>
@@ -504,7 +504,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                                 <select
                                                     value={mealType}
                                                     onChange={(e) => setMealType(e.target.value as MealType)}
-                                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100 appearance-none transition-all cursor-pointer font-medium"
+                                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 appearance-none transition-all cursor-pointer font-medium"
                                                 >
                                                     {MEAL_TYPES.map(m => <option key={m} value={m}>{m}</option>)}
                                                 </select>
@@ -550,7 +550,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                             type="text"
                                             value={manualEntry.name}
                                             onChange={(e) => setManualEntry({ ...manualEntry, name: e.target.value })}
-                                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100 transition-all font-medium"
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 transition-all font-medium"
                                             placeholder="Ej. Comida con amigos"
                                         />
                                     </div>
@@ -562,7 +562,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                                 type="number"
                                                 value={manualEntry.calories || ''}
                                                 onChange={(e) => setManualEntry({ ...manualEntry, calories: parseFloat(e.target.value) || 0 })}
-                                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100 font-mono text-lg font-bold"
+                                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 font-mono text-lg font-bold"
                                                 placeholder="0"
                                             />
                                         </div>
@@ -623,7 +623,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                             value={aiDescription}
                                             onChange={(e) => setAiDescription(e.target.value)}
                                             placeholder="Ej: Filete a la vilaroy con patatas y un poco de ensalada..."
-                                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-purple-300 focus:ring-4 focus:ring-purple-50 min-h-[120px] resize-none placeholder:text-gray-400 transition-all font-medium"
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 min-h-[120px] resize-none placeholder:text-gray-400 transition-all font-medium"
                                         />
                                     </div>
 
@@ -631,7 +631,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                         <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">O sube una foto</label>
                                         <div
                                             onClick={() => fileInputRef.current?.click()}
-                                            className="border-2 border-dashed border-gray-200 hover:border-purple-400 hover:bg-purple-50 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all group"
+                                            className="border-2 border-dashed border-gray-200 hover:border-gray-400 hover:bg-gray-50 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all group"
                                         >
                                             {aiImage ? (
                                                 <div className="relative w-full h-48 group-hover:scale-[1.02] transition-transform">
@@ -648,7 +648,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                                 </div>
                                             ) : (
                                                 <>
-                                                    <div className="p-4 bg-purple-50 rounded-full mb-4 group-hover:scale-110 transition-transform text-purple-400">
+                                                    <div className="p-4 bg-gray-100 rounded-full mb-4 group-hover:scale-110 transition-transform text-gray-600">
                                                         <Icons.Sparkles size={32} />
                                                     </div>
                                                     <p className="text-sm text-gray-500 font-medium">Clic para subir o tomar foto</p>
@@ -672,7 +672,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                 <button
                                     onClick={handleAnalyze}
                                     disabled={isAnalyzing || (!aiDescription && !aiImage)}
-                                    className="w-full py-4 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-lg rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
+                                    className="w-full py-4 bg-gray-900 hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-lg rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
                                 >
                                     {isAnalyzing ? (
                                         <>
