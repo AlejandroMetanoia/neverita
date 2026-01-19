@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Food, LogEntry } from '../types';
 import { FOOD_CATEGORIES, SUB_CATEGORIES } from '../constants';
 import { Icons } from './ui/Icons';
 
 interface LibraryProps {
+  isGuest?: boolean;
   foods: Food[];
   onAddLog?: (log: LogEntry) => void;
   onAddFood: (food: Food) => void;
@@ -12,13 +14,14 @@ interface LibraryProps {
   onToggleMenu: (hidden: boolean) => void;
 }
 
-const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoOpenAdd = false, onToggleMenu }) => {
+const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, onDeleteFood, autoOpenAdd = false, onToggleMenu }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(autoOpenAdd);
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
+  const [subscriptionMode, setSubscriptionMode] = useState<'teaser' | 'details' | null>(null);
 
   // Toggle Menu Visibility
   useEffect(() => {
@@ -174,7 +177,13 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
           </div>
         </div>
         <button
-          onClick={() => setIsAdding(!isAdding)}
+          onClick={() => {
+            if (isGuest) {
+              setSubscriptionMode('teaser');
+            } else {
+              setIsAdding(!isAdding);
+            }
+          }}
           className="bg-gray-900 hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-xl flex items-center gap-2 transition-all shadow-lg hover:shadow-xl hover:scale-105"
         >
           <Icons.Plus size={20} />
@@ -514,6 +523,85 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
             </div>
           </div>
         </div>
+      )}
+
+      {/* Subscription Modal - Portaled */}
+      {subscriptionMode && createPortal(
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+          <div className="bg-white/90 backdrop-blur-xl w-full max-w-xl rounded-[2rem] border border-white/60 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white/50">
+              <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
+                {subscriptionMode === 'teaser' && <Icons.Lock className="text-gray-800" />}
+                {subscriptionMode === 'details' && <Icons.Star className="text-gray-800" />}
+
+                {subscriptionMode === 'teaser' ? 'Función Premium' : 'Ventajas Premium'}
+              </h3>
+              <button onClick={() => setSubscriptionMode(null)} className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors">
+                <Icons.Plus className="rotate-45" size={20} />
+              </button>
+            </div>
+
+            <div className="p-8 space-y-8 max-h-[80vh] overflow-y-auto custom-scrollbar">
+              {/* SUBSCRIPTION TEASER */}
+              {subscriptionMode === 'teaser' && (
+                <div className="text-center space-y-6">
+                  <div className="w-20 h-20 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Icons.Fridge size={40} className="text-stone-500" />
+                  </div>
+                  <h4 className="text-xl font-bold text-gray-800">Desbloquea la función de añadir más alimentos y recetas a tu nevera</h4>
+                  <p className="text-gray-600">
+                    Para disfrutar de esta función, debes suscribirte. El precio es de <strong>0,99 € al mes</strong>, sin permanencia; cancela cuando quieras.
+                  </p>
+                  <p className="text-gray-600">
+                    Además de esta función, podrás disfrutar de la aplicación completa y guardar tus datos en la nube.
+                  </p>
+                  <button
+                    onClick={() => setSubscriptionMode('details')}
+                    className="w-full py-4 bg-gray-900 hover:bg-gray-800 text-white font-bold rounded-xl transition-all shadow-lg text-lg"
+                  >
+                    Saber más
+                  </button>
+                </div>
+              )}
+
+              {/* SUBSCRIPTION DETAILS */}
+              {subscriptionMode === 'details' && (
+                <div className="space-y-6">
+                  <p className="text-gray-600 text-center font-medium">Al suscribirte obtendrás:</p>
+                  <ul className="space-y-4">
+                    <li className="flex items-start gap-3">
+                      <div className="p-1 bg-green-100 rounded-full text-green-600 mt-0.5"><Icons.Check size={14} /></div>
+                      <span className="text-gray-700"><strong>Asistente IA Ilimitado:</strong> Analiza tus platos con fotos o descripciones al instante.</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="p-1 bg-green-100 rounded-full text-green-600 mt-0.5"><Icons.Check size={14} /></div>
+                      <span className="text-gray-700"><strong>Guardado en la Nube:</strong> Accede a tu historial desde cualquier dispositivo.</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="p-1 bg-green-100 rounded-full text-green-600 mt-0.5"><Icons.Check size={14} /></div>
+                      <span className="text-gray-700"><strong>Prioridad en Soporte:</strong> Resolvemos tus dudas antes que a nadie.</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="p-1 bg-green-100 rounded-full text-green-600 mt-0.5"><Icons.Check size={14} /></div>
+                      <span className="text-gray-700"><strong>Sin Anuncios:</strong> Experiencia fluida y sin interrupciones.</span>
+                    </li>
+                  </ul>
+                  <div className="pt-4 border-t border-gray-100 text-center">
+                    <p className="text-sm text-gray-500 mb-4">Solo 0,99 € / mes. Cancela cuando quieras.</p>
+                    <button
+                      onClick={() => setSubscriptionMode('teaser')} // Temporary back loop
+                      className="w-full py-4 bg-gray-900 hover:bg-gray-800 text-white font-bold rounded-xl transition-all shadow-lg text-lg flex items-center justify-center gap-2"
+                    >
+                      <Icons.Star size={20} className="text-yellow-400" />
+                      Suscribirme Ahora
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>,
+        document.body
       )}
     </div>
   );
