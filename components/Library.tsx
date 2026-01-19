@@ -144,10 +144,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
             </button>
           )}
           <div>
-            <h2 className="text-3xl font-bold text-gray-800 flex items-center gap-3 tracking-tight">
-              <div className="p-2 bg-blue-100 rounded-lg text-blue-500">
-                <Icons.Fridge className="" size={28} />
-              </div>
+            <h2 className="text-3xl font-bold text-gray-800 tracking-tight">
               {isSearching ? 'Buscando...' : (selectedSubCategory || selectedCategory || 'Nevera')}
             </h2>
             <p className="text-gray-500 text-sm font-medium ml-1">
