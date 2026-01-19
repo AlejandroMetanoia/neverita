@@ -157,21 +157,21 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
                         <table className="w-full text-sm text-left text-gray-500">
                             <thead className="text-xs text-gray-400 uppercase bg-gray-50/50 border-b border-gray-100 sticky top-0 backdrop-blur-md">
                                 <tr>
-                                    <th className="px-6 py-4 rounded-tl-xl font-bold tracking-wider text-gray-500">Día</th>
-                                    <th className="px-6 py-4 font-bold tracking-wider text-gray-500">Kcal</th>
-                                    <th className="px-6 py-4 font-bold tracking-wider text-gray-500">Prot</th>
-                                    <th className="px-6 py-4 font-bold tracking-wider text-gray-500">Carb</th>
-                                    <th className="px-6 py-4 rounded-tr-xl font-bold tracking-wider text-gray-500">Grasa</th>
+                                    <th className="px-2 md:px-6 py-4 rounded-tl-xl font-bold tracking-wider text-gray-500 text-center md:text-left">Día</th>
+                                    <th className="px-2 md:px-6 py-4 font-bold tracking-wider text-gray-500 text-center md:text-left">Kcal</th>
+                                    <th className="px-2 md:px-6 py-4 font-bold tracking-wider text-gray-500 text-center md:text-left">Prot</th>
+                                    <th className="px-2 md:px-6 py-4 font-bold tracking-wider text-gray-500 text-center md:text-left">Carb</th>
+                                    <th className="px-2 md:px-6 py-4 rounded-tr-xl font-bold tracking-wider text-gray-500 text-center md:text-left">Grasa</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100/50">
                                 {weeklyData.map((day, idx) => (
                                     <tr key={idx} className="hover:bg-white/40 transition-colors">
-                                        <td className="px-6 py-5 font-bold text-gray-800">{day.date}</td>
-                                        <td className="px-6 py-5 font-bold text-gray-700">{Math.round(day.calories)}</td>
-                                        <td className="px-6 py-5 text-gray-600 font-medium">{Math.round(day.protein)}g</td>
-                                        <td className="px-6 py-5 text-gray-500 font-medium">{Math.round(day.carbs)}g</td>
-                                        <td className="px-6 py-5 text-gray-400 font-medium">{Math.round(day.fat)}g</td>
+                                        <td className="px-2 md:px-6 py-4 md:py-5 font-bold text-gray-800 text-xs md:text-sm text-center md:text-left">{day.date}</td>
+                                        <td className="px-2 md:px-6 py-4 md:py-5 font-bold text-gray-700 text-xs md:text-sm text-center md:text-left">{Math.round(day.calories)}</td>
+                                        <td className="px-2 md:px-6 py-4 md:py-5 text-gray-600 font-medium text-xs md:text-sm text-center md:text-left">{Math.round(day.protein)}<span className="md:hidden"></span><span className="hidden md:inline">g</span></td>
+                                        <td className="px-2 md:px-6 py-4 md:py-5 text-gray-500 font-medium text-xs md:text-sm text-center md:text-left">{Math.round(day.carbs)}<span className="md:hidden"></span><span className="hidden md:inline">g</span></td>
+                                        <td className="px-2 md:px-6 py-4 md:py-5 text-gray-400 font-medium text-xs md:text-sm text-center md:text-left">{Math.round(day.fat)}<span className="md:hidden"></span><span className="hidden md:inline">g</span></td>
                                     </tr>
                                 ))}
                             </tbody>
