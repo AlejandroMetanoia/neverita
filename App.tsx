@@ -32,6 +32,8 @@ function App() {
 
    const [logs, setLogs] = useState<LogEntry[]>([]);
 
+   const [guestLogs, setGuestLogs] = useState<LogEntry[]>([]);
+
    const handleNavigateToLibraryAdd = () => {
       setCurrentView('library');
       setAutoOpenAdd(true);
@@ -193,7 +195,10 @@ function App() {
    };
 
    const addLog = async (log: LogEntry) => {
-      if (!user) return;
+      if (!user) {
+         setGuestLogs(prev => [...prev, log]);
+         return;
+      }
       try {
          // Add userId to the log entry before saving
          const logWithUser = { ...log, userId: user.uid };
@@ -204,7 +209,10 @@ function App() {
    };
 
    const deleteLog = async (id: string) => {
-      if (!user) return;
+      if (!user) {
+         setGuestLogs(prev => prev.filter(l => l.id !== id));
+         return;
+      }
       try {
          await deleteDoc(doc(db, 'daily_logs', id));
       } catch (error) {
@@ -304,8 +312,9 @@ function App() {
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
                {currentView === 'dashboard' && (
                   <Dashboard
+                     isGuest={!user}
                      foods={foods}
-                     logs={logs}
+                     logs={user ? logs : guestLogs.filter(l => l.date === selectedDate)}
                      onAddLog={addLog}
                      onDeleteLog={deleteLog}
                      selectedDate={selectedDate}

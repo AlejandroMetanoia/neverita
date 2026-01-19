@@ -42,7 +42,9 @@ import {
   ScanBarcode,
   Check,
   AlertCircle,
-  IceCream
+  IceCream,
+  Lock,
+  Star
 } from 'lucide-react';
 
 export const Icons = {

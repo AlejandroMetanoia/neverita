@@ -7,6 +7,7 @@ import BarcodeScanner from './BarcodeScanner';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 interface DashboardProps {
+    isGuest: boolean;
     foods: Food[];
     logs: LogEntry[];
     onAddLog: (entry: LogEntry) => void;
@@ -17,8 +18,8 @@ interface DashboardProps {
     onToggleMenu: (hidden: boolean) => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLog, selectedDate, onDateChange, onNavigateToLibrary, onToggleMenu }) => {
-    const [entryMode, setEntryMode] = useState<'search' | 'scan' | 'manual' | 'ai' | null>(null);
+const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, onDeleteLog, selectedDate, onDateChange, onNavigateToLibrary, onToggleMenu }) => {
+    const [entryMode, setEntryMode] = useState<'search' | 'scan' | 'manual' | 'ai' | 'subscription_teaser' | 'subscription_details' | null>(null);
 
     // Toggle Menu Visibility
     useEffect(() => {
@@ -338,7 +339,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                 </button>
 
                 <button
-                    onClick={() => setEntryMode('ai')}
+                    onClick={() => setEntryMode(isGuest ? 'subscription_teaser' : 'ai')}
                     className="group w-full py-3 bg-gradient-to-br from-stone-500/80 to-stone-700/80 hover:from-stone-600 hover:to-stone-800 backdrop-blur-xl rounded-xl text-white font-bold text-sm transition-all flex items-center justify-center gap-3 relative overflow-hidden border border-white/20"
                 >
                     <div className="absolute inset-0 bg-white/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -445,12 +446,75 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                 {entryMode === 'search' && <Icons.Search className="text-gray-800" />}
                                 {entryMode === 'manual' && <Icons.Plus className="text-gray-800" />}
                                 {entryMode === 'ai' && <Icons.Sparkles className="text-gray-800" />}
-                                {entryMode === 'search' ? 'Calculadora' : entryMode === 'manual' ? 'Comida Fuera' : 'Asistente Nutricional'}
+                                {entryMode === 'subscription_teaser' && <Icons.Lock className="text-gray-800" />}
+                                {entryMode === 'subscription_details' && <Icons.Star className="text-gray-800" />}
+
+                                {entryMode === 'search' ? 'Calculadora' :
+                                    entryMode === 'manual' ? 'Comida Fuera' :
+                                        entryMode === 'ai' ? 'Asistente Nutricional' :
+                                            entryMode === 'subscription_teaser' ? 'Función Premium' : 'Ventajas Premium'}
                             </h3>
                             <button onClick={() => setEntryMode(null)} className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"><Icons.Plus className="rotate-45" size={20} /></button>
                         </div>
 
                         <div className="p-8 space-y-8 max-h-[80vh] overflow-y-auto custom-scrollbar">
+                            {/* SUBSCRIPTION TEASER */}
+                            {entryMode === 'subscription_teaser' && (
+                                <div className="text-center space-y-6">
+                                    <div className="w-20 h-20 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <Icons.Sparkles size={40} className="text-stone-500" />
+                                    </div>
+                                    <h4 className="text-xl font-bold text-gray-800">Desbloquea el Asistente IA</h4>
+                                    <p className="text-gray-600">
+                                        Para disfrutar del Asistente IA, debes suscribirte. El precio es de <strong>0,99 € al mes</strong>, sin permanencia; cancela cuando quieras.
+                                    </p>
+                                    <p className="text-gray-600">
+                                        Además de esta función, podrás disfrutar de la aplicación completa y guardar tus datos en la nube.
+                                    </p>
+                                    <button
+                                        onClick={() => setEntryMode('subscription_details')}
+                                        className="w-full py-4 bg-gray-900 hover:bg-gray-800 text-white font-bold rounded-xl transition-all shadow-lg text-lg"
+                                    >
+                                        Saber más
+                                    </button>
+                                </div>
+                            )}
+
+                            {/* SUBSCRIPTION DETAILS */}
+                            {entryMode === 'subscription_details' && (
+                                <div className="space-y-6">
+                                    <p className="text-gray-600 text-center font-medium">Al suscribirte obtendrás:</p>
+                                    <ul className="space-y-4">
+                                        <li className="flex items-start gap-3">
+                                            <div className="p-1 bg-green-100 rounded-full text-green-600 mt-0.5"><Icons.Check size={14} /></div>
+                                            <span className="text-gray-700"><strong>Asistente IA Ilimitado:</strong> Analiza tus platos con fotos o descripciones al instante.</span>
+                                        </li>
+                                        <li className="flex items-start gap-3">
+                                            <div className="p-1 bg-green-100 rounded-full text-green-600 mt-0.5"><Icons.Check size={14} /></div>
+                                            <span className="text-gray-700"><strong>Guardado en la Nube:</strong> Accede a tu historial desde cualquier dispositivo.</span>
+                                        </li>
+                                        <li className="flex items-start gap-3">
+                                            <div className="p-1 bg-green-100 rounded-full text-green-600 mt-0.5"><Icons.Check size={14} /></div>
+                                            <span className="text-gray-700"><strong>Prioridad en Soporte:</strong> Resolvemos tus dudas antes que a nadie.</span>
+                                        </li>
+                                        <li className="flex items-start gap-3">
+                                            <div className="p-1 bg-green-100 rounded-full text-green-600 mt-0.5"><Icons.Check size={14} /></div>
+                                            <span className="text-gray-700"><strong>Sin Anuncios:</strong> Experiencia fluida y sin interrupciones.</span>
+                                        </li>
+                                    </ul>
+                                    <div className="pt-4 border-t border-gray-100 text-center">
+                                        <p className="text-sm text-gray-500 mb-4">Solo 0,99 € / mes. Cancela cuando quieras.</p>
+                                        <button
+                                            onClick={() => setEntryMode('subscription_teaser')} // Temporary back loop or login trigger
+                                            className="w-full py-4 bg-gray-900 hover:bg-gray-800 text-white font-bold rounded-xl transition-all shadow-lg text-lg flex items-center justify-center gap-2"
+                                        >
+                                            <Icons.Star size={20} className="text-yellow-400" />
+                                            Suscribirme Ahora
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Content remains mostly the same, just styled inputs */}
                             {entryMode === 'search' ? (
                                 <>
@@ -693,7 +757,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                         </>
                                     )}
                                 </button>
-                            ) : (
+                            ) : (entryMode === 'search' || entryMode === 'manual') ? (
                                 <button
                                     onClick={handleAddLog}
                                     disabled={entryMode === 'search' && !selectedFood}
@@ -702,7 +766,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                     <Icons.Plus size={24} />
                                     {entryMode === 'search' ? 'Añadir al Diario' : 'Registrar Comida'}
                                 </button>
-                            )}
+                            ) : null}
                         </div>
                     </div>
                 </div>
