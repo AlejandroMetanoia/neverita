@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { User, onAuthStateChanged } from 'firebase/auth';
+import { User, onAuthStateChanged, signInWithPopup } from 'firebase/auth';
 import { collection, query, where, onSnapshot, setDoc, deleteDoc, doc, QuerySnapshot } from 'firebase/firestore';
-import { auth, db } from './src/firebase';
-import Login from './src/components/Login';
+import { auth, db, googleProvider } from './src/firebase';
+// Login component removed
 import { Icons } from './components/ui/Icons';
 import Dashboard from './components/Dashboard';
 import Library from './components/Library';
@@ -159,6 +159,14 @@ function App() {
 
 
    // Handlers
+   const handleLogin = async () => {
+      try {
+         await signInWithPopup(auth, googleProvider);
+      } catch (error) {
+         console.error("Error signing in with Google", error);
+      }
+   };
+
    const addFood = async (food: Food) => {
       if (!user) return;
       try {
@@ -208,13 +216,7 @@ function App() {
       return <div className="min-h-screen bg-background flex items-center justify-center text-white">Loading...</div>;
    }
 
-   if (!user) {
-      return (
-         <div className="min-h-screen bg-background text-gray-100 flex flex-col items-center justify-center p-4">
-            <Login user={null} />
-         </div>
-      );
-   }
+
 
    return (
       <div className="min-h-screen text-textMain font-family-sans flex flex-col md:flex-row relative overflow-hidden bg-background">
@@ -223,7 +225,7 @@ function App() {
             <img
                src={
                   currentView === 'library' ? "/library-bg-mobile.jpg" :
-                     currentView === 'stats' ? "/stats-bg-mobile.jpg" :
+                     currentView === 'stats' ? "/stats-bg-mobile.png" :
                         "/dashboard-bg-mobile.jpg"
                }
                alt="Background"
@@ -329,12 +331,35 @@ function App() {
                      <div className="bg-surface backdrop-blur-xl border border-white/60 p-12 rounded-[2rem] shadow-glass max-w-md w-full text-center relative overflow-hidden">
                         <div className="absolute top-0 w-full h-32 bg-gradient-to-b from-blue-50 to-transparent opacity-50 pointer-events-none left-0" />
                         <div className="relative z-10">
-                           <img src={user?.photoURL || 'https://ui-avatars.com/api/?name=User'} className="w-28 h-28 rounded-full mx-auto mb-6 border-[6px] border-white shadow-xl" />
-                           <h2 className="text-3xl font-bold text-gray-800 mb-2 font-[Outfit]">{user?.displayName}</h2>
-                           <p className="text-gray-500 mb-8 font-medium">{user?.email}</p>
-                           <button onClick={() => auth.signOut()} className="w-full bg-red-50 hover:bg-red-100 text-red-500 border border-red-200 font-bold py-4 px-8 rounded-2xl transition-all shadow-sm hover:shadow text-lg">
-                              Cerrar Sesión
-                           </button>
+                           {user ? (
+                              <>
+                                 <img src={user.photoURL || 'https://ui-avatars.com/api/?name=User'} className="w-28 h-28 rounded-full mx-auto mb-6 border-[6px] border-white shadow-xl" />
+                                 <h2 className="text-3xl font-bold text-gray-800 mb-2 font-[Outfit]">{user.displayName}</h2>
+                                 <p className="text-gray-500 mb-8 font-medium">{user.email}</p>
+                                 <button onClick={() => auth.signOut()} className="w-full bg-red-50 hover:bg-red-100 text-red-500 border border-red-200 font-bold py-4 px-8 rounded-2xl transition-all shadow-sm hover:shadow text-lg">
+                                    Cerrar Sesión
+                                 </button>
+                              </>
+                           ) : (
+                              <>
+                                 <div className="w-28 h-28 rounded-full mx-auto mb-6 bg-gray-200 flex items-center justify-center text-gray-400 text-4xl font-bold border-[6px] border-white shadow-xl">
+                                    ?
+                                 </div>
+                                 <h2 className="text-3xl font-bold text-gray-800 mb-2 font-[Outfit]">Invitado</h2>
+                                 <p className="text-gray-500 mb-8 font-medium">Inicia sesión para guardar tus datos</p>
+                                 <button
+                                    onClick={handleLogin}
+                                    className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 font-bold py-4 px-8 rounded-2xl transition-all shadow-sm hover:shadow text-lg"
+                                 >
+                                    <img
+                                       src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                                       alt="Google"
+                                       className="w-6 h-6"
+                                    />
+                                    Inicia Sesión con Google
+                                 </button>
+                              </>
+                           )}
                            <div className="mt-8 pt-8 border-t border-gray-100">
                               <p className="text-xs text-gray-400 uppercase tracking-widest font-bold">Neverita v1.0</p>
                            </div>
