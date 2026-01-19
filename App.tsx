@@ -260,7 +260,7 @@ function App() {
                onClick={() => handleChangeView('library')}
                className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'library' ? 'bg-stone-200 text-stone-700' : 'text-gray-400 hover:text-stone-600 hover:bg-white/40'}`}
             >
-               <Icons.Library size={28} className={`transition-transform duration-300 ${currentView === 'library' ? 'scale-110' : 'group-hover:scale-110'}`} />
+               <Icons.Fridge size={28} className={`transition-transform duration-300 ${currentView === 'library' ? 'scale-110' : 'group-hover:scale-110'}`} />
                {currentView === 'library' && <div className="absolute left-0 w-1 h-8 bg-stone-500 rounded-r-full hidden md:block -ml-[2px]" />}
             </button>
 
