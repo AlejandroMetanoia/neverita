@@ -92,5 +92,7 @@ export const Icons = {
   Edit2,
   ScanBarcode,
   Check,
-  AlertCircle
+  AlertCircle,
+  Lock,
+  Star
 };
