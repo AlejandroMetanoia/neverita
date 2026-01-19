@@ -34,7 +34,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
 
     // Modal State
     const [selectedFoodId, setSelectedFoodId] = useState('');
-    const [grams, setGrams] = useState<number>(100);
+    const [grams, setGrams] = useState<string | number>(100);
     const [mealType, setMealType] = useState<MealType>('Desayuno');
     const [foodSearch, setFoodSearch] = useState('');
 
@@ -79,7 +79,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
     const selectedFood = foods.find(f => f.id === selectedFoodId);
     const calculatedMacros = useMemo(() => {
         if (!selectedFood) return null;
-        const ratio = grams / 100;
+        const ratio = (Number(grams) || 0) / 100;
         return {
             calories: Math.round(selectedFood.calories * ratio),
             protein: Number((selectedFood.protein * ratio).toFixed(1)),
@@ -101,7 +101,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                 foodId: selectedFood.id,
                 foodName: selectedFood.name,
                 meal: mealType,
-                grams: grams,
+                grams: Number(grams) || 0,
                 calculated: calculatedMacros
             };
         } else {
@@ -497,7 +497,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
                                                 <input
                                                     type="number"
                                                     value={grams}
-                                                    onChange={(e) => setGrams(parseFloat(e.target.value) || 0)}
+                                                    onChange={(e) => setGrams(e.target.value)}
                                                     className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 transition-all font-mono text-lg font-bold"
                                                 />
                                                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold pointer-events-none">g</span>
