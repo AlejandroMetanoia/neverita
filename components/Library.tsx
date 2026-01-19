@@ -334,7 +334,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
         <div className="space-y-10">
           {Object.entries(FOOD_CATEGORIES).map(([group, subcategories]) => (
             <div key={group}>
-              <h3 className="text-gray-400 text-xs font-bold uppercase tracking-[0.2em] mb-4 border-b border-gray-100 pb-2 pl-1">{group}</h3>
+              <h3 className="text-black text-xs font-bold uppercase tracking-[0.2em] mb-4 border-b border-gray-100 pb-2 pl-1">{group}</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {subcategories.map(sub => {
                   // Optional: Count items in category
@@ -368,7 +368,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
       {/* VIEW: SubCategory Grid (When Category is selected but has subcategories and no subcategory is selected) */}
       {!isSearching && selectedCategory && SUB_CATEGORIES[selectedCategory] && !selectedSubCategory && (
         <div className="animate-in fade-in zoom-in-95 duration-200">
-          <h3 className="text-gray-400 text-xs font-bold uppercase tracking-[0.2em] mb-4 border-b border-gray-100 pb-2 pl-1">{selectedCategory}</h3>
+          <h3 className="text-black text-xs font-bold uppercase tracking-[0.2em] mb-4 border-b border-gray-100 pb-2 pl-1">{selectedCategory}</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {SUB_CATEGORIES[selectedCategory].map(sub => {
               const count = foods.filter(f => f.category === selectedCategory && f.subCategory === sub).length;
