@@ -123,7 +123,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
       case "Postres Lácteos": return Icons.IceCream;
       case "Embutidos y Charcutería": return Icons.BeefIcon; // Fallback or Specific
       case "Huevos": return Icons.Egg;
-      case "Lácteos": return Icons.Milk;
+
 
       // Grasas
       case "Aceites Vegetales": return Icons.Fat; // Droplet
