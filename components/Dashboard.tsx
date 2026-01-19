@@ -210,7 +210,7 @@ const Dashboard: React.FC<DashboardProps> = ({ foods, logs, onAddLog, onDeleteLo
     return (
         <div className="space-y-4 animate-fade-in pb-20">
             {/* Header & Date Picker */}
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h2 className="text-3xl font-bold text-gray-800 tracking-tight drop-shadow-sm">Registro Diario</h2>
                     <p className="text-gray-600 text-sm font-medium">Resumen y seguimiento nutricional</p>

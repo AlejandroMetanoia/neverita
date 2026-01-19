@@ -148,7 +148,7 @@ const Library: React.FC<LibraryProps> = ({ foods, onAddFood, onDeleteFood, autoO
   return (
     <div className="space-y-8 animate-fade-in pb-20">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div className="flex items-center gap-4">
           {selectedCategory && !isSearching && (
             <button
