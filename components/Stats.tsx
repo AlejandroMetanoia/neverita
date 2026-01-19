@@ -103,76 +103,80 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
                 </div>
             </div>
 
-            {/* Main Chart - LIGHT GLASS */}
-            <div className="bg-white/50 backdrop-blur-xl p-8 rounded-[2rem] border border-white/60 h-96 shadow-glass relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-stone-100/50 blur-[80px] rounded-full pointer-events-none translate-x-1/2 -translate-y-1/2" />
-                <h3 className="text-xl font-bold text-gray-800 mb-6 relative z-10">Tendencia Calórica</h3>
-                <ResponsiveContainer width="100%" height="85%">
-                    <BarChart data={weeklyData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#00000008" vertical={false} />
-                        <XAxis
-                            dataKey="date"
-                            stroke="#9ca3af"
-                            fontSize={12}
-                            tickLine={false}
-                            axisLine={false}
-                            dy={10}
-                        />
-                        <YAxis
-                            stroke="#9ca3af"
-                            fontSize={12}
-                            tickLine={false}
-                            axisLine={false}
-                            dx={-10}
-                        />
-                        <Tooltip
-                            cursor={{ fill: '#00000005' }}
-                            contentStyle={{ backgroundColor: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(10px)', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', color: '#1f2937' }}
-                            itemStyle={{ color: '#1f2937' }}
-                        />
-                        <Bar
-                            dataKey="calories"
-                            fill="url(#colorGradient)"
-                            radius={[6, 6, 0, 0]}
-                            barSize={32}
-                            animationDuration={1500}
-                        />
-                        <defs>
-                            <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="#78716c" stopOpacity={0.8} />
-                                <stop offset="100%" stopColor="#a8a29e" stopOpacity={0.3} />
-                            </linearGradient>
-                        </defs>
-                    </BarChart>
-                </ResponsiveContainer>
-            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Main Chart - LIGHT GLASS */}
+                <div className="bg-white/50 backdrop-blur-xl p-8 rounded-[2rem] border border-white/60 h-[500px] shadow-glass relative overflow-hidden flex flex-col">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-stone-100/50 blur-[80px] rounded-full pointer-events-none translate-x-1/2 -translate-y-1/2" />
+                    <h3 className="text-xl font-bold text-gray-800 mb-6 relative z-10">Tendencia Calórica</h3>
+                    <div className="flex-1 min-h-0">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={weeklyData}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#00000008" vertical={false} />
+                                <XAxis
+                                    dataKey="date"
+                                    stroke="#9ca3af"
+                                    fontSize={12}
+                                    tickLine={false}
+                                    axisLine={false}
+                                    dy={10}
+                                />
+                                <YAxis
+                                    stroke="#9ca3af"
+                                    fontSize={12}
+                                    tickLine={false}
+                                    axisLine={false}
+                                    dx={-10}
+                                />
+                                <Tooltip
+                                    cursor={{ fill: '#00000005' }}
+                                    contentStyle={{ backgroundColor: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(10px)', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', color: '#1f2937' }}
+                                    itemStyle={{ color: '#1f2937' }}
+                                />
+                                <Bar
+                                    dataKey="calories"
+                                    fill="url(#colorGradient)"
+                                    radius={[6, 6, 0, 0]}
+                                    barSize={32}
+                                    animationDuration={1500}
+                                />
+                                <defs>
+                                    <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stopColor="#78716c" stopOpacity={0.8} />
+                                        <stop offset="100%" stopColor="#a8a29e" stopOpacity={0.3} />
+                                    </linearGradient>
+                                </defs>
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
 
-            {/* Table - LIGHT GLASS */}
-            <div className="bg-white/60 backdrop-blur-md p-8 rounded-[2rem] border border-white/60 shadow-glass overflow-hidden">
-                <h3 className="text-xl font-bold text-gray-800 mb-6">Detalle Diario</h3>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-left text-gray-500">
-                        <thead className="text-xs text-gray-400 uppercase bg-gray-50/50 border-b border-gray-100">
-                            <tr>
-                                <th className="px-6 py-4 rounded-tl-xl font-bold tracking-wider text-gray-500">Día</th>
-                                <th className="px-6 py-4 font-bold tracking-wider text-gray-500">Kcal</th>
-                                <th className="px-6 py-4 font-bold tracking-wider text-gray-500">Prot</th>
-                                <th className="px-6 py-4 font-bold tracking-wider text-gray-500">Carb</th>
-                                <th className="px-6 py-4 rounded-tr-xl font-bold tracking-wider text-gray-500">Grasa</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-100/50">
-                            {weeklyData.map((day, idx) => (
-                                <tr key={idx} className="hover:bg-white/40 transition-colors">
-                                    <td className="px-6 py-5 font-bold text-gray-800">{day.date}</td>
-                                    <td className="px-6 py-5 font-bold text-gray-700">{Math.round(day.calories)}</td>
-                                    <td className="px-6 py-5 text-gray-600 font-medium">{Math.round(day.protein)}g</td>
-                                    <td className="px-6 py-5 text-gray-500 font-medium">{Math.round(day.carbs)}g</td>
-                                    <td className="px-6 py-5 text-gray-400 font-medium">{Math.round(day.fat)}g</td>
+                {/* Table - LIGHT GLASS */}
+                <div className="bg-white/60 backdrop-blur-md p-8 rounded-[2rem] border border-white/60 shadow-glass overflow-hidden h-[500px] flex flex-col">
+                    <h3 className="text-xl font-bold text-gray-800 mb-6 flex-shrink-0">Detalle Diario</h3>
+                    <div className="overflow-auto custom-scrollbar flex-1 -mx-4 px-4">
+                        <table className="w-full text-sm text-left text-gray-500">
+                            <thead className="text-xs text-gray-400 uppercase bg-gray-50/50 border-b border-gray-100 sticky top-0 backdrop-blur-md">
+                                <tr>
+                                    <th className="px-6 py-4 rounded-tl-xl font-bold tracking-wider text-gray-500">Día</th>
+                                    <th className="px-6 py-4 font-bold tracking-wider text-gray-500">Kcal</th>
+                                    <th className="px-6 py-4 font-bold tracking-wider text-gray-500">Prot</th>
+                                    <th className="px-6 py-4 font-bold tracking-wider text-gray-500">Carb</th>
+                                    <th className="px-6 py-4 rounded-tr-xl font-bold tracking-wider text-gray-500">Grasa</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody className="divide-y divide-gray-100/50">
+                                {weeklyData.map((day, idx) => (
+                                    <tr key={idx} className="hover:bg-white/40 transition-colors">
+                                        <td className="px-6 py-5 font-bold text-gray-800">{day.date}</td>
+                                        <td className="px-6 py-5 font-bold text-gray-700">{Math.round(day.calories)}</td>
+                                        <td className="px-6 py-5 text-gray-600 font-medium">{Math.round(day.protein)}g</td>
+                                        <td className="px-6 py-5 text-gray-500 font-medium">{Math.round(day.carbs)}g</td>
+                                        <td className="px-6 py-5 text-gray-400 font-medium">{Math.round(day.fat)}g</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
