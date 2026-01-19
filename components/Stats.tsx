@@ -151,9 +151,9 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
                 </div>
 
                 {/* Table - LIGHT GLASS */}
-                <div className="bg-white/60 backdrop-blur-md p-8 rounded-[2rem] border border-white/60 shadow-glass overflow-hidden flex flex-col">
+                <div className="bg-white/60 backdrop-blur-md p-8 rounded-[2rem] border border-white/60 shadow-glass overflow-hidden h-[500px] flex flex-col">
                     <h3 className="text-xl font-bold text-gray-800 mb-6 flex-shrink-0">Detalle Diario</h3>
-                    <div className="-mx-4 px-4">
+                    <div className="-mx-4 px-4 h-full flex flex-col justify-center">
                         <table className="w-full text-sm text-left text-gray-500">
                             <thead className="text-xs text-gray-400 uppercase bg-gray-50/50 border-b border-gray-100 sticky top-0 backdrop-blur-md">
                                 <tr>
@@ -167,11 +167,11 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
                             <tbody className="divide-y divide-gray-100/50">
                                 {weeklyData.map((day, idx) => (
                                     <tr key={idx} className="hover:bg-white/40 transition-colors">
-                                        <td className="px-2 md:px-6 py-4 md:py-5 font-bold text-gray-800 text-xs md:text-sm text-center md:text-left">{day.date}</td>
-                                        <td className="px-2 md:px-6 py-4 md:py-5 font-bold text-gray-700 text-xs md:text-sm text-center md:text-left">{Math.round(day.calories)}</td>
-                                        <td className="px-2 md:px-6 py-4 md:py-5 text-gray-600 font-medium text-xs md:text-sm text-center md:text-left">{Math.round(day.protein)}<span className="md:hidden"></span><span className="hidden md:inline">g</span></td>
-                                        <td className="px-2 md:px-6 py-4 md:py-5 text-gray-500 font-medium text-xs md:text-sm text-center md:text-left">{Math.round(day.carbs)}<span className="md:hidden"></span><span className="hidden md:inline">g</span></td>
-                                        <td className="px-2 md:px-6 py-4 md:py-5 text-gray-400 font-medium text-xs md:text-sm text-center md:text-left">{Math.round(day.fat)}<span className="md:hidden"></span><span className="hidden md:inline">g</span></td>
+                                        <td className="px-2 md:px-6 py-4 md:py-3 font-bold text-gray-800 text-xs md:text-sm text-center md:text-left">{day.date}</td>
+                                        <td className="px-2 md:px-6 py-4 md:py-3 font-bold text-gray-700 text-xs md:text-sm text-center md:text-left">{Math.round(day.calories)}</td>
+                                        <td className="px-2 md:px-6 py-4 md:py-3 text-gray-600 font-medium text-xs md:text-sm text-center md:text-left">{Math.round(day.protein)}<span className="md:hidden"></span><span className="hidden md:inline">g</span></td>
+                                        <td className="px-2 md:px-6 py-4 md:py-3 text-gray-500 font-medium text-xs md:text-sm text-center md:text-left">{Math.round(day.carbs)}<span className="md:hidden"></span><span className="hidden md:inline">g</span></td>
+                                        <td className="px-2 md:px-6 py-4 md:py-3 text-gray-400 font-medium text-xs md:text-sm text-center md:text-left">{Math.round(day.fat)}<span className="md:hidden"></span><span className="hidden md:inline">g</span></td>
                                     </tr>
                                 ))}
                             </tbody>
