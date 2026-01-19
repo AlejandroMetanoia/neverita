@@ -1,4 +1,5 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Food, LogEntry, MealType } from '../types';
 import { MEAL_TYPES, MEAL_COLORS } from '../constants';
@@ -437,8 +438,8 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
                 )}
             </div>
 
-            {/* Modal - Ethereal Light */}
-            {entryMode && (
+            {/* Modal - Ethereal Light - Portaled to body for full screen cover */}
+            {entryMode && createPortal(
                 <div className="fixed inset-0 bg-black/20 backdrop-blur-md z-[100] flex items-center justify-center p-4">
                     <div className="bg-white/90 backdrop-blur-xl w-full max-w-xl rounded-[2rem] border border-white/60 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                         <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white/50">
@@ -516,7 +517,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
                             )}
 
                             {/* Content remains mostly the same, just styled inputs */}
-                            {entryMode === 'search' ? (
+                            {entryMode === 'search' && (
                                 <>
                                     {/* Food Selector */}
                                     <div>
@@ -612,7 +613,9 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
                                         </div>
                                     )}
                                 </>
-                            ) : entryMode === 'manual' ? (
+                            )}
+
+                            {entryMode === 'manual' && (
                                 /* MANUAL MODE */
                                 <>
                                     <div>
@@ -685,7 +688,9 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
                                         </div>
                                     </div>
                                 </>
-                            ) : (
+                            )}
+
+                            {entryMode === 'ai' && (
                                 /* AI MODE */
                                 <>
                                     <div>
@@ -769,7 +774,8 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
                             ) : null}
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
             {entryMode === 'scan' && (
                 <BarcodeScanner
