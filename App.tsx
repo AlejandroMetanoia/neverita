@@ -325,6 +325,7 @@ function App() {
                )}
                {currentView === 'library' && (
                   <Library
+                     isGuest={!user}
                      foods={foods}
                      onAddFood={addFood}
                      onDeleteFood={deleteFood}
