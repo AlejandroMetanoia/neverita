@@ -567,23 +567,23 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
               {/* SUBSCRIPTION DETAILS */}
               {subscriptionMode === 'details' && (
                 <div className="space-y-6">
-                  <p className="text-gray-600 text-center font-medium">Al suscribirte obtendrás:</p>
+                  <p className="text-gray-600 text-center font-medium">Al registrarte obtendrás:</p>
                   <ul className="space-y-4">
                     <li className="flex items-start gap-3">
                       <div className="p-1 bg-green-100 rounded-full text-green-600 mt-0.5"><Icons.Check size={14} /></div>
-                      <span className="text-gray-700"><strong>Asistente IA Ilimitado:</strong> Analiza tus platos con fotos o descripciones al instante.</span>
+                      <span className="text-gray-700"><strong>Asistente IA sin límites:</strong> Olvídate de buscar ingredientes uno a uno. Haz una foto o describe tu plato y deja que la IA calcule los macros por ti en segundos.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <div className="p-1 bg-green-100 rounded-full text-green-600 mt-0.5"><Icons.Check size={14} /></div>
-                      <span className="text-gray-700"><strong>Guardado en la Nube:</strong> Accede a tu historial desde cualquier dispositivo.</span>
+                      <span className="text-gray-700"><strong>Tu Nevera Personalizada:</strong> Crea tus propias recetas y añade alimentos a tu base de datos. Diseña una biblioteca a tu medida para registrar tus comidas en un solo clic.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <div className="p-1 bg-green-100 rounded-full text-green-600 mt-0.5"><Icons.Check size={14} /></div>
-                      <span className="text-gray-700"><strong>Prioridad en Soporte:</strong> Resolvemos tus dudas antes que a nadie.</span>
+                      <span className="text-gray-700"><strong>Historial y Nube:</strong> No pierdas ni un gramo de progreso. Sincroniza tus datos entre dispositivos y accede a tu evolución histórica siempre que lo necesites.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <div className="p-1 bg-green-100 rounded-full text-green-600 mt-0.5"><Icons.Check size={14} /></div>
-                      <span className="text-gray-700"><strong>Sin Anuncios:</strong> Experiencia fluida y sin interrupciones.</span>
+                      <span className="text-gray-700"><strong>Soporte e Impulso:</strong> Recibe atención prioritaria y ayuda a que Neverita siga creciendo. Tu suscripción financia la mejora continua de la inteligencia de la app.</span>
                     </li>
                   </ul>
                   <div className="pt-4 border-t border-gray-100 text-center">
@@ -593,7 +593,7 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
                       className="w-full py-4 bg-gray-900 hover:bg-gray-800 text-white font-bold rounded-xl transition-all shadow-lg text-lg flex items-center justify-center gap-2"
                     >
                       <Icons.Star size={20} className="text-yellow-400" />
-                      Suscribirme Ahora
+                      Registrarme Ahora
                     </button>
                   </div>
                 </div>
