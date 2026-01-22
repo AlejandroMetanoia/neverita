@@ -1,12 +1,16 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { LogEntry } from '../types';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { Icons } from './ui/Icons';
+import { HelpModal } from './ui/HelpModal';
 
 interface StatsProps {
     logs: LogEntry[];
 }
 
 const Stats: React.FC<StatsProps> = ({ logs }) => {
+    const [showHelp, setShowHelp] = useState(false);
+
     const weeklyData = useMemo(() => {
         const data: Record<string, { date: string; calories: number; protein: number; carbs: number; fat: number; hasRecord: boolean }> = {};
 
@@ -75,9 +79,32 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
     return (
         <div className="space-y-8 animate-fade-in pb-20">
             <div className="flex flex-col">
-                <h2 className="text-3xl font-bold text-gray-800 tracking-tight">Registro Semanal</h2>
+                <div className="flex items-center gap-3">
+                    <h2 className="text-3xl font-bold text-gray-800 tracking-tight">Registro Semanal</h2>
+                    <button
+                        onClick={() => setShowHelp(true)}
+                        className="p-2 text-gray-400 hover:text-indigo-500 bg-white/50 hover:bg-white rounded-full transition-all"
+                    >
+                        <Icons.Help size={20} />
+                    </button>
+                </div>
                 <p className="text-gray-500 text-sm font-medium">Resumen y tendencias de los últimos 7 días</p>
             </div>
+
+            <HelpModal
+                isOpen={showHelp}
+                onClose={() => setShowHelp(false)}
+                title="Estadísticas Semanales"
+            >
+                <div className="space-y-4">
+                    <p>Analiza tu progreso y tendencias a medio plazo:</p>
+                    <ul className="list-disc pl-5 space-y-2">
+                        <li><strong>Medias Diarias:</strong> Tarjetas superiores que muestran tus promedios de la última semana.</li>
+                        <li><strong>Tendencia Calórica:</strong> Gráfico de barras para ver la fluctuación de tu consumo día a día.</li>
+                        <li><strong>Tabla Detallada:</strong> Desglose numérico exacto de cada día de la semana actual.</li>
+                    </ul>
+                </div>
+            </HelpModal>
 
             {/* Averages Cards - Ethereal Light */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

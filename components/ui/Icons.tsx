@@ -44,7 +44,8 @@ import {
   AlertCircle,
   IceCream,
   Lock,
-  Star
+  Star,
+  CircleHelp
 } from 'lucide-react';
 
 export const Icons = {
@@ -94,5 +95,6 @@ export const Icons = {
   Check,
   AlertCircle,
   Lock,
-  Star
+  Star,
+  Help: CircleHelp
 };

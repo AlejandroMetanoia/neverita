@@ -4,6 +4,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Food, LogEntry, MealType } from '../types';
 import { MEAL_TYPES, MEAL_COLORS } from '../constants';
 import { Icons } from './ui/Icons';
+import { HelpModal } from './ui/HelpModal';
 import BarcodeScanner from './BarcodeScanner';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
@@ -21,6 +22,7 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, onDeleteLog, selectedDate, onDateChange, onNavigateToLibrary, onToggleMenu }) => {
     const [entryMode, setEntryMode] = useState<'search' | 'scan' | 'manual' | 'ai' | 'subscription_teaser' | 'subscription_details' | null>(null);
+    const [showHelp, setShowHelp] = useState(false);
 
     // Toggle Menu Visibility
     useEffect(() => {
@@ -214,9 +216,17 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
         <div className="space-y-4 animate-fade-in pb-20">
             {/* Header & Date Picker */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h2 className="text-3xl font-bold text-gray-800 tracking-tight drop-shadow-sm">Registro Diario</h2>
-                    <p className="text-gray-600 text-sm font-medium">Resumen y seguimiento nutricional</p>
+                <div className="flex items-center gap-3">
+                    <div>
+                        <h2 className="text-3xl font-bold text-gray-800 tracking-tight drop-shadow-sm">Registro Diario</h2>
+                        <p className="text-gray-600 text-sm font-medium">Resumen y seguimiento nutricional</p>
+                    </div>
+                    <button
+                        onClick={() => setShowHelp(true)}
+                        className="p-2 text-gray-400 hover:text-indigo-500 bg-white/50 hover:bg-white rounded-full transition-all"
+                    >
+                        <Icons.Help size={20} />
+                    </button>
                 </div>
                 <div className="relative group">
                     <input
@@ -229,6 +239,23 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
                     <Icons.Calendar size={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none z-20" />
                 </div>
             </div>
+
+            {/* Help Modal */}
+            <HelpModal
+                isOpen={showHelp}
+                onClose={() => setShowHelp(false)}
+                title="Guía del Registro Diario"
+            >
+                <div className="space-y-4">
+                    <p>Bienvenido a tu panel principal. Aquí podrás llevar un control detallado de tu día a día:</p>
+                    <ul className="list-disc pl-5 space-y-2">
+                        <li><strong>Resumen de Macros:</strong> Visualiza tus calorías, proteínas, carbohidratos y grasas consumidas hoy.</li>
+                        <li><strong>Añadir Comidas:</strong> Usa los botones de acceso rápido para escanear, buscar o usar nuestra IA.</li>
+                        <li><strong>Historial:</strong> Revisa y edita las comidas que has registrado a lo largo del día.</li>
+                        <li><strong>Navegación por Fecha:</strong> Usa el calendario superior para ver registros de días anteriores.</li>
+                    </ul>
+                </div>
+            </HelpModal>
 
             {/* Refactored Stats Grid - Consolidated for Desktop */}
             <div className="mb-4">

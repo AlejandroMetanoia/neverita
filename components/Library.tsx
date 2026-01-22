@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { Food, LogEntry } from '../types';
 import { FOOD_CATEGORIES, SUB_CATEGORIES } from '../constants';
 import { Icons } from './ui/Icons';
+import { HelpModal } from './ui/HelpModal';
 
 interface LibraryProps {
   isGuest?: boolean;
@@ -22,6 +23,7 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
   const [isAdding, setIsAdding] = useState(autoOpenAdd);
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
   const [subscriptionMode, setSubscriptionMode] = useState<'teaser' | 'details' | null>(null);
+  const [showHelp, setShowHelp] = useState(false);
 
   // Toggle Menu Visibility
   useEffect(() => {
@@ -167,13 +169,21 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
               <Icons.Back size={20} />
             </button>
           )}
-          <div>
-            <h2 className="text-3xl font-bold text-gray-800 tracking-tight">
-              {isSearching ? 'Buscando...' : (selectedSubCategory || selectedCategory || 'Nevera')}
-            </h2>
-            <p className="text-gray-500 text-sm font-medium ml-1">
-              {selectedSubCategory ? 'Explorando sub-carpeta' : selectedCategory ? 'Explorando carpeta' : 'Organiza tus alimentos por carpetas'}
-            </p>
+          <div className="flex items-center gap-3">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-800 tracking-tight">
+                {isSearching ? 'Buscando...' : (selectedSubCategory || selectedCategory || 'Nevera')}
+              </h2>
+              <p className="text-gray-500 text-sm font-medium ml-1">
+                {selectedSubCategory ? 'Explorando sub-carpeta' : selectedCategory ? 'Explorando carpeta' : 'Organiza tus alimentos por carpetas'}
+              </p>
+            </div>
+            <button
+              onClick={() => setShowHelp(true)}
+              className="p-2 text-gray-400 hover:text-indigo-500 bg-white/50 hover:bg-white rounded-full transition-all"
+            >
+              <Icons.Help size={20} />
+            </button>
           </div>
         </div>
         <button
@@ -190,6 +200,23 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
           {isAdding ? 'Cancelar' : 'Nuevo Alimento'}
         </button>
       </div>
+
+      {/* Help Modal */}
+      <HelpModal
+        isOpen={showHelp}
+        onClose={() => setShowHelp(false)}
+        title="Guía de la Nevera"
+      >
+        <div className="space-y-4">
+          <p>Tu biblioteca personal de alimentos. Aquí se guarda todo lo que usas habitualmente:</p>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong>Carpetas:</strong> Los alimentos se organizan automáticamente por categorías (Carnes, Lácteos, etc.).</li>
+            <li><strong>Nuevo Alimento:</strong> Crea tus propios alimentos personalizados y guárdalos para usarlos siempre.</li>
+            <li><strong>Búsqueda Global:</strong> Encuentra rápidamente cualquier alimento sin navegar por las carpetas.</li>
+            <li><strong>Gestión:</strong> Elimina alimentos que ya no necesites (mantén pulsado o usa el icono de papelera).</li>
+          </ul>
+        </div>
+      </HelpModal>
 
       {/* Add Food Form - Ethereal Light */}
       {isAdding && (
