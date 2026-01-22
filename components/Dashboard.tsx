@@ -216,17 +216,17 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
         <div className="space-y-4 animate-fade-in pb-20">
             {/* Header & Date Picker */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div className="flex items-center gap-3">
-                    <div>
+                <div>
+                    <div className="flex items-center gap-1">
                         <h2 className="text-3xl font-bold text-gray-800 tracking-tight drop-shadow-sm">Registro Diario</h2>
-                        <p className="text-gray-600 text-sm font-medium">Resumen y seguimiento nutricional</p>
+                        <button
+                            onClick={() => setShowHelp(true)}
+                            className="text-gray-300 hover:text-indigo-500 transition-colors mt-1"
+                        >
+                            <Icons.Help size={18} />
+                        </button>
                     </div>
-                    <button
-                        onClick={() => setShowHelp(true)}
-                        className="p-2 text-gray-400 hover:text-indigo-500 bg-white/50 hover:bg-white rounded-full transition-all"
-                    >
-                        <Icons.Help size={20} />
-                    </button>
+                    <p className="text-gray-600 text-sm font-medium">Resumen y seguimiento nutricional</p>
                 </div>
                 <div className="relative group">
                     <input
