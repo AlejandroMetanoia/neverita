@@ -221,7 +221,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
                         <h2 className="text-3xl font-bold text-gray-800 tracking-tight drop-shadow-sm">Registro Diario</h2>
                         <button
                             onClick={() => setShowHelp(true)}
-                            className="text-gray-300 hover:text-indigo-500 transition-colors mt-1"
+                            className="text-gray-800 hover:text-black transition-colors mt-1"
                         >
                             <Icons.Help size={18} />
                         </button>

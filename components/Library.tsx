@@ -176,7 +176,7 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
               </h2>
               <button
                 onClick={() => setShowHelp(true)}
-                className="text-gray-300 hover:text-indigo-500 transition-colors mt-1"
+                className="text-gray-800 hover:text-black transition-colors mt-1"
               >
                 <Icons.Help size={18} />
               </button>

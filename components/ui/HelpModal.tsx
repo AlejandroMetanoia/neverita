@@ -20,7 +20,7 @@ export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, title, ch
             <div className="bg-white/90 backdrop-blur-xl w-full max-w-lg rounded-[2rem] border border-white/60 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 relative z-10">
                 <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white/50">
                     <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                        <Icons.Help className="text-indigo-500" size={24} />
+                        <Icons.Help className="text-gray-800" size={24} />
                         {title}
                     </h3>
                     <button
