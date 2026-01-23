@@ -1,15 +1,51 @@
-import React, { useMemo, useState } from 'react';
-import { LogEntry } from '../types';
+import React, { useMemo, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { LogEntry, UserGoals } from '../types';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { Icons } from './ui/Icons';
 import { HelpModal } from './ui/HelpModal';
 
 interface StatsProps {
     logs: LogEntry[];
+    goals: UserGoals | null;
+    onUpdateGoals: (goals: UserGoals) => Promise<void>;
 }
 
-const Stats: React.FC<StatsProps> = ({ logs }) => {
+const Stats: React.FC<StatsProps> = ({ logs, goals, onUpdateGoals }) => {
     const [showHelp, setShowHelp] = useState(false);
+    const [showGoalsModal, setShowGoalsModal] = useState(false);
+
+    // Goal Editing State
+    const [targetKcal, setTargetKcal] = useState(2000);
+    const [targetMacros, setTargetMacros] = useState({ proteinas: 30, carbohidratos: 40, grasas: 30 });
+
+    // Initialize state when modal opens
+    useEffect(() => {
+        if (showGoalsModal) {
+            if (goals) {
+                setTargetKcal(goals.kcalObjetivo);
+                setTargetMacros(goals.macrosPct);
+            } else {
+                setTargetKcal(2000);
+                setTargetMacros({ proteinas: 30, carbohidratos: 40, grasas: 30 });
+            }
+        }
+    }, [showGoalsModal, goals]);
+
+    const totalPct = targetMacros.proteinas + targetMacros.carbohidratos + targetMacros.grasas;
+    const isValid = totalPct === 100;
+
+    const handleSave = async () => {
+        if (!isValid) return;
+        await onUpdateGoals({
+            kcalObjetivo: targetKcal,
+            macrosPct: targetMacros,
+            updatedAt: new Date().toISOString()
+        });
+        setShowGoalsModal(false);
+    };
+
+    const calcGrams = (pct: number, factor: number) => Math.round((targetKcal * (pct / 100)) / factor);
 
     const weeklyData = useMemo(() => {
         const data: Record<string, { date: string; calories: number; protein: number; carbs: number; fat: number; hasRecord: boolean }> = {};
@@ -78,17 +114,28 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
 
     return (
         <div className="space-y-8 animate-fade-in pb-20">
-            <div className="flex flex-col">
-                <div className="flex items-center gap-1">
-                    <h2 className="text-3xl font-bold text-gray-800 tracking-tight">Registro Semanal</h2>
-                    <button
-                        onClick={() => setShowHelp(true)}
-                        className="text-gray-800 hover:text-black transition-colors mt-1"
-                    >
-                        <Icons.Help size={18} />
-                    </button>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <div className="flex items-center gap-1">
+                        <h2 className="text-3xl font-bold text-gray-800 tracking-tight">Registro Semanal</h2>
+                        <button
+                            onClick={() => setShowHelp(true)}
+                            className="text-gray-800 hover:text-black transition-colors mt-1"
+                        >
+                            <Icons.Help size={18} />
+                        </button>
+                    </div>
+                    <p className="text-gray-500 text-sm font-medium">Resumen y tendencias de los últimos 7 días</p>
                 </div>
-                <p className="text-gray-500 text-sm font-medium">Resumen y tendencias de los últimos 7 días</p>
+                <button
+                    onClick={() => setShowGoalsModal(true)}
+                    className="group flex items-center gap-2 bg-gradient-to-r from-stone-700 to-stone-800 text-white pl-4 pr-5 py-2.5 rounded-xl shadow-lg hover:shadow-xl transition-all active:scale-95"
+                >
+                    <div className="p-1.5 bg-white/20 rounded-lg group-hover:bg-white/30 transition-colors">
+                        <Icons.Edit2 size={16} className="text-white" />
+                    </div>
+                    <span className="font-bold text-sm">Objetivos</span>
+                </button>
             </div>
 
             <HelpModal
@@ -206,6 +253,129 @@ const Stats: React.FC<StatsProps> = ({ logs }) => {
                     </div>
                 </div>
             </div>
+
+            {/* Goals Modal */}
+            {showGoalsModal && createPortal(
+                <div className="fixed inset-0 bg-black/30 backdrop-blur-md z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200">
+                    <div className="bg-white/90 backdrop-blur-xl w-full max-w-lg rounded-[2.5rem] border border-white/60 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+                        <div className="p-8 pb-4">
+                            <h3 className="text-2xl font-bold text-gray-800 flex items-center justify-between">
+                                Preferencias Nutricionales
+                                <button
+                                    onClick={() => setShowGoalsModal(false)}
+                                    className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"
+                                >
+                                    <Icons.Plus className="rotate-45" size={24} />
+                                </button>
+                            </h3>
+                            <p className="text-gray-500 text-sm mt-1">Ajusta tus objetivos diarios</p>
+                        </div>
+
+                        <div className="p-8 pt-4 space-y-8">
+                            {/* Calories Input */}
+                            <div>
+                                <label className="flex items-center justify-between text-sm font-bold text-gray-600 mb-2 uppercase tracking-wider">
+                                    Objetivo Calórico
+                                    <span className="text-xs font-normal normal-case bg-stone-100 px-2 py-1 rounded-full text-stone-500">Todo se calcula en base a esto</span>
+                                </label>
+                                <div className="relative group">
+                                    <Icons.Calories className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-stone-600 transition-colors" size={20} />
+                                    <input
+                                        type="number"
+                                        value={targetKcal}
+                                        onChange={(e) => setTargetKcal(Number(e.target.value))}
+                                        className="w-full bg-white border border-gray-200 rounded-2xl pl-12 pr-12 py-4 text-3xl font-black text-gray-800 focus:outline-none focus:border-stone-400 focus:ring-4 focus:ring-stone-100 transition-all text-center"
+                                    />
+                                    <span className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 font-bold pointer-events-none">Kcal</span>
+                                </div>
+                            </div>
+
+                            {/* Sliders */}
+                            <div className="space-y-6">
+                                {/* Protein */}
+                                <div>
+                                    <div className="flex justify-between items-end mb-2">
+                                        <label className="text-sm font-bold text-protein uppercase tracking-wider">Proteína</label>
+                                        <div className="text-right">
+                                            <span className="text-xl font-bold text-gray-800">{calcGrams(targetMacros.proteinas, 4)}g</span>
+                                            <span className="text-sm text-gray-400 ml-1">({targetMacros.proteinas}%)</span>
+                                        </div>
+                                    </div>
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        step="5"
+                                        value={targetMacros.proteinas}
+                                        onChange={(e) => setTargetMacros({ ...targetMacros, proteinas: Number(e.target.value) })}
+                                        className="w-full h-3 bg-gray-200 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-protein [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md transition-all hover:[&::-webkit-slider-thumb]:scale-110"
+                                    />
+                                </div>
+
+                                {/* Carbs */}
+                                <div>
+                                    <div className="flex justify-between items-end mb-2">
+                                        <label className="text-sm font-bold text-carbs uppercase tracking-wider">Carbohidratos</label>
+                                        <div className="text-right">
+                                            <span className="text-xl font-bold text-gray-800">{calcGrams(targetMacros.carbohidratos, 4)}g</span>
+                                            <span className="text-sm text-gray-400 ml-1">({targetMacros.carbohidratos}%)</span>
+                                        </div>
+                                    </div>
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        step="5"
+                                        value={targetMacros.carbohidratos}
+                                        onChange={(e) => setTargetMacros({ ...targetMacros, carbohidratos: Number(e.target.value) })}
+                                        className="w-full h-3 bg-gray-200 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-carbs [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md transition-all hover:[&::-webkit-slider-thumb]:scale-110"
+                                    />
+                                </div>
+
+                                {/* Fat */}
+                                <div>
+                                    <div className="flex justify-between items-end mb-2">
+                                        <label className="text-sm font-bold text-fat uppercase tracking-wider">Grasas</label>
+                                        <div className="text-right">
+                                            <span className="text-xl font-bold text-gray-800">{calcGrams(targetMacros.grasas, 9)}g</span>
+                                            <span className="text-sm text-gray-400 ml-1">({targetMacros.grasas}%)</span>
+                                        </div>
+                                    </div>
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        step="5"
+                                        value={targetMacros.grasas}
+                                        onChange={(e) => setTargetMacros({ ...targetMacros, grasas: Number(e.target.value) })}
+                                        className="w-full h-3 bg-gray-200 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-fat [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md transition-all hover:[&::-webkit-slider-thumb]:scale-110"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Total Validation */}
+                            <div className={`p-4 rounded-xl flex items-center justify-between border ${!isValid ? 'bg-red-50 border-red-100 text-red-600' : 'bg-green-50 border-green-100 text-green-700'}`}>
+                                <span className="font-bold text-sm">Total Porcentaje</span>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xl font-black">{totalPct}%</span>
+                                    <span className="text-xs opacity-70">/ 100%</span>
+                                </div>
+                            </div>
+
+                            {/* Action Button */}
+                            <button
+                                onClick={handleSave}
+                                disabled={!isValid}
+                                className={`w-full py-4 rounded-2xl font-bold text-lg shadow-lg transition-all flex items-center justify-center gap-2 ${!isValid ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-gray-900 text-white hover:bg-black hover:shadow-xl hover:scale-[1.02]'}`}
+                            >
+                                <Icons.Check size={20} />
+                                Guardar Objetivos
+                            </button>
+                        </div>
+                    </div>
+                </div>,
+                document.body
+            )}
         </div>
     );
 };

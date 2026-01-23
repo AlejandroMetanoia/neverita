@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { Food, LogEntry, MealType } from '../types';
+import { Food, LogEntry, MealType, UserGoals } from '../types';
 import { MEAL_TYPES, MEAL_COLORS } from '../constants';
 import { Icons } from './ui/Icons';
 import { HelpModal } from './ui/HelpModal';
@@ -18,9 +18,10 @@ interface DashboardProps {
     onDateChange: (date: string) => void;
     onNavigateToLibrary: () => void;
     onToggleMenu: (hidden: boolean) => void;
+    goals: UserGoals | null;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, onDeleteLog, selectedDate, onDateChange, onNavigateToLibrary, onToggleMenu }) => {
+const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, onDeleteLog, selectedDate, onDateChange, onNavigateToLibrary, onToggleMenu, goals }) => {
     const [entryMode, setEntryMode] = useState<'search' | 'scan' | 'manual' | 'ai' | 'subscription_teaser' | 'subscription_details' | null>(null);
     const [showHelp, setShowHelp] = useState(false);
 

@@ -35,3 +35,13 @@ export interface DayStats {
   totalCarbs: number;
   totalFat: number;
 }
+
+export interface UserGoals {
+  kcalObjetivo: number;
+  macrosPct: {
+    proteinas: number;
+    carbohidratos: number;
+    grasas: number;
+  };
+  updatedAt?: string;
+}

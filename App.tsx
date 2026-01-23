@@ -7,7 +7,7 @@ import { Icons } from './components/ui/Icons';
 import Dashboard from './components/Dashboard';
 import Library from './components/Library';
 import Stats from './components/Stats';
-import { Food, LogEntry } from './types';
+import { Food, LogEntry, UserGoals } from './types';
 import { INITIAL_FOODS } from './constants';
 
 type View = 'dashboard' | 'library' | 'stats' | 'profile';
@@ -33,6 +33,7 @@ function App() {
    const [logs, setLogs] = useState<LogEntry[]>([]);
 
    const [guestLogs, setGuestLogs] = useState<LogEntry[]>([]);
+   const [goals, setGoals] = useState<UserGoals | null>(null);
 
    const handleNavigateToLibraryAdd = () => {
       setCurrentView('library');
@@ -118,6 +119,33 @@ function App() {
 
       return () => unsubscribe();
    }, []);
+
+   // Listen for user goals
+   useEffect(() => {
+      if (!user) {
+         setGoals(null);
+         return;
+      }
+      const unsubscribe = onSnapshot(doc(db, 'users', user.uid), (docSnapshot) => {
+         if (docSnapshot.exists()) {
+            const data = docSnapshot.data();
+            // Check if it has goal data
+            if (data.kcalObjetivo && data.macrosPct) {
+               setGoals(data as UserGoals);
+            }
+         }
+      });
+      return () => unsubscribe();
+   }, [user]);
+
+   const updateGoals = async (newGoals: UserGoals) => {
+      if (!user) return;
+      try {
+         await setDoc(doc(db, 'users', user.uid), newGoals, { merge: true });
+      } catch (error) {
+         console.error("Error updating goals:", error);
+      }
+   };
 
 
 
@@ -321,6 +349,7 @@ function App() {
                      onDateChange={setSelectedDate}
                      onNavigateToLibrary={handleNavigateToLibraryAdd}
                      onToggleMenu={setIsMenuHidden}
+                     goals={goals}
                   />
                )}
                {currentView === 'library' && (
@@ -334,7 +363,7 @@ function App() {
                   />
                )}
                {currentView === 'stats' && (
-                  <Stats logs={logs} />
+                  <Stats logs={logs} goals={goals} onUpdateGoals={updateGoals} />
                )}
                {currentView === 'profile' && (
                   <div className="flex items-center justify-center h-[80vh]">
