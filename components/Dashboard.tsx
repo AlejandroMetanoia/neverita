@@ -480,7 +480,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
             </div>
 
             {/* Modal - Ethereal Light - Portaled to body for full screen cover */}
-            {entryMode && createPortal(
+            {entryMode && entryMode !== 'scan' && createPortal(
                 <div className="fixed inset-0 bg-black/20 backdrop-blur-md z-[100] flex items-center justify-center p-4">
                     <div className="bg-white/90 backdrop-blur-xl w-full max-w-xl rounded-[2rem] border border-white/60 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                         <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white/50">
