@@ -351,7 +351,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 <button
-                    onClick={() => setEntryMode('scan')}
+                    onClick={() => setEntryMode('scan')} // Unlocked for all users (Guests & Registered)
                     className="w-full py-3 bg-white/50 backdrop-blur-md border border-white/40 hover:bg-white/70 rounded-xl text-gray-600 hover:text-stone-600 font-bold text-sm shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-3"
                 >
                     <div className="p-2 bg-stone-200/50 rounded-lg group-hover:scale-110 transition-transform">
