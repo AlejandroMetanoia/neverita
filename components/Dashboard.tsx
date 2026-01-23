@@ -268,7 +268,10 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
                             <p className="text-gray-600 font-bold mb-1 ml-1 text-sm">Calorías Consumidas</p>
                             <div className="flex items-baseline gap-1">
                                 <span className="text-6xl font-black text-gray-800 tracking-tighter leading-none">{Math.round(totals.calories)}</span>
-                                <span className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">Kcal</span>
+                                <span className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">
+                                    <span className="hidden md:inline">Kcal</span>
+                                    {goals && <span className="text-gray-400 text-xs ml-1">/{goals.kcalObjetivo}</span>}
+                                </span>
                             </div>
                         </div>
 
@@ -312,7 +315,10 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
                                 <div className="w-2 h-2 rounded-full bg-white ring-1 ring-black/5" />
                                 <span className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Proteína</span>
                             </div>
-                            <p className="text-2xl md:text-4xl font-black text-gray-800">{Math.round(totals.protein)}<span className="text-xs text-gray-400 font-bold ml-0.5">g</span></p>
+                            <div className="flex items-baseline gap-1">
+                                <p className="text-2xl md:text-4xl font-black text-gray-800">{Math.round(totals.protein)}<span className="text-xs text-gray-400 font-bold ml-0.5">g</span></p>
+                                {goals && <p className="text-xs md:text-sm text-gray-400 font-bold">/{Math.round(goals.kcalObjetivo * goals.macrosPct.proteinas / 100 / 4)}</p>}
+                            </div>
                         </div>
 
                         {/* Carbs */}
@@ -321,7 +327,10 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
                                 <div className="w-2 h-2 rounded-full bg-stone-400" />
                                 <span className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Carbs</span>
                             </div>
-                            <p className="text-2xl md:text-4xl font-black text-gray-800">{Math.round(totals.carbs)}<span className="text-xs text-gray-400 font-bold ml-0.5">g</span></p>
+                            <div className="flex items-baseline gap-1">
+                                <p className="text-2xl md:text-4xl font-black text-gray-800">{Math.round(totals.carbs)}<span className="text-xs text-gray-400 font-bold ml-0.5">g</span></p>
+                                {goals && <p className="text-xs md:text-sm text-gray-400 font-bold">/{Math.round(goals.kcalObjetivo * goals.macrosPct.carbohidratos / 100 / 4)}</p>}
+                            </div>
                         </div>
 
                         {/* Fat */}
@@ -330,7 +339,10 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
                                 <div className="w-2 h-2 rounded-full bg-stone-500" />
                                 <span className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Grasas</span>
                             </div>
-                            <p className="text-2xl md:text-4xl font-black text-gray-800">{Math.round(totals.fat)}<span className="text-xs text-gray-400 font-bold ml-0.5">g</span></p>
+                            <div className="flex items-baseline gap-1">
+                                <p className="text-2xl md:text-4xl font-black text-gray-800">{Math.round(totals.fat)}<span className="text-xs text-gray-400 font-bold ml-0.5">g</span></p>
+                                {goals && <p className="text-xs md:text-sm text-gray-400 font-bold">/{Math.round(goals.kcalObjetivo * goals.macrosPct.grasas / 100 / 9)}</p>}
+                            </div>
                         </div>
                     </div>
 

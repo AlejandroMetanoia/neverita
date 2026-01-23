@@ -157,22 +157,34 @@ const Stats: React.FC<StatsProps> = ({ logs, goals, onUpdateGoals }) => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] border border-white/60 hover:border-gray-200 hover:bg-white/80 transition-all shadow-sm hover:shadow-md group">
                     <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Calorías Media</p>
-                    <p className="text-3xl font-black text-gray-800 group-hover:scale-105 transition-transform origin-left">{averages.calories}</p>
+                    <div className="flex items-baseline gap-1 group-hover:scale-105 transition-transform origin-left">
+                        <p className="text-3xl font-black text-gray-800">{averages.calories}</p>
+                        {goals && <p className="text-xs font-bold text-gray-400">/{goals.kcalObjetivo}</p>}
+                    </div>
                     <p className="text-xs text-gray-500 mt-1">kcal/día</p>
                 </div>
                 <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] border border-white/60 hover:border-stone-300 hover:bg-white/80 transition-all shadow-sm hover:shadow-md group">
                     <p className="text-stone-400 text-xs font-bold uppercase tracking-wider mb-2">Proteína Media</p>
-                    <p className="text-3xl font-black text-stone-600 group-hover:scale-105 transition-transform origin-left">{averages.protein}g</p>
+                    <div className="flex items-baseline gap-1 group-hover:scale-105 transition-transform origin-left">
+                        <p className="text-3xl font-black text-stone-600">{averages.protein}g</p>
+                        {goals && <p className="text-xs font-bold text-stone-400">/{Math.round(goals.kcalObjetivo * goals.macrosPct.proteinas / 100 / 4)}</p>}
+                    </div>
                     <p className="text-xs text-gray-500 mt-1">g/día</p>
                 </div>
                 <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] border border-white/60 hover:border-stone-400 hover:bg-white/80 transition-all shadow-sm hover:shadow-md group">
                     <p className="text-stone-500 text-xs font-bold uppercase tracking-wider mb-2">Carbs Media</p>
-                    <p className="text-3xl font-black text-stone-700 group-hover:scale-105 transition-transform origin-left">{averages.carbs}g</p>
+                    <div className="flex items-baseline gap-1 group-hover:scale-105 transition-transform origin-left">
+                        <p className="text-3xl font-black text-stone-700">{averages.carbs}g</p>
+                        {goals && <p className="text-xs font-bold text-stone-400">/{Math.round(goals.kcalObjetivo * goals.macrosPct.carbohidratos / 100 / 4)}</p>}
+                    </div>
                     <p className="text-xs text-gray-500 mt-1">g/día</p>
                 </div>
                 <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] border border-white/60 hover:border-stone-500 hover:bg-white/80 transition-all shadow-sm hover:shadow-md group">
                     <p className="text-stone-600 text-xs font-bold uppercase tracking-wider mb-2">Grasas Media</p>
-                    <p className="text-3xl font-black text-stone-800 group-hover:scale-105 transition-transform origin-left">{averages.fat}g</p>
+                    <div className="flex items-baseline gap-1 group-hover:scale-105 transition-transform origin-left">
+                        <p className="text-3xl font-black text-stone-800">{averages.fat}g</p>
+                        {goals && <p className="text-xs font-bold text-stone-400">/{Math.round(goals.kcalObjetivo * goals.macrosPct.grasas / 100 / 9)}</p>}
+                    </div>
                     <p className="text-xs text-gray-500 mt-1">g/día</p>
                 </div>
             </div>
