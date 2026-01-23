@@ -166,7 +166,7 @@ const Stats: React.FC<StatsProps> = ({ logs, goals, onUpdateGoals }) => {
                 <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] border border-white/60 hover:border-stone-300 hover:bg-white/80 transition-all shadow-sm hover:shadow-md group">
                     <p className="text-stone-400 text-xs font-bold uppercase tracking-wider mb-2">Proteína Media</p>
                     <div className="flex items-baseline gap-1 group-hover:scale-105 transition-transform origin-left">
-                        <p className="text-3xl font-black text-stone-600">{averages.protein}g</p>
+                        <p className="text-3xl font-black text-stone-600">{averages.protein}</p>
                         {goals && <p className="text-xs font-bold text-stone-400">/{Math.round(goals.kcalObjetivo * goals.macrosPct.proteinas / 100 / 4)}</p>}
                     </div>
                     <p className="text-xs text-gray-500 mt-1">g/día</p>
@@ -174,7 +174,7 @@ const Stats: React.FC<StatsProps> = ({ logs, goals, onUpdateGoals }) => {
                 <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] border border-white/60 hover:border-stone-400 hover:bg-white/80 transition-all shadow-sm hover:shadow-md group">
                     <p className="text-stone-500 text-xs font-bold uppercase tracking-wider mb-2">Carbs Media</p>
                     <div className="flex items-baseline gap-1 group-hover:scale-105 transition-transform origin-left">
-                        <p className="text-3xl font-black text-stone-700">{averages.carbs}g</p>
+                        <p className="text-3xl font-black text-stone-700">{averages.carbs}</p>
                         {goals && <p className="text-xs font-bold text-stone-400">/{Math.round(goals.kcalObjetivo * goals.macrosPct.carbohidratos / 100 / 4)}</p>}
                     </div>
                     <p className="text-xs text-gray-500 mt-1">g/día</p>
@@ -182,7 +182,7 @@ const Stats: React.FC<StatsProps> = ({ logs, goals, onUpdateGoals }) => {
                 <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] border border-white/60 hover:border-stone-500 hover:bg-white/80 transition-all shadow-sm hover:shadow-md group">
                     <p className="text-stone-600 text-xs font-bold uppercase tracking-wider mb-2">Grasas Media</p>
                     <div className="flex items-baseline gap-1 group-hover:scale-105 transition-transform origin-left">
-                        <p className="text-3xl font-black text-stone-800">{averages.fat}g</p>
+                        <p className="text-3xl font-black text-stone-800">{averages.fat}</p>
                         {goals && <p className="text-xs font-bold text-stone-400">/{Math.round(goals.kcalObjetivo * goals.macrosPct.grasas / 100 / 9)}</p>}
                     </div>
                     <p className="text-xs text-gray-500 mt-1">g/día</p>
