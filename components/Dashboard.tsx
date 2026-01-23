@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import OpenAI from "openai";
 import { Food, LogEntry, MealType, UserGoals } from '../types';
 import { MEAL_TYPES, MEAL_COLORS } from '../constants';
 import { Icons } from './ui/Icons';
@@ -149,38 +149,52 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
     const handleAnalyze = async () => {
         setIsAnalyzing(true);
         try {
-            const apiKey = import.meta.env.VITE_GEMINI_API_NEVERITA;
+            const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
             if (!apiKey) {
-                alert("API Key not found (VITE_GEMINI_API_NEVERITA)");
+                alert("API Key not found (VITE_OPENAI_API_KEY)");
                 setIsAnalyzing(false);
                 return;
             }
 
-            const genAI = new GoogleGenerativeAI(apiKey);
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+            const openai = new OpenAI({
+                apiKey: apiKey,
+                dangerouslyAllowBrowser: true // Required for client-side usage
+            });
 
-            const prompt = `Act as an expert nutritionist. Estimate the macros (kcal, protein, carbs, fat) per 100g of the described or photographed dish.
-            Description: ${aiDescription}
-            
-            IMPORTANT: Return ONLY a raw JSON object (no markdown formatting, no code blocks) with this exact format:
-            {"kcal": 0, "proteinas": 0, "carbohidratos": 0, "grasas": 0}`;
+            // Construct content array. Always text, optionally image.
+            const content: any[] = [
+                {
+                    type: "text",
+                    text: `Act as an expert nutritionist. Estimate the macros (kcal, protein, carbs, fat) per 100g of the described or photographed dish.
+                    Description: ${aiDescription}
+                    
+                    IMPORTANT: Return ONLY a raw JSON object (no markdown formatting, no code blocks) with this exact format:
+                    {"kcal": 0, "proteinas": 0, "carbohidratos": 0, "grasas": 0}`
+                }
+            ];
 
-            let result;
             if (aiImage) {
-                const base64Data = aiImage.split(',')[1];
-                const imagePart = {
-                    inlineData: {
-                        data: base64Data,
-                        mimeType: "image/jpeg"
-                    },
-                };
-                result = await model.generateContent([prompt, imagePart]);
-            } else {
-                result = await model.generateContent(prompt);
+                content.push({
+                    type: "image_url",
+                    image_url: {
+                        url: aiImage,
+                        detail: "low" // 'low' is cheaper and usually sufficient for food
+                    }
+                });
             }
 
-            const response = result.response;
-            const text = response.text();
+            const response = await openai.chat.completions.create({
+                model: "gpt-4o-mini",
+                messages: [
+                    {
+                        role: "user",
+                        content: content
+                    }
+                ],
+                max_tokens: 150,
+            });
+
+            const text = response.choices[0].message.content || "{}";
 
             // Cleanup
             const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
