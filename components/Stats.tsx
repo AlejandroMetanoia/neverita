@@ -305,7 +305,7 @@ const Stats: React.FC<StatsProps> = ({ logs, goals, onUpdateGoals }) => {
                                         type="range"
                                         min="0"
                                         max="100"
-                                        step="5"
+                                        step="1"
                                         value={targetMacros.proteinas}
                                         onChange={(e) => setTargetMacros({ ...targetMacros, proteinas: Number(e.target.value) })}
                                         className="w-full h-3 bg-gray-200 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-protein [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md transition-all hover:[&::-webkit-slider-thumb]:scale-110"
@@ -325,7 +325,7 @@ const Stats: React.FC<StatsProps> = ({ logs, goals, onUpdateGoals }) => {
                                         type="range"
                                         min="0"
                                         max="100"
-                                        step="5"
+                                        step="1"
                                         value={targetMacros.carbohidratos}
                                         onChange={(e) => setTargetMacros({ ...targetMacros, carbohidratos: Number(e.target.value) })}
                                         className="w-full h-3 bg-gray-200 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-carbs [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md transition-all hover:[&::-webkit-slider-thumb]:scale-110"
@@ -345,7 +345,7 @@ const Stats: React.FC<StatsProps> = ({ logs, goals, onUpdateGoals }) => {
                                         type="range"
                                         min="0"
                                         max="100"
-                                        step="5"
+                                        step="1"
                                         value={targetMacros.grasas}
                                         onChange={(e) => setTargetMacros({ ...targetMacros, grasas: Number(e.target.value) })}
                                         className="w-full h-3 bg-gray-200 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-fat [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md transition-all hover:[&::-webkit-slider-thumb]:scale-110"
