@@ -134,7 +134,7 @@ const Stats: React.FC<StatsProps> = ({ logs, goals, onUpdateGoals }) => {
                     <div className="p-1.5 bg-white/20 rounded-lg group-hover:bg-white/30 transition-colors">
                         <Icons.Edit2 size={16} className="text-white" />
                     </div>
-                    <span className="font-bold text-sm">Objetivos</span>
+                    <span className="font-bold text-sm">Editar Objetivos</span>
                 </button>
             </div>
 
@@ -269,8 +269,8 @@ const Stats: React.FC<StatsProps> = ({ logs, goals, onUpdateGoals }) => {
             {/* Goals Modal */}
             {showGoalsModal && createPortal(
                 <div className="fixed inset-0 bg-black/30 backdrop-blur-md z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200">
-                    <div className="bg-white/90 backdrop-blur-xl w-full max-w-lg rounded-[2.5rem] border border-white/60 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-                        <div className="p-8 pb-4">
+                    <div className="bg-white/90 backdrop-blur-xl w-full max-w-lg rounded-[2.5rem] border border-white/60 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
+                        <div className="p-5 md:p-8 pb-2 md:pb-4 flex-shrink-0">
                             <h3 className="text-2xl font-bold text-gray-800 flex items-center justify-between">
                                 Preferencias Nutricionales
                                 <button
@@ -283,7 +283,7 @@ const Stats: React.FC<StatsProps> = ({ logs, goals, onUpdateGoals }) => {
                             <p className="text-gray-500 text-sm mt-1">Ajusta tus objetivos diarios</p>
                         </div>
 
-                        <div className="p-8 pt-4 space-y-8">
+                        <div className="p-5 md:p-8 pt-2 md:pt-4 space-y-4 md:space-y-8 overflow-y-auto custom-scrollbar">
                             {/* Calories Input */}
                             <div>
                                 <label className="flex items-center justify-between text-sm font-bold text-gray-600 mb-2 uppercase tracking-wider">
@@ -303,7 +303,7 @@ const Stats: React.FC<StatsProps> = ({ logs, goals, onUpdateGoals }) => {
                             </div>
 
                             {/* Sliders */}
-                            <div className="space-y-6">
+                            <div className="space-y-4 md:space-y-6">
                                 {/* Protein */}
                                 <div>
                                     <div className="flex justify-between items-end mb-2">
