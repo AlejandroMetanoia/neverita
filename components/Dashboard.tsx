@@ -770,9 +770,12 @@ Return ONLY a raw JSON object.
                                         <textarea
                                             value={aiDescription}
                                             onChange={(e) => setAiDescription(e.target.value)}
-                                            placeholder="Ej: Filete a la vilaroy con patatas y un poco de ensalada..."
+                                            placeholder="Ej. Solomillo de ternera a la brasa (tamaño palma de mano), con salsa a la pimienta y 1/4 de plato de patatas fritas."
                                             className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 min-h-[120px] resize-none placeholder:text-gray-400 transition-all font-medium"
                                         />
+                                        <p className="text-xs text-gray-400 mt-2 italic">
+                                            Sugerencia: Detalla el cocinado (si se conoce), salsas y guarnición para maximizar la precisión del análisis.
+                                        </p>
                                     </div>
 
                                     <div>
