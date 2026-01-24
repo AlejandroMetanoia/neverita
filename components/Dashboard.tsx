@@ -691,13 +691,13 @@ Return ONLY a raw JSON object.
                                 /* MANUAL MODE */
                                 <>
                                     <div>
-                                        <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">-</label>
+                                        <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Nombre del plato</label>
                                         <input
                                             type="text"
                                             value={manualEntry.name}
                                             onChange={(e) => setManualEntry({ ...manualEntry, name: e.target.value })}
                                             className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 transition-all font-medium"
-                                            placeholder="Ej. Comida con amigos"
+                                            placeholder="-"
                                         />
                                     </div>
 
