@@ -141,12 +141,13 @@ const Stats: React.FC<StatsProps> = ({ logs, goals, onUpdateGoals }) => {
             <HelpModal
                 isOpen={showHelp}
                 onClose={() => setShowHelp(false)}
-                title="Estadísticas Semanales"
+                title="Guía del Registro Semanal"
             >
                 <div className="space-y-4">
-                    <p>Analiza tu progreso y tendencias a medio plazo:</p>
+                    <p>Analiza tus estadísticas semanales:</p>
                     <ul className="list-disc pl-5 space-y-2">
-                        <li><strong>Medias Diarias:</strong> Tarjetas superiores que muestran tus promedios de la última semana.</li>
+                        <li><strong>Establece Objetivos:</strong> Define tus metas personalizadas de calorías y macronutrientes.</li>
+                        <li><strong>Medias Diarias:</strong> Tarjetas superiores que muestran tus promedios de la semana actual.</li>
                         <li><strong>Tendencia Calórica:</strong> Gráfico de barras para ver la fluctuación de tu consumo día a día.</li>
                         <li><strong>Tabla Detallada:</strong> Desglose numérico exacto de cada día de la semana actual.</li>
                     </ul>
