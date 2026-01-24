@@ -598,7 +598,7 @@ Return ONLY a raw JSON object.
                                             <Icons.Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-gray-800 transition-colors" size={20} />
                                             <input
                                                 type="text"
-                                                placeholder="Ej.: Filetes de pollo..."
+                                                placeholder="Ej. Filetes de pollo..."
                                                 value={foodSearch}
                                                 onChange={(e) => {
                                                     setFoodSearch(e.target.value);
@@ -691,7 +691,7 @@ Return ONLY a raw JSON object.
                                 /* MANUAL MODE */
                                 <>
                                     <div>
-                                        <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Nombre del plato</label>
+                                        <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">-</label>
                                         <input
                                             type="text"
                                             value={manualEntry.name}
