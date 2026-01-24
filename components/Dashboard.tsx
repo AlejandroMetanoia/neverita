@@ -56,7 +56,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
         protein: '',
         carbs: '',
         fat: '',
-        name: 'Comida Fuera'
+        name: ''
     });
 
     // Daily Stats Calculation - logs are already filtered by App.tsx
@@ -133,7 +133,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
         // Reset minimal state
         setGrams(100);
         setFoodSearch('');
-        setManualEntry({ calories: '', protein: '', carbs: '', fat: '', name: 'Comida Fuera' });
+        setManualEntry({ calories: '', protein: '', carbs: '', fat: '', name: '' });
     };
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -523,7 +523,7 @@ Return ONLY a raw JSON object.
                                 {entryMode === 'subscription_details' && <Icons.Star className="text-gray-800" />}
 
                                 {entryMode === 'search' ? 'Calculadora' :
-                                    entryMode === 'manual' ? 'Comida Fuera' :
+                                    entryMode === 'manual' ? 'Registro Manual' :
                                         entryMode === 'ai' ? 'Asistente Nutricional' :
                                             entryMode === 'subscription_teaser' ? 'Función Premium' : 'Ventajas Premium'}
                             </h3>
@@ -598,7 +598,7 @@ Return ONLY a raw JSON object.
                                             <Icons.Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-gray-800 transition-colors" size={20} />
                                             <input
                                                 type="text"
-                                                placeholder="Ej. Arroz con pollo..."
+                                                placeholder="Ej.: Filetes de pollo..."
                                                 value={foodSearch}
                                                 onChange={(e) => {
                                                     setFoodSearch(e.target.value);
