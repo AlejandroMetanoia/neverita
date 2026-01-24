@@ -222,7 +222,7 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
       {
         isAdding && (
           <form onSubmit={handleSubmit} className="bg-white/80 backdrop-blur-xl p-8 rounded-[2rem] border border-white/60 grid grid-cols-1 md:grid-cols-2 gap-6 animate-in slide-in-from-top-4 duration-300 shadow-glass relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50/50 blur-[60px] rounded-full pointer-events-none translate-x-1/2 -translate-y-1/2" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-stone-50/50 blur-[60px] rounded-full pointer-events-none translate-x-1/2 -translate-y-1/2" />
 
             <div className="md:col-span-2 border-b border-gray-100 pb-4 mb-2">
               <h3 className="text-xl font-bold text-gray-800 mb-1">Añadir Nuevo Alimento</h3>
@@ -236,7 +236,7 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
                 type="text"
                 value={newFood.name}
                 onChange={(e) => setNewFood({ ...newFood, name: e.target.value })}
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-50 transition-all placeholder:text-gray-400 font-medium"
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 transition-all placeholder:text-gray-400 font-medium"
                 placeholder="Ej. Pechuga de Pavo"
               />
             </div>
@@ -247,7 +247,7 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
                 type="text"
                 value={newFood.brand}
                 onChange={(e) => setNewFood({ ...newFood, brand: e.target.value })}
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-50 transition-all placeholder:text-gray-400 font-medium"
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 transition-all placeholder:text-gray-400 font-medium"
                 placeholder="Ej. Hacendado, Carrefour..."
               />
             </div>
@@ -261,7 +261,7 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
                     required
                     value={newFood.category}
                     onChange={(e) => setNewFood({ ...newFood, category: e.target.value })}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 appearance-none focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-50 cursor-pointer font-medium"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 appearance-none focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 cursor-pointer font-medium"
                   >
                     <option value="" disabled>Selecciona una carpeta...</option>
                     {Object.entries(FOOD_CATEGORIES).map(([group, subcategories]) => (
@@ -281,7 +281,7 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
                     <select
                       value={newFood.subCategory || ''}
                       onChange={(e) => setNewFood({ ...newFood, subCategory: e.target.value })}
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 appearance-none focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-50 cursor-pointer font-medium"
+                      className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 appearance-none focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 cursor-pointer font-medium"
                     >
                       <option value="">(General)</option>
                       {SUB_CATEGORIES[newFood.category].map(sub => (
@@ -301,7 +301,7 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
                 min="0"
                 value={newFood.calories}
                 onChange={(e) => setNewFood({ ...newFood, calories: e.target.value })}
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-50 font-mono text-lg font-bold"
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 font-mono text-lg font-bold"
                 placeholder="0"
               />
             </div>
@@ -327,7 +327,7 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
                 step="0.1"
                 value={newFood.carbs}
                 onChange={(e) => setNewFood({ ...newFood, carbs: e.target.value })}
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-carbs focus:ring-4 focus:ring-indigo-50 font-bold"
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-carbs focus:ring-4 focus:ring-stone-50 font-bold"
                 placeholder="0"
               />
             </div>
@@ -357,13 +357,13 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
 
       {/* Search Bar - Light */}
       <div className="relative group">
-        <Icons.Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-indigo-500 transition-colors" size={20} />
+        <Icons.Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-gray-800 transition-colors" size={20} />
         <input
           type="text"
           placeholder="Buscar alimento en todas las carpetas..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full bg-white/70 backdrop-blur-md border border-white/60 rounded-2xl pl-12 pr-4 py-4 text-gray-800 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-50 transition-all placeholder:text-gray-400 shadow-sm hover:shadow-md"
+          className="w-full bg-white/70 backdrop-blur-md border border-white/60 rounded-2xl pl-12 pr-4 py-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 transition-all placeholder:text-gray-400 shadow-sm hover:shadow-md"
         />
       </div>
 
@@ -384,16 +384,16 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
                       <button
                         key={sub}
                         onClick={() => setSelectedCategory(sub)}
-                        className="bg-white/60 backdrop-blur-sm p-6 rounded-[1.5rem] border border-white/60 hover:border-indigo-200 hover:bg-white/90 transition-all flex flex-col items-center justify-center gap-4 text-center group h-40 shadow-sm hover:shadow-lg hover:-translate-y-1 relative overflow-hidden"
+                        className="bg-white/60 backdrop-blur-sm p-6 rounded-[1.5rem] border border-white/60 hover:border-stone-200 hover:bg-white/90 transition-all flex flex-col items-center justify-center gap-4 text-center group h-40 shadow-sm hover:shadow-lg hover:-translate-y-1 relative overflow-hidden"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="absolute inset-0 bg-gradient-to-br from-stone-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                        <div className="p-4 bg-white rounded-full group-hover:bg-indigo-50 group-hover:text-indigo-500 transition-colors text-gray-400 shadow-sm border border-gray-100 group-hover:border-indigo-100">
+                        <div className="p-4 bg-white rounded-full group-hover:bg-stone-100 group-hover:text-stone-600 transition-colors text-gray-400 shadow-sm border border-gray-100 group-hover:border-stone-200">
                           <IconComponent size={28} />
                         </div>
                         <div className="relative z-10">
                           <span className="text-base font-bold text-gray-700 block mb-1 group-hover:text-gray-900">{sub}</span>
-                          <span className="text-xs text-gray-400 font-medium group-hover:text-indigo-400 transition-colors">{count} alimentos</span>
+                          <span className="text-xs text-gray-400 font-medium group-hover:text-stone-400 transition-colors">{count} alimentos</span>
                         </div>
                       </button>
                     );
@@ -417,15 +417,15 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
                   <button
                     key={sub}
                     onClick={() => setSelectedSubCategory(sub)}
-                    className="bg-white/60 backdrop-blur-sm p-6 rounded-[1.5rem] border border-white/60 hover:border-indigo-200 hover:bg-white/90 transition-all flex flex-col items-center justify-center gap-4 text-center group h-40 shadow-sm hover:shadow-lg hover:-translate-y-1 relative overflow-hidden"
+                    className="bg-white/60 backdrop-blur-sm p-6 rounded-[1.5rem] border border-white/60 hover:border-stone-200 hover:bg-white/90 transition-all flex flex-col items-center justify-center gap-4 text-center group h-40 shadow-sm hover:shadow-lg hover:-translate-y-1 relative overflow-hidden"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="p-4 bg-white rounded-full group-hover:bg-indigo-50 group-hover:text-indigo-500 transition-colors text-gray-400 shadow-sm border border-gray-100 group-hover:border-indigo-100">
+                    <div className="absolute inset-0 bg-gradient-to-br from-stone-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="p-4 bg-white rounded-full group-hover:bg-stone-100 group-hover:text-stone-600 transition-colors text-gray-400 shadow-sm border border-gray-100 group-hover:border-stone-200">
                       <Icons.Folder size={28} />
                     </div>
                     <div className="relative z-10">
                       <span className="text-base font-bold text-gray-700 block mb-1 group-hover:text-gray-900">{sub}</span>
-                      <span className="text-xs text-gray-400 font-medium group-hover:text-indigo-400 transition-colors">{count} alimentos</span>
+                      <span className="text-xs text-gray-400 font-medium group-hover:text-stone-400 transition-colors">{count} alimentos</span>
                     </div>
                   </button>
                 )
@@ -440,11 +440,11 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
                   {foods
                     .filter(f => f.category === selectedCategory && !f.subCategory)
                     .map(food => (
-                      <div key={food.id} className="bg-white/70 backdrop-blur-md p-5 rounded-2xl border border-white/60 hover:border-indigo-100 hover:bg-white transition-all group relative hover:-translate-y-1 hover:shadow-md shadow-sm">
+                      <div key={food.id} className="bg-white/70 backdrop-blur-md p-5 rounded-2xl border border-white/60 hover:border-stone-200 hover:bg-white transition-all group relative hover:-translate-y-1 hover:shadow-md shadow-sm">
                         {/* Food Card Content (Reused) */}
                         <div className="flex justify-between items-start mb-3">
                           <div className="pr-6">
-                            <h3 className="font-bold text-gray-800 truncate text-lg group-hover:text-indigo-900 transition-colors">{food.name}</h3>
+                            <h3 className="font-bold text-gray-800 truncate text-lg group-hover:text-gray-900 transition-colors">{food.name}</h3>
                             {food.brand && <p className="text-xs text-gray-400 mt-0.5">{food.brand}</p>}
                           </div>
                           <button
@@ -478,10 +478,10 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-in fade-in zoom-in-95 duration-200">
             {filteredFoods.length > 0 ? (
               filteredFoods.map((food) => (
-                <div key={food.id} className="bg-white/70 backdrop-blur-md p-5 rounded-2xl border border-white/60 hover:border-indigo-100 hover:bg-white transition-all group relative hover:-translate-y-1 hover:shadow-md shadow-sm">
+                <div key={food.id} className="bg-white/70 backdrop-blur-md p-5 rounded-2xl border border-white/60 hover:border-stone-200 hover:bg-white transition-all group relative hover:-translate-y-1 hover:shadow-md shadow-sm">
                   <div className="flex justify-between items-start mb-3">
                     <div className="pr-6">
-                      <h3 className="font-bold text-gray-800 truncate text-lg group-hover:text-indigo-900 transition-colors">{food.name}</h3>
+                      <h3 className="font-bold text-gray-800 truncate text-lg group-hover:text-gray-900 transition-colors">{food.name}</h3>
                       {food.brand && <p className="text-xs text-gray-400 mt-0.5">{food.brand}</p>}
                       {isSearching && <span className="text-[10px] text-gray-400 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded-md mt-2 inline-block shadow-sm">{food.category} {food.subCategory ? `> ${food.subCategory}` : ''}</span>}
                     </div>
@@ -495,9 +495,9 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
                   <div className="flex justify-between items-center text-sm mt-4 bg-gray-50/80 p-3 rounded-xl border border-gray-100">
                     <span className="text-gray-800 font-black">{food.calories} <span className="text-xs font-normal text-gray-400">kcal</span></span>
                     <div className="flex gap-2 text-xs text-gray-500 font-medium">
-                      <span title="Proteína" className="hover:text-blue-500 transition-colors bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-sm">P: {food.protein}</span>
-                      <span title="Carbohidratos" className="hover:text-indigo-500 transition-colors bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-sm">C: {food.carbs}</span>
-                      <span title="Grasas" className="hover:text-pink-500 transition-colors bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-sm">G: {food.fat}</span>
+                      <span title="Proteína" className="hover:text-stone-500 transition-colors bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-sm">P: {food.protein}</span>
+                      <span title="Carbohidratos" className="hover:text-stone-400 transition-colors bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-sm">C: {food.carbs}</span>
+                      <span title="Grasas" className="hover:text-stone-600 transition-colors bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-sm">G: {food.fat}</span>
                     </div>
                   </div>
                 </div>
@@ -514,7 +514,7 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
                 )}
                 {isSearching && <p className="text-lg">No se encontraron alimentos.</p>}
 
-                <button onClick={() => setIsAdding(true)} className="text-indigo-500 hover:text-indigo-600 font-bold text-sm tracking-wide uppercase border-b border-indigo-200 hover:border-indigo-500 transition-all pb-0.5">Crear nuevo alimento aquí</button>
+                <button onClick={() => setIsAdding(true)} className="text-gray-900 hover:text-black font-bold text-sm tracking-wide uppercase border-b border-gray-300 hover:border-gray-900 transition-all pb-0.5">Crear nuevo alimento aquí</button>
               </div>
             )}
           </div>
