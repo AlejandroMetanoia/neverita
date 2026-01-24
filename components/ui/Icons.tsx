@@ -45,7 +45,9 @@ import {
   IceCream,
   Lock,
   Star,
-  CircleHelp
+  CircleHelp,
+  Image,
+  Camera
 } from 'lucide-react';
 
 export const Icons = {
@@ -96,5 +98,7 @@ export const Icons = {
   AlertCircle,
   Lock,
   Star,
-  Help: CircleHelp
+  Help: CircleHelp,
+  Image,
+  Camera
 };

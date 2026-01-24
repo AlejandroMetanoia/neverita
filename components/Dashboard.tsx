@@ -36,6 +36,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
     const [aiImage, setAiImage] = useState<string | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const cameraInputRef = useRef<HTMLInputElement>(null);
 
     // Modal State
     const [selectedFoodId, setSelectedFoodId] = useState('');
@@ -776,10 +777,7 @@ Return ONLY a raw JSON object.
 
                                     <div>
                                         <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">O sube una foto</label>
-                                        <div
-                                            onClick={() => fileInputRef.current?.click()}
-                                            className="border-2 border-dashed border-gray-200 hover:border-gray-400 hover:bg-gray-50 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all group"
-                                        >
+                                        <div className="border-2 border-dashed border-gray-200 rounded-2xl p-6 transition-all group">
                                             {aiImage ? (
                                                 <div className="relative w-full h-48 group-hover:scale-[1.02] transition-transform">
                                                     <img src={aiImage} alt="Preview" className="w-full h-full object-contain rounded-xl shadow-lg" />
@@ -794,16 +792,43 @@ Return ONLY a raw JSON object.
                                                     </button>
                                                 </div>
                                             ) : (
-                                                <>
-                                                    <div className="p-4 bg-gray-100 rounded-full mb-4 group-hover:scale-110 transition-transform text-gray-600">
-                                                        <Icons.Sparkles size={32} />
+                                                <div className="flex flex-col gap-3">
+                                                    <p className="text-sm text-gray-500 font-medium text-center mb-1">Elige una opción</p>
+                                                    <div className="flex gap-3">
+                                                        <button
+                                                            onClick={() => fileInputRef.current?.click()}
+                                                            className="flex-1 py-4 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-100 transition-colors flex flex-col items-center gap-2 group/btn"
+                                                        >
+                                                            <div className="p-2 bg-white rounded-full shadow-sm text-gray-600 group-hover/btn:text-gray-900 group-hover/btn:scale-110 transition-all">
+                                                                <Icons.Image size={24} />
+                                                            </div>
+                                                            <span className="text-xs font-bold text-gray-600">Galería</span>
+                                                        </button>
+
+                                                        <button
+                                                            onClick={() => cameraInputRef.current?.click()}
+                                                            className="flex-1 py-4 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-100 transition-colors flex flex-col items-center gap-2 group/btn"
+                                                        >
+                                                            <div className="p-2 bg-white rounded-full shadow-sm text-gray-600 group-hover/btn:text-gray-900 group-hover/btn:scale-110 transition-all">
+                                                                <Icons.Camera size={24} />
+                                                            </div>
+                                                            <span className="text-xs font-bold text-gray-600">Cámara</span>
+                                                        </button>
                                                     </div>
-                                                    <p className="text-sm text-gray-500 font-medium">Clic para subir o tomar foto</p>
-                                                </>
+                                                </div>
                                             )}
+                                            {/* Gallery Input - No Capture */}
                                             <input
                                                 type="file"
                                                 ref={fileInputRef}
+                                                className="hidden"
+                                                accept="image/*"
+                                                onChange={handleImageUpload}
+                                            />
+                                            {/* Camera Input - Force Environment Capture */}
+                                            <input
+                                                type="file"
+                                                ref={cameraInputRef}
                                                 className="hidden"
                                                 accept="image/*"
                                                 capture="environment"
