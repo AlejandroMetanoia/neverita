@@ -165,11 +165,27 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
             const content: any[] = [
                 {
                     type: "text",
-                    text: `Act as an expert nutritionist. Estimate the macros (kcal, protein, carbs, fat) per 100g of the described or photographed dish.
-                    Description: ${aiDescription}
-                    
-                    IMPORTANT: Return ONLY a raw JSON object (no markdown formatting, no code blocks) with this exact format:
-                    {"kcal": 0, "proteinas": 0, "carbohidratos": 0, "grasas": 0}`
+                    text: `Act as a Senior Digital Nutritionist. Your goal is to provide the most accurate macro estimation possible based on a text description or image.
+
+CONTEXT:
+The user says: "${aiDescription}"
+
+INSTRUCTIONS:
+1. If the quantity is missing, assume a standard adult restaurant portion.
+2. If the cooking method is missing, assume the most common one (e.g., "chicken" -> grilled, "potatoes" -> boiled/roasted unless specified).
+3. Calculate the TOTAL macros for the entire description provided, not just per 100g.
+4. If the input is extremely vague, prioritize conservative, realistic estimates.
+
+OUTPUT FORMAT:
+Return ONLY a raw JSON object. 
+{
+  "kcal": 0, 
+  "proteinas": 0, 
+  "carbohidratos": 0, 
+  "grasas": 0,
+  "gramos_totales_estimados": 0,
+  "inferencias": "Brief list of assumptions made (e.g., 'Assumed 200g chicken, 150g potatoes, grilled')"
+}`
                 }
             ];
 
