@@ -17,8 +17,11 @@ export const RecipeCreator: React.FC<RecipeCreatorProps> = ({ onClose, onSave, a
     // Lock body scroll when modal is open
     useEffect(() => {
         document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+
         return () => {
             document.body.style.overflow = 'unset';
+            document.documentElement.style.overflow = 'unset';
         };
     }, []);
 
@@ -140,7 +143,7 @@ export const RecipeCreator: React.FC<RecipeCreatorProps> = ({ onClose, onSave, a
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white/90 backdrop-blur-xl w-full max-w-2xl rounded-[2rem] border border-white/60 shadow-2xl relative flex flex-col max-h-[90vh] overflow-hidden">
+            <div className="bg-white/90 backdrop-blur-xl w-full max-w-3xl rounded-[2rem] border border-white/60 shadow-2xl relative flex flex-col h-[85vh] md:h-auto md:max-h-[90vh] overflow-hidden">
 
                 {/* Header */}
                 <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white/50">
@@ -153,7 +156,7 @@ export const RecipeCreator: React.FC<RecipeCreatorProps> = ({ onClose, onSave, a
                     </button>
                 </div>
 
-                <div className="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-6">
+                <div className="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-6 pb-40">
                     {/* Name Input */}
                     <div>
                         <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Nombre de la Receta</label>
