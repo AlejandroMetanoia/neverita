@@ -529,7 +529,15 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
                 )}
                 {isSearching && <p className="text-lg">No se encontraron alimentos.</p>}
 
-                <button onClick={() => setIsAdding(true)} className="text-gray-900 hover:text-black font-bold text-sm tracking-wide uppercase border-b border-gray-300 hover:border-gray-900 transition-all pb-0.5">Crear nuevo alimento aquí</button>
+                <button onClick={() => {
+                  if (selectedCategory === "Recetas") {
+                    setIsCreatingRecipe(true);
+                  } else {
+                    setIsAdding(true);
+                  }
+                }} className="text-gray-900 hover:text-black font-bold text-sm tracking-wide uppercase border-b border-gray-300 hover:border-gray-900 transition-all pb-0.5">
+                  {selectedCategory === "Recetas" ? "Crear nueva receta aquí" : "Crear nuevo alimento aquí"}
+                </button>
               </div>
             )}
           </div>
