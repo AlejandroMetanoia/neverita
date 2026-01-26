@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { Food, Ingredient } from '../types';
 import { Icons } from './ui/Icons';
+import { FOOD_CATEGORIES } from '../constants';
 
 interface RecipeCreatorProps {
     onClose: () => void;
@@ -11,6 +12,7 @@ interface RecipeCreatorProps {
 
 export const RecipeCreator: React.FC<RecipeCreatorProps> = ({ onClose, onSave, availableFoods }) => {
     const [name, setName] = useState('');
+    const [subCategory, setSubCategory] = useState('Platos'); // Default to Platos or first item
     const [searchTerm, setSearchTerm] = useState('');
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [isSearching, setIsSearching] = useState(false);
@@ -131,6 +133,7 @@ export const RecipeCreator: React.FC<RecipeCreatorProps> = ({ onClose, onSave, a
             id: Date.now().toString(), // Will be overwritten by DB ID usually, but good for local
             name,
             category: 'Recetas',
+            subCategory,
             calories: per100g.calories,
             protein: per100g.protein,
             carbs: per100g.carbs,
@@ -168,6 +171,23 @@ export const RecipeCreator: React.FC<RecipeCreatorProps> = ({ onClose, onSave, a
                             className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 font-bold text-lg focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 transition-all placeholder:text-gray-400"
                             placeholder="Ej. Bizcocho de Avena..."
                         />
+                    </div>
+
+                    {/* Category Dropdown */}
+                    <div>
+                        <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Carpeta / Categoría</label>
+                        <div className="relative">
+                            <Icons.ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                            <select
+                                value={subCategory}
+                                onChange={(e) => setSubCategory(e.target.value)}
+                                className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 appearance-none focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 cursor-pointer font-medium"
+                            >
+                                {FOOD_CATEGORIES['Recetas'].map(cat => (
+                                    <option key={cat} value={cat}>{cat}</option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
 
                     {/* Ingredients List */}
