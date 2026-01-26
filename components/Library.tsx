@@ -4,6 +4,7 @@ import { Food, LogEntry } from '../types';
 import { FOOD_CATEGORIES, SUB_CATEGORIES } from '../constants';
 import { Icons } from './ui/Icons';
 import { HelpModal } from './ui/HelpModal';
+import { RecipeCreator } from './RecipeCreator';
 
 interface LibraryProps {
   isGuest?: boolean;
@@ -24,6 +25,7 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
   const [subscriptionMode, setSubscriptionMode] = useState<'teaser' | 'details' | null>(null);
   const [showHelp, setShowHelp] = useState(false);
+  const [isCreatingRecipe, setIsCreatingRecipe] = useState(false); // New state for recipe creator
 
   // Toggle Menu Visibility
   useEffect(() => {
@@ -198,6 +200,19 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
         >
           <Icons.Plus size={20} />
           {isAdding ? 'Cancelar' : 'Nuevo Alimento'}
+        </button>
+        <button
+          onClick={() => {
+            if (isGuest) {
+              setSubscriptionMode('teaser');
+            } else {
+              setIsCreatingRecipe(true);
+            }
+          }}
+          className="bg-white hover:bg-gray-50 text-gray-800 font-bold py-3 px-6 rounded-xl flex items-center gap-2 transition-all shadow-sm border border-gray-200 hover:border-gray-300 hover:scale-105"
+        >
+          <Icons.ChefHat size={20} />
+          Crear Receta
         </button>
       </div>
 
@@ -642,7 +657,15 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
           document.body
         )
       }
-    </div >
+      {/* Recipe Creator Modal */}
+      {isCreatingRecipe && (
+        <RecipeCreator
+          onClose={() => setIsCreatingRecipe(false)}
+          onSave={onAddFood}
+          availableFoods={foods}
+        />
+      )}
+    </div>
   );
 };
 

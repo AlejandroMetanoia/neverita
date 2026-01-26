@@ -47,7 +47,10 @@ import {
   Star,
   CircleHelp,
   Image,
-  Camera
+  Camera,
+  ChefHat,
+  X,
+  Save
 } from 'lucide-react';
 
 export const Icons = {
@@ -100,5 +103,8 @@ export const Icons = {
   Star,
   Help: CircleHelp,
   Image,
-  Camera
+  Camera,
+  ChefHat,
+  X,
+  Save
 };

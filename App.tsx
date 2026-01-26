@@ -22,13 +22,14 @@ function App() {
 
    // Persistent State
    const [userFoods, setUserFoods] = useState<Food[]>([]);
+   const [userRecipes, setUserRecipes] = useState<Food[]>([]);
    const [baseFoods, setBaseFoods] = useState<Food[]>([]);
 
-   // Combine static, base, and user foods and sort alphabetically
+   // Combine static, base, user foods and recipes, and sort alphabetically
    const foods = useMemo(() => {
-      const allFoods = [...INITIAL_FOODS, ...baseFoods, ...userFoods];
+      const allFoods = [...INITIAL_FOODS, ...baseFoods, ...userFoods, ...userRecipes];
       return allFoods.sort((a, b) => a.name.localeCompare(b.name));
-   }, [baseFoods, userFoods]);
+   }, [baseFoods, userFoods, userRecipes]);
 
    const [logs, setLogs] = useState<LogEntry[]>([]);
 
@@ -98,6 +99,25 @@ function App() {
             fetchedFoods.push(doc.data() as Food);
          });
          setUserFoods(fetchedFoods);
+      });
+
+      return () => unsubscribe();
+   }, [user]);
+
+   // Listen for user_recipes from Firestore
+   useEffect(() => {
+      if (!user) {
+         setUserRecipes([]);
+         return;
+      }
+
+      const q = query(collection(db, 'user_recipes'), where('userId', '==', user.uid));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+         const fetchedRecipes: Food[] = [];
+         snapshot.forEach((doc) => {
+            fetchedRecipes.push(doc.data() as Food);
+         });
+         setUserRecipes(fetchedRecipes);
       });
 
       return () => unsubscribe();
@@ -201,7 +221,9 @@ function App() {
       if (!user) return;
       try {
          const foodWithUser = { ...food, userId: user.uid };
-         await setDoc(doc(db, 'user_foods', food.id), foodWithUser);
+         // Store in different collections based on category
+         const collectionName = food.category === 'Recetas' ? 'user_recipes' : 'user_foods';
+         await setDoc(doc(db, collectionName, food.id), foodWithUser);
       } catch (error) {
          console.error("Error adding food:", error);
       }
@@ -216,7 +238,8 @@ function App() {
          return;
       }
       try {
-         await deleteDoc(doc(db, 'user_foods', id));
+         const collectionName = foodToDelete.category === 'Recetas' ? 'user_recipes' : 'user_foods';
+         await deleteDoc(doc(db, collectionName, id));
       } catch (error) {
          console.error("Error deleting food:", error);
       }

@@ -11,6 +11,18 @@ export interface Food {
   carbs: number; // per 100g
   fat: number; // per 100g
   userId?: string; // Present if user-created food
+  ingredients?: Ingredient[]; // Present if it's a recipe
+}
+
+export interface Ingredient {
+  id: string;
+  foodId?: string; // If linked to an existing food
+  name: string;
+  quantity: number; // grams
+  calories: number; // per 100g
+  protein: number; // per 100g
+  carbs: number; // per 100g
+  fat: number; // per 100g
 }
 
 export interface LogEntry {
