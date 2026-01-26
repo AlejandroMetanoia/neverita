@@ -8,13 +8,14 @@ interface RecipeCreatorProps {
     onClose: () => void;
     onSave: (recipe: Food) => void;
     availableFoods: Food[]; // For searching ingredients
+    initialRecipe?: Food; // For editing
 }
 
-export const RecipeCreator: React.FC<RecipeCreatorProps> = ({ onClose, onSave, availableFoods }) => {
-    const [name, setName] = useState('');
-    const [subCategory, setSubCategory] = useState('Platos'); // Default to Platos or first item
+export const RecipeCreator: React.FC<RecipeCreatorProps> = ({ onClose, onSave, availableFoods, initialRecipe }) => {
+    const [name, setName] = useState(initialRecipe?.name || '');
+    const [subCategory, setSubCategory] = useState(initialRecipe?.subCategory || 'Platos');
     const [searchTerm, setSearchTerm] = useState('');
-    const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+    const [ingredients, setIngredients] = useState<Ingredient[]>(initialRecipe?.ingredients || []);
     const [isSearching, setIsSearching] = useState(false);
 
     // Lock body scroll when modal is open
@@ -130,7 +131,7 @@ export const RecipeCreator: React.FC<RecipeCreatorProps> = ({ onClose, onSave, a
 
         // Create the Recipe object (which matches Food interface but with ingredients)
         const newRecipe: Food = {
-            id: Date.now().toString(), // Will be overwritten by DB ID usually, but good for local
+            id: initialRecipe?.id || Date.now().toString(), // Preserve ID if editing
             name,
             category: 'Recetas',
             subCategory,
@@ -139,6 +140,7 @@ export const RecipeCreator: React.FC<RecipeCreatorProps> = ({ onClose, onSave, a
             carbs: per100g.carbs,
             fat: per100g.fat,
             ingredients: ingredients,
+            userId: initialRecipe?.userId, // Preserve userId if editing
         };
 
         onSave(newRecipe);
@@ -153,7 +155,7 @@ export const RecipeCreator: React.FC<RecipeCreatorProps> = ({ onClose, onSave, a
                 <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white/50">
                     <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
                         <Icons.ChefHat className="text-gray-800" />
-                        Crear Receta
+                        {initialRecipe ? 'Editar Receta' : 'Crear Receta'}
                     </h3>
                     <button onClick={onClose} className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors">
                         <Icons.X size={20} />

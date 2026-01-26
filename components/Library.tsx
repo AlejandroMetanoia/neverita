@@ -26,6 +26,7 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
   const [subscriptionMode, setSubscriptionMode] = useState<'teaser' | 'details' | null>(null);
   const [showHelp, setShowHelp] = useState(false);
   const [isCreatingRecipe, setIsCreatingRecipe] = useState(false); // New state for recipe creator
+  const [editingRecipe, setEditingRecipe] = useState<Food | undefined>(undefined); // State for editing
 
   // Toggle Menu Visibility
   useEffect(() => {
@@ -267,7 +268,7 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
                 value={newFood.brand}
                 onChange={(e) => setNewFood({ ...newFood, brand: e.target.value })}
                 className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 transition-all placeholder:text-gray-400 font-medium"
-                placeholder="Ej. Hacendado, Carrefour..."
+                placeholder="Ej. Hacendado, ElPozo..."
               />
             </div>
 
@@ -496,31 +497,69 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
         (isSearching || (selectedCategory && (!SUB_CATEGORIES[selectedCategory] || selectedSubCategory))) && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-in fade-in zoom-in-95 duration-200">
             {filteredFoods.length > 0 ? (
-              filteredFoods.map((food) => (
-                <div key={food.id} className="bg-white/70 backdrop-blur-md p-5 rounded-2xl border border-white/60 hover:border-stone-200 hover:bg-white transition-all group relative hover:-translate-y-1 hover:shadow-md shadow-sm">
-                  <div className="flex justify-between items-start mb-3">
-                    <div className="pr-6">
-                      <h3 className="font-bold text-gray-800 truncate text-lg group-hover:text-gray-900 transition-colors">{food.name}</h3>
-                      {food.brand && <p className="text-xs text-gray-400 mt-0.5">{food.brand}</p>}
-                      {isSearching && <span className="text-[10px] text-gray-400 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded-md mt-2 inline-block shadow-sm">{food.category} {food.subCategory ? `> ${food.subCategory}` : ''}</span>}
+              filteredFoods.map((food) => {
+                // Check if it's a recipe to calculate real totals
+                const isRecipe = food.category === 'Recetas' && food.ingredients;
+                let displayCalories = food.calories;
+                let displayProtein = food.protein;
+                let displayCarbs = food.carbs;
+                let displayFat = food.fat;
+
+                if (isRecipe && food.ingredients) {
+                  const totals = food.ingredients.reduce((acc, ing) => {
+                    const factor = ing.quantity / 100;
+                    return {
+                      calories: acc.calories + (ing.calories * factor),
+                      protein: acc.protein + (ing.protein * factor),
+                      carbs: acc.carbs + (ing.carbs * factor),
+                      fat: acc.fat + (ing.fat * factor),
+                    };
+                  }, { calories: 0, protein: 0, carbs: 0, fat: 0 });
+
+                  displayCalories = Math.round(totals.calories);
+                  displayProtein = parseFloat(totals.protein.toFixed(1));
+                  displayCarbs = parseFloat(totals.carbs.toFixed(1));
+                  displayFat = parseFloat(totals.fat.toFixed(1));
+                }
+
+                return (
+                  <div
+                    key={food.id}
+                    onClick={() => {
+                      if (isRecipe) {
+                        setEditingRecipe(food);
+                        setIsCreatingRecipe(true);
+                      }
+                    }}
+                    className={`bg-white/70 backdrop-blur-md p-5 rounded-2xl border border-white/60 hover:border-stone-200 hover:bg-white transition-all group relative hover:-translate-y-1 hover:shadow-md shadow-sm ${isRecipe ? 'cursor-pointer' : ''}`}
+                  >
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="pr-6">
+                        <h3 className="font-bold text-gray-800 truncate text-lg group-hover:text-gray-900 transition-colors flex items-center gap-2">
+                          {food.name}
+                          {isRecipe && <Icons.Edit2 size={14} className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />}
+                        </h3>
+                        {food.brand && <p className="text-xs text-gray-400 mt-0.5">{food.brand}</p>}
+                        {isSearching && <span className="text-[10px] text-gray-400 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded-md mt-2 inline-block shadow-sm">{food.category} {food.subCategory ? `> ${food.subCategory}` : ''}</span>}
+                      </div>
+                      <button
+                        onClick={() => setDeleteConfirmation(food.id)}
+                        className="text-gray-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all absolute top-5 right-5 scale-90 hover:scale-110"
+                      >
+                        <Icons.Trash size={18} />
+                      </button>
                     </div>
-                    <button
-                      onClick={() => setDeleteConfirmation(food.id)}
-                      className="text-gray-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all absolute top-5 right-5 scale-90 hover:scale-110"
-                    >
-                      <Icons.Trash size={18} />
-                    </button>
-                  </div>
-                  <div className="flex justify-between items-center text-sm mt-4 bg-gray-50/80 p-3 rounded-xl border border-gray-100">
-                    <span className="text-gray-800 font-black">{food.calories} <span className="text-xs font-normal text-gray-400">kcal</span></span>
-                    <div className="flex gap-2 text-xs text-gray-500 font-medium">
-                      <span title="Proteína" className="hover:text-stone-500 transition-colors bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-sm">P: {food.protein}</span>
-                      <span title="Carbohidratos" className="hover:text-stone-400 transition-colors bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-sm">C: {food.carbs}</span>
-                      <span title="Grasas" className="hover:text-stone-600 transition-colors bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-sm">G: {food.fat}</span>
+                    <div className="flex justify-between items-center text-sm mt-4 bg-gray-50/80 p-3 rounded-xl border border-gray-100">
+                      <span className="text-gray-800 font-black">{displayCalories} <span className="text-xs font-normal text-gray-400">kcal</span></span>
+                      <div className="flex gap-2 text-xs text-gray-500 font-medium">
+                        <span title="Proteína" className="hover:text-stone-500 transition-colors bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-sm">P: {displayProtein}</span>
+                        <span title="Carbohidratos" className="hover:text-stone-400 transition-colors bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-sm">C: {displayCarbs}</span>
+                        <span title="Grasas" className="hover:text-stone-600 transition-colors bg-white px-1.5 py-0.5 rounded-md border border-gray-100 shadow-sm">G: {displayFat}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <div className="col-span-full py-20 text-center text-gray-500 flex flex-col items-center gap-4 border-2 border-dashed border-gray-200 rounded-3xl bg-white/30 backdrop-blur-sm">
                 {selectedCategory && (
@@ -677,9 +716,13 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
       {/* Recipe Creator Modal */}
       {isCreatingRecipe && (
         <RecipeCreator
-          onClose={() => setIsCreatingRecipe(false)}
+          onClose={() => {
+            setIsCreatingRecipe(false);
+            setEditingRecipe(undefined);
+          }}
           onSave={onAddFood}
           availableFoods={foods}
+          initialRecipe={editingRecipe}
         />
       )}
     </div>
