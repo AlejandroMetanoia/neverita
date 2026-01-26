@@ -188,32 +188,34 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
             </p>
           </div>
         </div>
-        <button
-          onClick={() => {
-            if (isGuest) {
-              setSubscriptionMode('teaser');
-            } else {
-              setIsAdding(!isAdding);
-            }
-          }}
-          className="bg-gray-900 hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-xl flex items-center gap-2 transition-all shadow-lg hover:shadow-xl hover:scale-105"
-        >
-          <Icons.Plus size={20} />
-          {isAdding ? 'Cancelar' : 'Nuevo Alimento'}
-        </button>
-        <button
-          onClick={() => {
-            if (isGuest) {
-              setSubscriptionMode('teaser');
-            } else {
-              setIsCreatingRecipe(true);
-            }
-          }}
-          className="bg-white hover:bg-gray-50 text-gray-800 font-bold py-3 px-6 rounded-xl flex items-center gap-2 transition-all shadow-sm border border-gray-200 hover:border-gray-300 hover:scale-105"
-        >
-          <Icons.ChefHat size={20} />
-          Crear Receta
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => {
+              if (isGuest) {
+                setSubscriptionMode('teaser');
+              } else {
+                setIsAdding(!isAdding);
+              }
+            }}
+            className="bg-gray-900 hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-xl flex items-center gap-2 transition-all shadow-lg hover:shadow-xl hover:scale-105"
+          >
+            <Icons.Plus size={20} />
+            {isAdding ? 'Cancelar' : 'Nuevo Alimento'}
+          </button>
+          <button
+            onClick={() => {
+              if (isGuest) {
+                setSubscriptionMode('teaser');
+              } else {
+                setIsCreatingRecipe(true);
+              }
+            }}
+            className="bg-white hover:bg-gray-50 text-gray-800 font-bold py-3 px-6 rounded-xl flex items-center gap-2 transition-all shadow-sm border border-gray-200 hover:border-gray-300 hover:scale-105"
+          >
+            <Icons.ChefHat size={20} />
+            Crear Receta
+          </button>
+        </div>
       </div>
 
       {/* Help Modal */}
