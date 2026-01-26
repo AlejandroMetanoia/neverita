@@ -322,6 +322,11 @@ export const RecipeCreator: React.FC<RecipeCreatorProps> = ({ onClose, onSave, a
                             </div>
                         </div>
                     )}
+
+                    {/* Spacer for dropdown visibility */}
+                    {isSearching && searchTerm && (
+                        <div className="h-64 pointer-events-none" aria-hidden="true" />
+                    )}
                 </div>
 
                 {/* Footer Actions */}
