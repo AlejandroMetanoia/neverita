@@ -14,6 +14,14 @@ export const RecipeCreator: React.FC<RecipeCreatorProps> = ({ onClose, onSave, a
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [isSearching, setIsSearching] = useState(false);
 
+    // Lock body scroll when modal is open
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, []);
+
     // Temporary state for adding a custom ingredient
     const [customIngredient, setCustomIngredient] = useState<{
         name: string;
@@ -281,23 +289,23 @@ export const RecipeCreator: React.FC<RecipeCreatorProps> = ({ onClose, onSave, a
                     {/* Live Totals Preview */}
                     {ingredients.length > 0 && (
                         <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
-                            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 text-center">Información Nutricional (por 100g)</h4>
+                            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 text-center">Información Nutricional (Total)</h4>
                             <div className="flex justify-between items-center px-2">
                                 <div className="text-center">
-                                    <p className="text-2xl font-black text-gray-800">{per100g.calories}</p>
+                                    <p className="text-2xl font-black text-gray-800">{Math.round(totals.calories)}</p>
                                     <p className="text-[10px] font-bold text-gray-400 uppercase">Kcal</p>
                                 </div>
                                 <div className="w-px h-8 bg-gray-100" />
                                 <div className="text-center">
-                                    <p className="text-lg font-bold text-protein">{per100g.protein}g</p>
+                                    <p className="text-lg font-bold text-protein">{parseFloat(totals.protein.toFixed(1))}g</p>
                                     <p className="text-[10px] font-bold text-gray-400 uppercase">Prot</p>
                                 </div>
                                 <div className="text-center">
-                                    <p className="text-lg font-bold text-carbs">{per100g.carbs}g</p>
+                                    <p className="text-lg font-bold text-carbs">{parseFloat(totals.carbs.toFixed(1))}g</p>
                                     <p className="text-[10px] font-bold text-gray-400 uppercase">Carb</p>
                                 </div>
                                 <div className="text-center">
-                                    <p className="text-lg font-bold text-fat">{per100g.fat}g</p>
+                                    <p className="text-lg font-bold text-fat">{parseFloat(totals.fat.toFixed(1))}g</p>
                                     <p className="text-[10px] font-bold text-gray-400 uppercase">Gras</p>
                                 </div>
                             </div>
