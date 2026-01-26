@@ -71,7 +71,9 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
   const filteredFoods = foods.filter((f) => {
     const matchesSearch = f.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
       .includes(debouncedSearchTerm.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase());
-    const matchesCategory = selectedCategory ? f.category === selectedCategory : true;
+    const matchesCategory = selectedCategory
+      ? (f.category === selectedCategory || (f.category === 'Recetas' && f.subCategory === selectedCategory))
+      : true;
     const matchesSubCategory = selectedSubCategory ? f.subCategory === selectedSubCategory : true;
 
     // Simplified for the list view:
