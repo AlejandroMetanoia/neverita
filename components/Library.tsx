@@ -530,13 +530,18 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
                 {isSearching && <p className="text-lg">No se encontraron alimentos.</p>}
 
                 <button onClick={() => {
-                  if (selectedCategory === "Recetas") {
+                  // Check if the current category belongs to Recetas
+                  const isRecipeCategory = FOOD_CATEGORIES["Recetas"].includes(selectedCategory || "");
+
+                  if (isRecipeCategory || selectedCategory === "Recetas") {
                     setIsCreatingRecipe(true);
                   } else {
                     setIsAdding(true);
                   }
                 }} className="text-gray-900 hover:text-black font-bold text-sm tracking-wide uppercase border-b border-gray-300 hover:border-gray-900 transition-all pb-0.5">
-                  {selectedCategory === "Recetas" ? "Crear nueva receta aquí" : "Crear nuevo alimento aquí"}
+                  {(selectedCategory && FOOD_CATEGORIES["Recetas"].includes(selectedCategory)) || selectedCategory === "Recetas"
+                    ? "Crear nueva receta aquí"
+                    : "Crear nuevo alimento aquí"}
                 </button>
               </div>
             )}
