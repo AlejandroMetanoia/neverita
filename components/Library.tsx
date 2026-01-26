@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Food, LogEntry } from '../types';
-import { getCategoryIcon } from './ui/CategoryIcons';
+import { getCategoryIcon } from './ui/CategoryIconHelper';
 import { Icons } from './ui/Icons';
 import { FOOD_CATEGORIES, SUB_CATEGORIES } from '../constants';
 import { HelpModal } from './ui/HelpModal';
@@ -162,7 +162,7 @@ const Library: React.FC<LibraryProps> = ({
             )}
           </div>
         </div>
-      ) : isSearching && searchTerm ? (
+      ) : searchTerm ? (
         // Search Results View
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
           <h2 className="text-sm font-bold text-stone-400 uppercase tracking-wider mb-6">Resultados de búsqueda</h2>
@@ -314,6 +314,38 @@ const Library: React.FC<LibraryProps> = ({
               <p className="text-gray-500 mb-6">Esta función está reservada para usuarios Pro. Suscríbete para desbloquear el potencial completo de Neverita.</p>
               <button className="w-full py-3 bg-gray-900 text-white font-bold rounded-xl hover:bg-black transition-colors">
                 Ver Planes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmation && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+          <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl relative text-center">
+            <div className="bg-red-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500">
+              <Icons.Trash size={32} />
+            </div>
+            <h3 className="text-xl font-black text-gray-800 mb-2">¿Eliminar alimento?</h3>
+            <p className="text-gray-500 mb-6">Esta acción no se puede deshacer.</p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setDeleteConfirmation(null)}
+                className="flex-1 py-3 bg-gray-100 font-bold text-gray-700 rounded-xl hover:bg-gray-200 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  if (deleteConfirmation) {
+                    onDeleteFood(deleteConfirmation);
+                    setDeleteConfirmation(null);
+                  }
+                }}
+                className="flex-1 py-3 bg-red-500 font-bold text-white rounded-xl hover:bg-red-600 transition-colors shadow-lg hover:shadow-red-200"
+              >
+                Eliminar
               </button>
             </div>
           </div>
