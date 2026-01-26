@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import OpenAI from "openai";
-import { Food, LogEntry, MealType, UserGoals } from '../types';
+import { Food, LogEntry, MealType, UserGoals, Ingredient } from '../types';
 import { MEAL_TYPES, MEAL_COLORS } from '../constants';
 import { Icons } from './ui/Icons';
 import { HelpModal } from './ui/HelpModal';
@@ -44,6 +44,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
     const [mealType, setMealType] = useState<MealType>('Desayuno');
     const [foodSearch, setFoodSearch] = useState('');
 
+
     // Manual Entry State
     const [manualEntry, setManualEntry] = useState<{
         calories: string | number;
@@ -83,8 +84,25 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
 
     // Calculator Logic
     const selectedFood = foods.find(f => f.id === selectedFoodId);
+    const [recipeIngredients, setRecipeIngredients] = useState<Ingredient[]>([]);
+
     const calculatedMacros = useMemo(() => {
         if (!selectedFood) return null;
+
+        // If it's a recipe and we have ingredients loaded
+        if (selectedFood.ingredients && recipeIngredients.length > 0) {
+            return recipeIngredients.reduce((acc, ing) => {
+                const ratio = ing.quantity / 100;
+                return {
+                    calories: acc.calories + (ing.calories * ratio),
+                    protein: acc.protein + (ing.protein * ratio),
+                    carbs: acc.carbs + (ing.carbs * ratio),
+                    fat: acc.fat + (ing.fat * ratio),
+                };
+            }, { calories: 0, protein: 0, carbs: 0, fat: 0 });
+        }
+
+        // Standard Food
         const ratio = (Number(grams) || 0) / 100;
         return {
             calories: Math.round(selectedFood.calories * ratio),
@@ -92,7 +110,17 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
             carbs: Number((selectedFood.carbs * ratio).toFixed(1)),
             fat: Number((selectedFood.fat * ratio).toFixed(1)),
         };
-    }, [selectedFood, grams]);
+    }, [selectedFood, grams, recipeIngredients]);
+
+    // Update ingredients when a recipe is selected
+    useEffect(() => {
+        if (selectedFood && selectedFood.ingredients) {
+            // Deep copy to allow editing without affecting original until saved (though here we just log)
+            setRecipeIngredients(JSON.parse(JSON.stringify(selectedFood.ingredients)));
+        } else {
+            setRecipeIngredients([]);
+        }
+    }, [selectedFoodId, foods]); // foods dependency in case it updates
 
     const handleAddLog = (e: React.FormEvent) => {
         e.preventDefault();
@@ -101,14 +129,53 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
 
         if (entryMode === 'search') {
             if (!selectedFood || !calculatedMacros) return;
+
+            const isRecipe = selectedFood.ingredients && selectedFood.ingredients.length > 0;
+            const hasModifiedIngredients = isRecipe && JSON.stringify(selectedFood.ingredients) !== JSON.stringify(recipeIngredients);
+
+            if (isRecipe && hasModifiedIngredients) {
+                // Add each ingredient as a separate log
+                recipeIngredients.forEach(ing => {
+                    const ratio = ing.quantity / 100;
+                    const ingCalculated = {
+                        calories: Math.round(ing.calories * ratio),
+                        protein: Number((ing.protein * ratio).toFixed(1)),
+                        carbs: Number((ing.carbs * ratio).toFixed(1)),
+                        fat: Number((ing.fat * ratio).toFixed(1)),
+                    };
+
+                    onAddLog({
+                        id: Date.now().toString() + Math.random().toString().slice(2, 6), // unique id
+                        date: selectedDate,
+                        foodId: ing.foodId || `ing-${Date.now()}-${Math.random()}`, // Use link or gen new
+                        foodName: ing.name,
+                        meal: mealType,
+                        grams: ing.quantity,
+                        calculated: ingCalculated
+                    });
+                });
+                // We're done, skip the single log addition below
+                setEntryMode(null);
+                setGrams(100);
+                setFoodSearch('');
+                setRecipeIngredients([]);
+                return;
+            }
+
+            // Valid for Standard Food OR Unmodified Recipe
             newLog = {
                 id: Date.now().toString(),
                 date: selectedDate,
                 foodId: selectedFood.id,
                 foodName: selectedFood.name,
                 meal: mealType,
-                grams: Number(grams) || 0,
-                calculated: calculatedMacros
+                grams: isRecipe ? 100 : (Number(grams) || 0), // Recipes logs are 1 unit (100g context usually) if unmodified
+                calculated: {
+                    calories: Math.round(calculatedMacros.calories),
+                    protein: Number(calculatedMacros.protein.toFixed(1)),
+                    carbs: Number(calculatedMacros.carbs.toFixed(1)),
+                    fat: Number(calculatedMacros.fat.toFixed(1)),
+                }
             };
         } else {
             // Manual Mode
@@ -133,6 +200,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
         // Reset minimal state
         setGrams(100);
         setFoodSearch('');
+        setRecipeIngredients([]);
         setManualEntry({ calories: '', protein: '', carbs: '', fat: '', name: '' });
     };
 
@@ -628,18 +696,47 @@ Return ONLY a raw JSON object.
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-6">
-                                        {/* Grams Input */}
+                                        {/* Grams Input OR Ingredients List */}
                                         <div>
-                                            <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">2. Cantidad (g)</label>
-                                            <div className="relative">
-                                                <input
-                                                    type="number"
-                                                    value={grams}
-                                                    onChange={(e) => setGrams(e.target.value)}
-                                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 transition-all font-mono text-lg font-bold"
-                                                />
-                                                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold pointer-events-none">g</span>
-                                            </div>
+                                            {selectedFood?.ingredients ? (
+                                                <>
+                                                    <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">2. Ajustar Ingredientes</label>
+                                                    <div className="space-y-3 max-h-60 overflow-y-auto pr-1 custom-scrollbar">
+                                                        {recipeIngredients.map((ing, index) => (
+                                                            <div key={index} className="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100">
+                                                                <span className="text-sm font-medium text-gray-700 truncate flex-1 mr-2">{ing.name}</span>
+                                                                <div className="relative w-24">
+                                                                    <input
+                                                                        type="number"
+                                                                        value={ing.quantity}
+                                                                        onChange={(e) => {
+                                                                            const newQty = Number(e.target.value) || 0;
+                                                                            const newIngs = [...recipeIngredients];
+                                                                            newIngs[index].quantity = newQty;
+                                                                            setRecipeIngredients(newIngs);
+                                                                        }}
+                                                                        className="w-full bg-white border border-gray-200 rounded-lg py-1.5 pl-3 pr-6 text-right text-sm font-bold focus:outline-none focus:border-stone-300"
+                                                                    />
+                                                                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-bold pointer-events-none">g</span>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">2. Cantidad (g)</label>
+                                                    <div className="relative">
+                                                        <input
+                                                            type="number"
+                                                            value={grams}
+                                                            onChange={(e) => setGrams(e.target.value)}
+                                                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 transition-all font-mono text-lg font-bold"
+                                                        />
+                                                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold pointer-events-none">g</span>
+                                                    </div>
+                                                </>
+                                            )}
                                         </div>
                                         {/* Meal Select */}
                                         <div>
