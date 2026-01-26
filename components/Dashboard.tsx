@@ -94,10 +94,10 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
             return recipeIngredients.reduce((acc, ing) => {
                 const ratio = ing.quantity / 100;
                 return {
-                    calories: acc.calories + (ing.calories * ratio),
-                    protein: acc.protein + (ing.protein * ratio),
-                    carbs: acc.carbs + (ing.carbs * ratio),
-                    fat: acc.fat + (ing.fat * ratio),
+                    calories: Math.round(acc.calories + (ing.calories * ratio)),
+                    protein: Number((acc.protein + (ing.protein * ratio)).toFixed(1)),
+                    carbs: Number((acc.carbs + (ing.carbs * ratio)).toFixed(1)),
+                    fat: Number((acc.fat + (ing.fat * ratio)).toFixed(1)),
                 };
             }, { calories: 0, protein: 0, carbs: 0, fat: 0 });
         }
@@ -695,17 +695,17 @@ Return ONLY a raw JSON object.
                                         )}
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {/* Grams Input OR Ingredients List */}
                                         <div>
                                             {selectedFood?.ingredients ? (
                                                 <>
                                                     <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">2. Ajustar Ingredientes</label>
-                                                    <div className="space-y-3 max-h-60 overflow-y-auto pr-1 custom-scrollbar">
+                                                    <div className="space-y-3 max-h-none md:max-h-60 overflow-y-visible md:overflow-y-auto pr-1 custom-scrollbar">
                                                         {recipeIngredients.map((ing, index) => (
-                                                            <div key={index} className="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100">
-                                                                <span className="text-sm font-medium text-gray-700 truncate flex-1 mr-2">{ing.name}</span>
-                                                                <div className="relative w-24">
+                                                            <div key={index} className="flex flex-col md:flex-row md:justify-between md:items-center bg-gray-50 p-3 rounded-xl border border-gray-100 mobile-ingredient-item">
+                                                                <span className="text-sm font-medium text-gray-700 truncate mb-2 md:mb-0 md:flex-1 md:mr-2">{ing.name}</span>
+                                                                <div className="relative w-full md:w-24">
                                                                     <input
                                                                         type="number"
                                                                         value={ing.quantity}
