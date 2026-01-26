@@ -178,23 +178,30 @@ export const RecipeCreator: React.FC<RecipeCreatorProps> = ({ onClose, onSave, a
                         </div>
 
                         {ingredients.map((ing, i) => (
-                            <div key={ing.id} className="flex gap-4 items-center animate-in slide-in-from-left-4 duration-300" style={{ animationDelay: `${i * 50}ms` }}>
+                            <div key={ing.id} className="flex flex-col md:flex-row gap-2 md:gap-4 items-stretch md:items-center animate-in slide-in-from-left-4 duration-300" style={{ animationDelay: `${i * 50}ms` }}>
                                 <div className="flex-1 bg-white border border-gray-100 p-3 rounded-xl shadow-sm flex justify-between items-center">
                                     <span className="font-medium text-gray-700 truncate">{ing.name}</span>
-                                    <span className="text-xs text-gray-400">{ing.calories} kcal/100g</span>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xs text-gray-400">{ing.calories} kcal/100g</span>
+                                        <button onClick={() => removeIngredient(ing.id)} className="w-8 h-8 flex md:hidden items-center justify-center text-red-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                                            <Icons.Trash size={16} />
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="w-24 relative">
-                                    <input
-                                        type="number"
-                                        value={ing.quantity}
-                                        onChange={(e) => updateIngredientQuantity(ing.id, Number(e.target.value))}
-                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 pr-8 text-gray-800 font-bold focus:outline-none focus:border-stone-300 transition-all text-right"
-                                    />
-                                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-medium pointer-events-none">g</span>
+                                <div className="flex gap-2 items-center">
+                                    <div className="flex-1 md:w-24 relative">
+                                        <input
+                                            type="number"
+                                            value={ing.quantity}
+                                            onChange={(e) => updateIngredientQuantity(ing.id, Number(e.target.value))}
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 pr-8 text-gray-800 font-bold focus:outline-none focus:border-stone-300 transition-all text-right"
+                                        />
+                                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-medium pointer-events-none">g</span>
+                                    </div>
+                                    <button onClick={() => removeIngredient(ing.id)} className="w-10 h-10 hidden md:flex items-center justify-center text-red-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors">
+                                        <Icons.Trash size={18} />
+                                    </button>
                                 </div>
-                                <button onClick={() => removeIngredient(ing.id)} className="w-10 h-10 flex items-center justify-center text-red-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors">
-                                    <Icons.Trash size={18} />
-                                </button>
                             </div>
                         ))}
 
@@ -218,7 +225,7 @@ export const RecipeCreator: React.FC<RecipeCreatorProps> = ({ onClose, onSave, a
 
                                 {/* Search Results Dropdown */}
                                 {isSearching && searchTerm && (
-                                    <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-20 animate-in fade-in zoom-in-95 duration-100">
+                                    <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-[110] animate-in fade-in zoom-in-95 duration-100 max-h-48 overflow-y-auto">
                                         {filteredFoods.map(food => (
                                             <button
                                                 key={food.id}
