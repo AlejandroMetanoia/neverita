@@ -18,7 +18,7 @@ export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, title, ch
             <div className="absolute inset-0" onClick={onClose} />
 
             <div className="bg-white/90 backdrop-blur-xl w-full max-w-lg rounded-[2rem] border border-white/60 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 relative z-10">
-                <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white/50">
+                <div className="p-5 border-b border-gray-100 flex justify-between items-center bg-white/50">
                     <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
                         <Icons.Help className="text-gray-800" size={24} />
                         {title}
@@ -31,7 +31,7 @@ export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, title, ch
                     </button>
                 </div>
 
-                <div className="p-8 text-gray-600 leading-relaxed overflow-y-auto max-h-[70vh] custom-scrollbar">
+                <div className="p-6 text-gray-600 leading-relaxed overflow-y-auto max-h-[85vh] custom-scrollbar">
                     {children}
                 </div>
             </div>
