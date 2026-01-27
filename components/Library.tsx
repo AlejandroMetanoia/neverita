@@ -397,7 +397,7 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {subcategories.map(sub => {
                     // Optional: Count items in category
-                    const count = foods.filter(f => f.category === sub).length;
+                    const count = foods.filter(f => f.category === sub || (f.category === 'Recetas' && f.subCategory === sub)).length;
                     const IconComponent = getCategoryIcon(sub);
 
                     return (
