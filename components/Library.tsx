@@ -232,6 +232,7 @@ const Library: React.FC<LibraryProps> = ({ isGuest = false, foods, onAddFood, on
           <ul className="list-disc pl-5 space-y-2">
             <li><strong>Carpetas:</strong> Los alimentos se organizan automáticamente por categorías (Carnes, Lácteos, etc.).</li>
             <li><strong>Nuevo Alimento:</strong> Crea tus propios alimentos personalizados y guárdalos para usarlos siempre.</li>
+            <li><strong>Crear Receta:</strong> Añade tus recetas a la nevera.</li>
             <li><strong>Búsqueda Global:</strong> Encuentra rápidamente cualquier alimento sin navegar por las carpetas.</li>
             <li><strong>Gestión:</strong> Elimina alimentos que ya no necesites (mantén pulsado o usa el icono de papelera).</li>
           </ul>
