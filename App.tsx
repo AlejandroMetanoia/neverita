@@ -381,7 +381,7 @@ function App() {
             {/* Logo */}
             <div className="mb-8">
                <div className="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center transition-all hover:bg-stone-200 cursor-pointer shadow-sm">
-                  <Icons.Utensils className="text-stone-800" size={24} />
+                  <Icons.User className="text-stone-800" size={24} />
                </div>
             </div>
 
