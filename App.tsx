@@ -381,7 +381,7 @@ function App() {
             {/* Logo */}
             <div className="mb-8">
                <div className="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center transition-all hover:bg-stone-200 cursor-pointer shadow-sm">
-                  <Icons.User className="text-stone-800" size={24} />
+                  <Icons.Utensils className="text-stone-800" size={24} />
                </div>
             </div>
 
@@ -417,11 +417,7 @@ function App() {
                   onClick={() => handleChangeView('profile')}
                   className={`w-10 h-10 rounded-full overflow-hidden transition-all duration-200 flex items-center justify-center ${currentView === 'profile' ? 'ring-2 ring-black' : 'hover:bg-stone-100'}`}
                >
-                  {user?.photoURL ? (
-                     <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
-                  ) : (
-                     <Icons.User size={24} className="text-stone-600" />
-                  )}
+                  <Icons.User size={24} className="text-stone-600" />
                </button>
             </div>
          </aside>
@@ -475,17 +471,11 @@ function App() {
                   onClick={() => handleChangeView('profile')}
                   className="flex flex-col items-center justify-center gap-1 w-16"
                >
-                  {user?.photoURL ? (
-                     <div className={`w-7 h-7 rounded-full overflow-hidden ${currentView === 'profile' ? 'ring-2 ring-black' : ''}`}>
-                        <img src={user.photoURL} alt="User" className="w-full h-full object-cover" />
-                     </div>
-                  ) : (
-                     <Icons.User
-                        size={28}
-                        className={`transition-all ${currentView === 'profile' ? 'text-black fill-current' : 'text-stone-500'}`}
-                        strokeWidth={currentView === 'profile' ? 0 : 2}
-                     />
-                  )}
+                  <Icons.User
+                     size={28}
+                     className={`transition-all ${currentView === 'profile' ? 'text-black fill-current' : 'text-stone-500'}`}
+                     strokeWidth={currentView === 'profile' ? 0 : 2}
+                  />
                   <span className={`text-xs font-medium ${currentView === 'profile' ? 'text-black' : 'text-stone-500'}`}>
                      Cuenta
                   </span>
