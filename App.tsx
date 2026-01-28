@@ -531,15 +531,14 @@ function App() {
                         <div className="animate-in slide-in-from-bottom-8 duration-500 flex flex-col items-center w-full">
                            {user ? (
                               <>
-                                 <div className="w-40 h-40 rounded-full mx-auto mb-6 p-1 bg-gradient-to-tr from-stone-200 to-white shadow-xl">
+                                 <div className="w-28 h-28 rounded-full mx-auto mb-6 p-1 bg-gradient-to-tr from-stone-200 to-white shadow-xl">
                                     <img
                                        src={user.photoURL || 'https://ui-avatars.com/api/?name=User'}
                                        className="w-full h-full rounded-full object-cover border-4 border-white"
                                        alt={user.displayName || 'User'}
                                     />
                                  </div>
-                                 <h2 className="text-4xl md:text-5xl font-bold text-stone-800 mb-2 font-[Outfit] tracking-tight">{user.displayName}</h2>
-                                 <p className="text-stone-500 mb-6 font-medium text-lg">@{user.email?.split('@')[0] || 'usuario'}</p>
+                                 <h2 className="text-4xl md:text-5xl font-bold text-stone-800 mb-6 font-[Outfit] tracking-tight">{user.displayName}</h2>
 
                                  {!isEditingProfile ? (
                                     <>
