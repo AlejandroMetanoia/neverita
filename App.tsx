@@ -297,7 +297,7 @@ function App() {
    return (
       <div className="min-h-screen text-textMain font-family-sans flex flex-col md:flex-row relative overflow-hidden bg-background">
          {/* Background Images */}
-         <div className="fixed inset-0 z-0">
+         <div className={`fixed inset-0 z-0 ${currentView === 'profile' ? 'hidden' : ''}`}>
             <img
                src={
                   currentView === 'library' ? "/library-bg-mobile.jpg" :
@@ -464,9 +464,9 @@ function App() {
                   <Stats logs={logs} goals={goals} onUpdateGoals={updateGoals} />
                )}
                {currentView === 'profile' && (
-                  <div className="flex flex-col items-center justify-center min-h-[50vh] animate-in fade-in duration-300 w-full">
-                     {/* Light Mode Blurred Background Container */}
-                     <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center text-center p-8 md:p-12 bg-white/30 backdrop-blur-xl rounded-[3rem] border border-white/40 shadow-xl">
+                  <div className="flex flex-col items-center justify-center min-h-[50vh] animate-in fade-in duration-300 w-full bg-white">
+                     {/* Clean White Background Container */}
+                     <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center text-center p-8 md:p-12">
 
                         <div className="animate-in slide-in-from-bottom-8 duration-500 flex flex-col items-center w-full">
                            {user ? (
