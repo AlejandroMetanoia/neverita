@@ -39,7 +39,9 @@ function App() {
    // Edit Goals State
    const [currentWeight, setCurrentWeight] = useState('');
    const [desiredWeight, setDesiredWeight] = useState('');
+   const [startingWeight, setStartingWeight] = useState('');
    const [timeframe, setTimeframe] = useState('');
+   const [isEditingProfile, setIsEditingProfile] = useState(false);
 
    const weeklyChange = useMemo(() => {
       const current = parseFloat(currentWeight);
@@ -52,6 +54,35 @@ function App() {
       const changePerWeek = (totalChange / weeks) * 1000; // Convert to grams
       return Math.round(changePerWeek);
    }, [currentWeight, desiredWeight, timeframe]);
+
+   const progressPercentage = useMemo(() => {
+      const start = parseFloat(startingWeight);
+      const current = parseFloat(currentWeight);
+      const target = parseFloat(desiredWeight);
+
+      if (!start || !current || !target) return 0;
+      if (start === target) return 100;
+
+      const totalDiff = Math.abs(target - start);
+      const currentDiff = Math.abs(current - start);
+
+      // If we've passed the target (e.g. lost more weight than intended), cap at 100%
+      // Determine direction
+      const isWeightLoss = target < start;
+
+      // Check if we're moving in the right direction
+      if (isWeightLoss) {
+         if (current > start) return 0; // Gained weight instead of lost
+         if (current <= target) return 100;
+      } else {
+         // Weight gain
+         if (current < start) return 0; // Lost weight instead of gained
+         if (current >= target) return 100;
+      }
+
+      const progress = (currentDiff / totalDiff) * 100;
+      return Math.round(Math.min(100, Math.max(0, progress)));
+   }, [startingWeight, currentWeight, desiredWeight]);
 
    const handleNavigateToLibraryAdd = () => {
       setCurrentView('library');
@@ -173,6 +204,7 @@ function App() {
 
             // Check for Weight Goals
             if (data.weightGoals) {
+               setStartingWeight(data.weightGoals.startingWeight?.toString() || '');
                setCurrentWeight(data.weightGoals.currentWeight?.toString() || '');
                setDesiredWeight(data.weightGoals.desiredWeight?.toString() || '');
                setTimeframe(data.weightGoals.timeframe?.toString() || '');
@@ -195,6 +227,7 @@ function App() {
       if (!user) return;
 
       const newWeightGoals = {
+         startingWeight: parseFloat(startingWeight) || 0,
          currentWeight: parseFloat(currentWeight) || 0,
          desiredWeight: parseFloat(desiredWeight) || 0,
          timeframe: parseFloat(timeframe) || 0,
@@ -203,7 +236,7 @@ function App() {
 
       try {
          await setDoc(doc(db, 'users', user.uid), { weightGoals: newWeightGoals }, { merge: true });
-         handleChangeView('profile');
+         setIsEditingProfile(false);
       } catch (error) {
          console.error("Error saving weight goals:", error);
       }
@@ -506,30 +539,104 @@ function App() {
                                  <h2 className="text-4xl md:text-5xl font-bold text-stone-800 mb-2 font-[Outfit] tracking-tight">{user.displayName}</h2>
                                  <p className="text-stone-500 mb-6 font-medium text-lg">@{user.email?.split('@')[0] || 'usuario'}</p>
 
-                                 {/* Progress Bar */}
-                                 <div className="w-full max-w-xs mb-8">
-                                    <div className="flex justify-between text-sm font-medium text-stone-600 mb-2">
-                                       <span>Progreso</span>
-                                       <span>0%</span>
-                                    </div>
-                                    <div className="w-full h-3 bg-stone-200 rounded-full overflow-hidden">
-                                       <div className="h-full bg-stone-800 w-0 transition-all duration-1000" />
-                                    </div>
-                                 </div>
+                                 {!isEditingProfile ? (
+                                    <>
+                                       {/* Progress Bar View */}
+                                       <div className="w-full max-w-xs mb-8">
+                                          <div className="flex justify-between text-sm font-medium text-stone-600 mb-2">
+                                             <span>Progreso</span>
+                                             <span>{progressPercentage}%</span>
+                                          </div>
+                                          <div className="w-full h-3 bg-stone-200 rounded-full overflow-hidden">
+                                             <div
+                                                className="h-full bg-stone-800 transition-all duration-1000"
+                                                style={{ width: `${progressPercentage}%` }}
+                                             />
+                                          </div>
+                                          {parseFloat(startingWeight) > 0 && parseFloat(desiredWeight) > 0 && (
+                                             <p className="text-xs text-stone-400 mt-2">
+                                                Meta: {desiredWeight}kg (Inicio: {startingWeight}kg)
+                                             </p>
+                                          )}
+                                       </div>
 
-                                 <div className="flex gap-4 w-full max-w-md justify-center">
-                                    <button
-                                       className="bg-stone-200 hover:bg-stone-300 text-stone-900 font-bold py-3 px-6 rounded-full transition-all text-base active:scale-95"
-                                    >
-                                       Compartir
-                                    </button>
-                                    <button
-                                       onClick={() => handleChangeView('edit-goals')}
-                                       className="bg-stone-200 hover:bg-stone-300 text-stone-900 font-bold py-3 px-6 rounded-full transition-all text-base active:scale-95"
-                                    >
-                                       Editar Objetivos
-                                    </button>
-                                 </div>
+                                       <div className="flex gap-4 w-full max-w-md justify-center">
+                                          <button
+                                             className="bg-stone-200 hover:bg-stone-300 text-stone-900 font-bold py-3 px-6 rounded-full transition-all text-base active:scale-95"
+                                          >
+                                             Compartir
+                                          </button>
+                                          <button
+                                             onClick={() => setIsEditingProfile(true)}
+                                             className="bg-stone-200 hover:bg-stone-300 text-stone-900 font-bold py-3 px-6 rounded-full transition-all text-base active:scale-95"
+                                          >
+                                             Editar Objetivos
+                                          </button>
+                                       </div>
+                                    </>
+                                 ) : (
+                                    /* Inline Editing View */
+                                    <div className="w-full max-w-md my-6 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                                       <div className="grid grid-cols-2 gap-4">
+                                          <div className="space-y-1 text-left">
+                                             <label className="text-xs font-bold text-stone-500 uppercase tracking-wider ml-1">Peso Inicial</label>
+                                             <input
+                                                type="number"
+                                                value={startingWeight}
+                                                onChange={(e) => setStartingWeight(e.target.value)}
+                                                placeholder="0"
+                                                className="w-full p-3 rounded-2xl border border-stone-200 focus:border-stone-400 focus:ring-0 outline-none transition-all bg-stone-50"
+                                             />
+                                          </div>
+                                          <div className="space-y-1 text-left">
+                                             <label className="text-xs font-bold text-stone-500 uppercase tracking-wider ml-1">Peso Actual</label>
+                                             <input
+                                                type="number"
+                                                value={currentWeight}
+                                                onChange={(e) => setCurrentWeight(e.target.value)}
+                                                placeholder="0"
+                                                className="w-full p-3 rounded-2xl border border-stone-200 focus:border-stone-400 focus:ring-0 outline-none transition-all bg-stone-50"
+                                             />
+                                          </div>
+                                          <div className="space-y-1 text-left">
+                                             <label className="text-xs font-bold text-stone-500 uppercase tracking-wider ml-1">Peso Objetivo</label>
+                                             <input
+                                                type="number"
+                                                value={desiredWeight}
+                                                onChange={(e) => setDesiredWeight(e.target.value)}
+                                                placeholder="0"
+                                                className="w-full p-3 rounded-2xl border border-stone-200 focus:border-stone-400 focus:ring-0 outline-none transition-all bg-stone-50"
+                                             />
+                                          </div>
+                                          <div className="space-y-1 text-left">
+                                             <label className="text-xs font-bold text-stone-500 uppercase tracking-wider ml-1">Semanas</label>
+                                             <input
+                                                type="number"
+                                                value={timeframe}
+                                                onChange={(e) => setTimeframe(e.target.value)}
+                                                placeholder="0"
+                                                className="w-full p-3 rounded-2xl border border-stone-200 focus:border-stone-400 focus:ring-0 outline-none transition-all bg-stone-50"
+                                             />
+                                          </div>
+                                       </div>
+
+                                       <div className="flex gap-4 pt-4">
+                                          <button
+                                             onClick={() => setIsEditingProfile(false)}
+                                             className="flex-1 bg-white border border-stone-200 text-stone-500 hover:bg-stone-50 font-bold py-3 rounded-full transition-all active:scale-95"
+                                          >
+                                             Cancelar
+                                          </button>
+                                          <button
+                                             onClick={saveWeightGoals}
+                                             className="flex-1 bg-stone-800 hover:bg-black text-white font-bold py-3 rounded-full transition-all shadow-lg hover:shadow-xl active:scale-95"
+                                          >
+                                             Guardar Cambios
+                                          </button>
+                                       </div>
+                                    </div>
+                                 )}
+
 
                                  <div className="mt-12">
                                     <button

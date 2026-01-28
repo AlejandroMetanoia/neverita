@@ -56,6 +56,7 @@ export interface UserGoals {
     grasas: number;
   };
   weightGoals?: {
+    startingWeight: number;
     currentWeight: number;
     desiredWeight: number;
     timeframe: number;
