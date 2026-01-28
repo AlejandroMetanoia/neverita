@@ -562,15 +562,10 @@ function App() {
 
                                        <div className="flex gap-4 w-full max-w-md justify-center">
                                           <button
-                                             className="bg-stone-200 hover:bg-stone-300 text-stone-900 font-bold py-3 px-6 rounded-full transition-all text-base active:scale-95"
-                                          >
-                                             Compartir
-                                          </button>
-                                          <button
                                              onClick={() => setIsEditingProfile(true)}
                                              className="bg-stone-200 hover:bg-stone-300 text-stone-900 font-bold py-3 px-6 rounded-full transition-all text-base active:scale-95"
                                           >
-                                             Editar Objetivos
+                                             Editar Peso Objetivo
                                           </button>
                                        </div>
                                     </>
@@ -620,7 +615,23 @@ function App() {
                                           </div>
                                        </div>
 
-                                       <div className="flex gap-4 pt-4">
+                                       {(weeklyChange !== 0 && !isNaN(weeklyChange)) && (
+                                          <div className="py-4">
+                                             <div className="p-6 bg-stone-50 rounded-3xl border border-stone-100 mb-2">
+                                                <p className="text-stone-500 text-xs mb-1 text-center font-bold uppercase tracking-wide">Cambio semanal estimado</p>
+                                                <p className={`text-3xl font-bold text-center ${weeklyChange > 0 ? 'text-green-600' : 'text-blue-600'}`}>
+                                                   {weeklyChange > 0 ? '+' : ''}{weeklyChange}g <span className="text-lg text-stone-400 font-normal">/ semana</span>
+                                                </p>
+                                             </div>
+                                             {parseFloat(startingWeight) > 0 && parseFloat(desiredWeight) > 0 && (
+                                                <p className="text-xs text-stone-400 text-center font-medium">
+                                                   Meta: {desiredWeight}kg (Inicio: {startingWeight}kg)
+                                                </p>
+                                             )}
+                                          </div>
+                                       )}
+
+                                       <div className="flex gap-4 pt-2">
                                           <button
                                              onClick={() => setIsEditingProfile(false)}
                                              className="flex-1 bg-white border border-stone-200 text-stone-500 hover:bg-stone-50 font-bold py-3 rounded-full transition-all active:scale-95"
