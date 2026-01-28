@@ -17,6 +17,7 @@ import {
   FolderOpen,
   ArrowLeft,
   ChevronDown,
+  User,
   // Food Specifics
   Apple,
   Carrot,
@@ -72,6 +73,7 @@ export const Icons = {
   FolderOpen,
   Back: ArrowLeft,
   ChevronDown,
+  User,
   // Categories
   Apple,
   Carrot,

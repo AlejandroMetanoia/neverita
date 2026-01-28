@@ -31,7 +31,7 @@ export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, title, ch
                     </button>
                 </div>
 
-                <div className="p-6 text-gray-600 leading-relaxed overflow-y-auto max-h-[85vh] custom-scrollbar">
+                <div className="p-6 text-gray-600 leading-relaxed overflow-y-auto max-h-[75vh] custom-scrollbar">
                     {children}
                 </div>
             </div>

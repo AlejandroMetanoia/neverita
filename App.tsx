@@ -336,24 +336,18 @@ function App() {
             {/* Profile */}
             <button
                onClick={() => handleChangeView('profile')}
-               className="hidden md:flex mt-auto w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-md hover:shadow-lg transition-transform hover:scale-105"
+               className={`hidden md:flex mt-auto w-12 h-12 rounded-full items-center justify-center transition-all duration-300 ${currentView === 'profile' ? 'bg-stone-800 text-white shadow-lg scale-110' : 'bg-white text-stone-400 hover:text-stone-600 hover:scale-105 border border-gray-100 shadow-sm'}`}
             >
-               {user?.photoURL ? (
-                  <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
-               ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-500 font-bold">
-                     {user?.displayName?.[0] || 'U'}
-                  </div>
-               )}
+               <Icons.User size={24} />
             </button>
 
             {/* Mobile Profile Link */}
             <button
                onClick={() => handleChangeView('profile')}
-               className={`md:hidden p-3 rounded-full transition-all ${currentView === 'profile' ? 'ring-2 ring-secondary shadow-md' : 'opacity-80'}`}
+               className={`md:hidden p-3 rounded-full transition-all ${currentView === 'profile' ? 'text-stone-800 scale-110' : 'text-gray-400'}`}
             >
-               <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 ring-2 ring-white shadow-sm">
-                  {user?.photoURL ? <img src={user.photoURL} alt="User" className="w-full h-full object-cover" /> : <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">U</div>}
+               <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${currentView === 'profile' ? 'bg-stone-200' : 'bg-transparent'}`}>
+                  <Icons.User size={24} />
                </div>
             </button>
          </aside>
@@ -389,41 +383,76 @@ function App() {
                   <Stats logs={logs} goals={goals} onUpdateGoals={updateGoals} />
                )}
                {currentView === 'profile' && (
-                  <div className="flex items-center justify-center h-[80vh]">
-                     <div className="bg-surface backdrop-blur-xl border border-white/60 p-12 rounded-[2rem] shadow-glass max-w-md w-full text-center relative overflow-hidden">
-                        <div className="absolute top-0 w-full h-32 bg-gradient-to-b from-blue-50 to-transparent opacity-50 pointer-events-none left-0" />
-                        <div className="relative z-10">
-                           {user ? (
-                              <>
-                                 <img src={user.photoURL || 'https://ui-avatars.com/api/?name=User'} className="w-28 h-28 rounded-full mx-auto mb-6 border-[6px] border-white shadow-xl" />
-                                 <h2 className="text-3xl font-bold text-gray-800 mb-2 font-[Outfit]">{user.displayName}</h2>
-                                 <p className="text-gray-500 mb-8 font-medium">{user.email}</p>
-                                 <button onClick={() => auth.signOut()} className="w-full bg-red-50 hover:bg-red-100 text-red-500 border border-red-200 font-bold py-4 px-8 rounded-2xl transition-all shadow-sm hover:shadow text-lg">
-                                    Cerrar Sesión
-                                 </button>
-                              </>
-                           ) : (
-                              <>
-                                 <div className="w-28 h-28 rounded-full mx-auto mb-6 bg-gray-200 flex items-center justify-center text-gray-400 text-4xl font-bold border-[6px] border-white shadow-xl">
-                                    ?
-                                 </div>
-                                 <h2 className="text-3xl font-bold text-gray-800 mb-2 font-[Outfit]">Invitado</h2>
-                                 <p className="text-gray-500 mb-8 font-medium">Inicia sesión para guardar tus datos</p>
-                                 <button
-                                    onClick={handleLogin}
-                                    className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 font-bold py-4 px-8 rounded-2xl transition-all shadow-sm hover:shadow text-lg"
-                                 >
-                                    <img
-                                       src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                                       alt="Google"
-                                       className="w-6 h-6"
-                                    />
-                                    Inicia Sesión con Google
-                                 </button>
-                              </>
-                           )}
-                           <div className="mt-8 pt-8 border-t border-gray-100">
-                              <p className="text-xs text-gray-400 uppercase tracking-widest font-bold">Neverita v1.0</p>
+                  <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                     {/* Full screen blurred background */}
+                     <div
+                        className="absolute inset-0 bg-stone-900/30 backdrop-blur-xl transition-all duration-500"
+                        onClick={() => handleChangeView('dashboard')} // Click outside to close
+                     />
+
+                     {/* Content */}
+                     <div className="relative z-10 w-full max-w-md animate-in zoom-in-95 duration-300">
+                        <div className="bg-white/80 backdrop-blur-md border border-white/60 p-8 md:p-12 rounded-[2.5rem] shadow-2xl text-center relative overflow-hidden">
+                           <div className="absolute top-0 w-full h-40 bg-gradient-to-b from-stone-100 to-transparent opacity-50 pointer-events-none left-0" />
+
+                           <button
+                              onClick={() => handleChangeView('dashboard')}
+                              className="absolute top-6 right-6 p-2 rounded-full hover:bg-black/5 text-gray-400 hover:text-gray-600 transition-colors"
+                           >
+                              <Icons.X size={24} />
+                           </button>
+
+                           <div className="relative z-10 pt-4">
+                              {user ? (
+                                 <>
+                                    <div className="w-32 h-32 rounded-full mx-auto mb-6 p-1 bg-white shadow-xl">
+                                       <img
+                                          src={user.photoURL || 'https://ui-avatars.com/api/?name=User'}
+                                          className="w-full h-full rounded-full object-cover border-4 border-stone-50"
+                                          alt={user.displayName || 'User'}
+                                       />
+                                    </div>
+                                    <h2 className="text-4xl font-bold text-stone-800 mb-2 font-[Outfit] tracking-tight">{user.displayName}</h2>
+                                    <p className="text-stone-500 mb-10 font-medium text-lg">{user.email}</p>
+
+                                    <div className="flex flex-col gap-4">
+                                       <button
+                                          onClick={() => auth.signOut()}
+                                          className="w-full bg-stone-900 hover:bg-stone-800 text-white font-bold py-4 px-8 rounded-2xl transition-all shadow-lg hover:shadow-xl text-lg flex items-center justify-center gap-3 active:scale-95"
+                                       >
+                                          Cerrar Sesión
+                                       </button>
+                                       <button
+                                          onClick={() => handleChangeView('dashboard')}
+                                          className="w-full bg-white hover:bg-stone-50 text-stone-600 font-bold py-4 px-8 rounded-2xl transition-all border border-stone-200 hover:border-stone-300 text-lg active:scale-95"
+                                       >
+                                          Volver
+                                       </button>
+                                    </div>
+                                 </>
+                              ) : (
+                                 <>
+                                    <div className="w-32 h-32 rounded-full mx-auto mb-6 bg-stone-100 flex items-center justify-center text-stone-300 border-[6px] border-white shadow-xl">
+                                       <Icons.User size={64} />
+                                    </div>
+                                    <h2 className="text-3xl font-bold text-stone-800 mb-2 font-[Outfit]">Invitado</h2>
+                                    <p className="text-stone-500 mb-10 font-medium text-lg">Inicia sesión para guardar tus datos</p>
+                                    <button
+                                       onClick={handleLogin}
+                                       className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-800 border-2 border-gray-100 hover:border-gray-200 font-bold py-5 px-8 rounded-2xl transition-all shadow-sm hover:shadow-md text-lg active:scale-95"
+                                    >
+                                       <img
+                                          src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                                          alt="Google"
+                                          className="w-6 h-6"
+                                       />
+                                       Inicia Sesión con Google
+                                    </button>
+                                 </>
+                              )}
+                              <div className="mt-12">
+                                 <p className="text-xs text-stone-300 uppercase tracking-[0.2em] font-bold">Neverita v1.0</p>
+                              </div>
                            </div>
                         </div>
                      </div>
