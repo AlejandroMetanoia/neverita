@@ -223,7 +223,7 @@ function App() {
       }
    };
 
-   const saveWeightGoals = async () => {
+   const saveWeightGoals = async (shouldCloseEdit = true) => {
       if (!user) return;
 
       const newWeightGoals = {
@@ -236,7 +236,9 @@ function App() {
 
       try {
          await setDoc(doc(db, 'users', user.uid), { weightGoals: newWeightGoals }, { merge: true });
-         setIsEditingProfile(false);
+         if (shouldCloseEdit) {
+            setIsEditingProfile(false);
+         }
       } catch (error) {
          console.error("Error saving weight goals:", error);
       }
@@ -558,6 +560,28 @@ function App() {
                                                 Meta: {desiredWeight}kg (Inicio: {startingWeight}kg)
                                              </p>
                                           )}
+                                       </div>
+
+                                       <div className="mb-8 w-full max-w-xs relative group">
+                                          <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                                             <span className="text-stone-400 font-bold text-sm">ACTUAL:</span>
+                                          </div>
+                                          <input
+                                             type="number"
+                                             value={currentWeight}
+                                             onChange={(e) => setCurrentWeight(e.target.value)}
+                                             onBlur={() => saveWeightGoals(false)}
+                                             onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                   e.currentTarget.blur();
+                                                }
+                                             }}
+                                             className="w-full pl-20 pr-12 py-4 bg-stone-50 border border-stone-100 rounded-2xl text-center font-bold text-2xl text-stone-800 focus:outline-none focus:ring-2 focus:ring-stone-200 focus:bg-white transition-all"
+                                             placeholder="0.0"
+                                          />
+                                          <div className="absolute inset-y-0 right-6 flex items-center pointer-events-none">
+                                             <span className="text-stone-400 font-bold text-sm">kg</span>
+                                          </div>
                                        </div>
 
                                        <div className="flex gap-4 w-full max-w-md justify-center">
