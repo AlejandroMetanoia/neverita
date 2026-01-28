@@ -479,12 +479,37 @@ function App() {
                                     />
                                  </div>
                                  <h2 className="text-4xl md:text-5xl font-bold text-stone-800 mb-2 font-[Outfit] tracking-tight">{user.displayName}</h2>
-                                 <p className="text-stone-500 mb-10 font-medium text-xl">{user.email}</p>
+                                 <p className="text-stone-500 mb-6 font-medium text-lg">@{user.email?.split('@')[0] || 'usuario'}</p>
 
-                                 <div className="w-full max-w-sm">
+                                 {/* Progress Bar */}
+                                 <div className="w-full max-w-xs mb-8">
+                                    <div className="flex justify-between text-sm font-medium text-stone-600 mb-2">
+                                       <span>Progreso</span>
+                                       <span>0%</span>
+                                    </div>
+                                    <div className="w-full h-3 bg-stone-200 rounded-full overflow-hidden">
+                                       <div className="h-full bg-stone-800 w-0 transition-all duration-1000" />
+                                    </div>
+                                 </div>
+
+                                 <div className="flex gap-4 w-full max-w-md justify-center">
+                                    <button
+                                       className="bg-stone-200 hover:bg-stone-300 text-stone-900 font-bold py-3 px-6 rounded-full transition-all text-base active:scale-95"
+                                    >
+                                       Compartir
+                                    </button>
+                                    <button
+                                       onClick={() => handleChangeView('edit-goals')}
+                                       className="bg-stone-200 hover:bg-stone-300 text-stone-900 font-bold py-3 px-6 rounded-full transition-all text-base active:scale-95"
+                                    >
+                                       Editar Objetivos
+                                    </button>
+                                 </div>
+
+                                 <div className="mt-12">
                                     <button
                                        onClick={() => auth.signOut()}
-                                       className="w-full bg-red-50 hover:bg-red-100 text-red-500 border border-red-200 hover:border-red-300 font-bold py-5 px-8 rounded-2xl transition-all shadow-sm hover:shadow-md text-lg active:scale-95"
+                                       className="text-stone-400 hover:text-red-500 transition-colors text-sm font-medium"
                                     >
                                        Cerrar Sesión
                                     </button>
@@ -516,6 +541,87 @@ function App() {
                            <div className="mt-16">
                               <p className="text-xs text-stone-400 uppercase tracking-[0.3em] font-bold">Neverita v1.0</p>
                            </div>
+                        </div>
+                     </div>
+                  </div>
+               )}
+
+               {currentView === 'edit-goals' && (
+                  <div className="fixed inset-0 z-[60] bg-white animate-in slide-in-from-bottom duration-300 flex flex-col">
+                     {/* Header */}
+                     <div className="flex items-center justify-between p-4 border-b border-gray-100">
+                        <button
+                           onClick={() => handleChangeView('profile')}
+                           className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                        >
+                           <Icons.ChevronLeft size={28} className="text-stone-800" />
+                        </button>
+                        <h2 className="text-lg font-bold text-stone-900">Editar objetivos</h2>
+                        <button
+                           onClick={() => handleChangeView('profile')}
+                           className="bg-stone-200 hover:bg-stone-300 text-stone-900 font-bold py-2 px-4 rounded-full text-sm transition-colors"
+                        >
+                           Hecho
+                        </button>
+                     </div>
+
+                     {/* Content */}
+                     <div className="flex-1 overflow-y-auto p-6 md:p-10 max-w-2xl mx-auto w-full">
+                        <div className="flex flex-col items-center mb-10">
+                           <div className="w-24 h-24 bg-stone-100 rounded-full flex items-center justify-center mb-4">
+                              {user?.photoURL ? (
+                                 <img src={user.photoURL} alt="Profile" className="w-full h-full rounded-full object-cover" />
+                              ) : (
+                                 <Icons.User size={40} className="text-stone-400" />
+                              )}
+                           </div>
+                           <button className="bg-stone-200 hover:bg-stone-300 text-stone-900 font-bold py-2 px-4 rounded-full text-sm transition-colors">
+                              Modificar
+                           </button>
+                        </div>
+
+                        <div className="space-y-6">
+                           <div className="space-y-2">
+                              <label className="text-sm font-medium text-stone-500 ml-1">Peso Actual (kg)</label>
+                              <input
+                                 type="number"
+                                 value={currentWeight}
+                                 onChange={(e) => setCurrentWeight(e.target.value)}
+                                 placeholder="Ej: 75"
+                                 className="w-full p-4 rounded-2xl border border-stone-200 focus:border-stone-400 focus:ring-0 text-lg outline-none transition-all"
+                              />
+                           </div>
+
+                           <div className="space-y-2">
+                              <label className="text-sm font-medium text-stone-500 ml-1">Peso Deseado (kg)</label>
+                              <input
+                                 type="number"
+                                 value={desiredWeight}
+                                 onChange={(e) => setDesiredWeight(e.target.value)}
+                                 placeholder="Ej: 70"
+                                 className="w-full p-4 rounded-2xl border border-stone-200 focus:border-stone-400 focus:ring-0 text-lg outline-none transition-all"
+                              />
+                           </div>
+
+                           <div className="space-y-2">
+                              <label className="text-sm font-medium text-stone-500 ml-1">Tiempo (semanas)</label>
+                              <input
+                                 type="number"
+                                 value={timeframe}
+                                 onChange={(e) => setTimeframe(e.target.value)}
+                                 placeholder="Ej: 8"
+                                 className="w-full p-4 rounded-2xl border border-stone-200 focus:border-stone-400 focus:ring-0 text-lg outline-none transition-all"
+                              />
+                           </div>
+
+                           {weeklyChange !== 0 && !isNaN(weeklyChange) && (
+                              <div className="mt-8 p-6 bg-stone-50 rounded-3xl border border-stone-100">
+                                 <p className="text-stone-500 text-sm mb-1 text-center font-medium uppercase tracking-wide">Cambio semanal estimado</p>
+                                 <p className={`text-3xl font-bold text-center ${weeklyChange > 0 ? 'text-green-600' : 'text-blue-600'}`}>
+                                    {weeklyChange > 0 ? '+' : ''}{weeklyChange}g <span className="text-lg text-stone-400 font-normal">/ semana</span>
+                                 </p>
+                              </div>
+                           )}
                         </div>
                      </div>
                   </div>
