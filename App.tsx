@@ -44,16 +44,16 @@ function App() {
    const [isEditingProfile, setIsEditingProfile] = useState(false);
 
    const weeklyChange = useMemo(() => {
-      const current = parseFloat(currentWeight);
+      const start = parseFloat(startingWeight);
       const desired = parseFloat(desiredWeight);
       const weeks = parseFloat(timeframe);
 
-      if (!current || !desired || !weeks || weeks === 0) return 0;
+      if (!start || !desired || !weeks || weeks === 0) return 0;
 
-      const totalChange = desired - current; // Negative for loss, positive for gain
+      const totalChange = desired - start; // Negative for loss, positive for gain
       const changePerWeek = (totalChange / weeks) * 1000; // Convert to grams
       return Math.round(changePerWeek);
-   }, [currentWeight, desiredWeight, timeframe]);
+   }, [startingWeight, desiredWeight, timeframe]);
 
    const progressPercentage = useMemo(() => {
       const start = parseFloat(startingWeight);
