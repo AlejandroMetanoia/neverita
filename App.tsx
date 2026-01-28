@@ -299,61 +299,125 @@ function App() {
                alt="Background"
                className="hidden md:block w-full h-full object-cover opacity-80"
             />
-         </div>         {/* Sidebar Navigation - Floating Light Dock */}
-         <aside className={`fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] md:translate-x-0 md:left-6 md:top-1/2 md:-translate-y-1/2 md:w-24 md:h-[90vh] md:bottom-auto bg-white/50 backdrop-blur-xl border border-white/40 rounded-xl z-50 flex md:flex-col justify-around md:justify-center items-center py-2 md:py-8 md:gap-8 transition-all duration-300 ${isMenuHidden ? 'translate-y-[200%] md:translate-y-[-50%] md:-translate-x-[200%]' : ''}`}>
-
-            {/* Logo / Brand */}
-            <div className="hidden md:flex flex-col items-center gap-2 mb-auto">
-               <div className="w-12 h-12 bg-gradient-to-tr from-stone-400 to-stone-600 rounded-2xl flex items-center justify-center transition-all hover:scale-105">
-                  <Icons.Utensils className="text-white" size={24} />
+         </div>         {/* Desktop Pinterest-style Sidebar - Fixed Left */}
+         <aside className="hidden md:flex fixed left-0 top-0 h-screen w-20 flex-col items-center py-6 bg-white z-50 border-r border-gray-100">
+            {/* Logo */}
+            <div className="mb-8">
+               <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center transition-all hover:bg-red-700 cursor-pointer shadow-sm">
+                  <Icons.Utensils className="text-white" size={20} />
                </div>
             </div>
 
-            <button
-               onClick={() => handleChangeView('dashboard')}
-               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'dashboard' ? 'bg-stone-200 text-stone-700' : 'text-gray-400 hover:text-stone-600 hover:bg-white/40'}`}
-            >
-               <Icons.Dashboard size={28} className={`transition-transform duration-300 ${currentView === 'dashboard' ? 'scale-110' : 'group-hover:scale-110'}`} />
-               {currentView === 'dashboard' && <div className="absolute left-0 w-1 h-8 bg-stone-500 rounded-r-full hidden md:block -ml-[2px]" />}
-            </button>
+            {/* Nav Items */}
+            <div className="flex flex-col gap-6 w-full items-center">
+               <button
+                  onClick={() => handleChangeView('dashboard')}
+                  className={`p-3 rounded-xl transition-all duration-200 group relative flex items-center justify-center ${currentView === 'dashboard' ? 'bg-black text-white' : 'text-stone-500 hover:bg-stone-100'}`}
+               >
+                  <Icons.Dashboard size={24} strokeWidth={currentView === 'dashboard' ? 3 : 2} />
+               </button>
 
-            <button
-               onClick={() => handleChangeView('library')}
-               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'library' ? 'bg-stone-200 text-stone-700' : 'text-gray-400 hover:text-stone-600 hover:bg-white/40'}`}
-            >
-               <Icons.Fridge size={28} className={`transition-transform duration-300 ${currentView === 'library' ? 'scale-110' : 'group-hover:scale-110'}`} />
-               {currentView === 'library' && <div className="absolute left-0 w-1 h-8 bg-stone-500 rounded-r-full hidden md:block -ml-[2px]" />}
-            </button>
+               <button
+                  onClick={() => handleChangeView('library')}
+                  className={`p-3 rounded-xl transition-all duration-200 group relative flex items-center justify-center ${currentView === 'library' ? 'bg-black text-white' : 'text-stone-500 hover:bg-stone-100'}`}
+               >
+                  <Icons.Fridge size={24} strokeWidth={currentView === 'library' ? 3 : 2} />
+               </button>
 
-            <button
-               onClick={() => handleChangeView('stats')}
-               className={`p-4 rounded-xl transition-all duration-300 group relative flex items-center justify-center ${currentView === 'stats' ? 'bg-stone-200 text-stone-700' : 'text-gray-400 hover:text-stone-600 hover:bg-white/40'}`}
-            >
-               <Icons.Stats size={28} className={`transition-transform duration-300 ${currentView === 'stats' ? 'scale-110' : 'group-hover:scale-110'}`} />
-               {currentView === 'stats' && <div className="absolute left-0 w-1 h-8 bg-stone-500 rounded-r-full hidden md:block -ml-[2px]" />}
-            </button>
+               <button
+                  onClick={() => handleChangeView('stats')}
+                  className={`p-3 rounded-xl transition-all duration-200 group relative flex items-center justify-center ${currentView === 'stats' ? 'bg-black text-white' : 'text-stone-500 hover:bg-stone-100'}`}
+               >
+                  <Icons.Stats size={24} strokeWidth={currentView === 'stats' ? 3 : 2} />
+               </button>
+            </div>
 
-            {/* Profile */}
-            <button
-               onClick={() => handleChangeView('profile')}
-               className={`hidden md:flex mt-auto w-12 h-12 rounded-full items-center justify-center transition-all duration-300 ${currentView === 'profile' ? 'bg-stone-800 text-white shadow-lg scale-110' : 'bg-white text-stone-400 hover:text-stone-600 hover:scale-105 border border-gray-100 shadow-sm'}`}
-            >
-               <Icons.User size={24} />
-            </button>
+            {/* Spacer to push Profile to bottom if needed, or just keep it close like Pinterest side rail */}
+            {/* In Pinterest desktop image, profile/settings is at the bottom, or there are more icons. I'll put Profile at the bottom for "Account" */}
 
-            {/* Mobile Profile Link */}
-            <button
-               onClick={() => handleChangeView('profile')}
-               className={`md:hidden p-3 rounded-full transition-all ${currentView === 'profile' ? 'text-stone-800 scale-110' : 'text-gray-400'}`}
-            >
-               <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${currentView === 'profile' ? 'bg-stone-200' : 'bg-transparent'}`}>
-                  <Icons.User size={24} />
-               </div>
-            </button>
+            <div className="mt-auto mb-4">
+               <button
+                  onClick={() => handleChangeView('profile')}
+                  className={`w-10 h-10 rounded-full overflow-hidden transition-all duration-200 flex items-center justify-center ${currentView === 'profile' ? 'ring-2 ring-black' : 'hover:bg-stone-100'}`}
+               >
+                  {user?.photoURL ? (
+                     <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                     <Icons.User size={24} className="text-stone-600" />
+                  )}
+               </button>
+            </div>
          </aside>
 
-         {/* Main Content Area */}
-         <main className="flex-1 p-4 md:p-10 max-w-6xl mx-auto w-full pb-32 md:pb-10 relative z-0 md:ml-32">
+         {/* Mobile Pinterest-style Bottom Navigation */}
+         <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 z-50 px-2 pb-safe-area">
+            <div className="flex flex-row justify-around items-center h-16">
+               <button
+                  onClick={() => handleChangeView('dashboard')}
+                  className="flex flex-col items-center justify-center gap-1 w-16"
+               >
+                  <Icons.Dashboard
+                     size={24}
+                     className={`transition-all ${currentView === 'dashboard' ? 'text-black fill-current' : 'text-stone-500'}`}
+                     strokeWidth={currentView === 'dashboard' ? 0 : 2}
+                  />
+                  <span className={`text-[10px] font-medium ${currentView === 'dashboard' ? 'text-black' : 'text-stone-500'}`}>
+                     Diario
+                  </span>
+               </button>
+
+               <button
+                  onClick={() => handleChangeView('library')}
+                  className="flex flex-col items-center justify-center gap-1 w-16"
+               >
+                  <Icons.Fridge
+                     size={24}
+                     className={`transition-all ${currentView === 'library' ? 'text-black fill-current' : 'text-stone-500'}`}
+                     strokeWidth={currentView === 'library' ? 0 : 2}
+                  />
+                  <span className={`text-[10px] font-medium ${currentView === 'library' ? 'text-black' : 'text-stone-500'}`}>
+                     Nevera
+                  </span>
+               </button>
+
+               <button
+                  onClick={() => handleChangeView('stats')}
+                  className="flex flex-col items-center justify-center gap-1 w-16"
+               >
+                  <Icons.Stats
+                     size={24}
+                     className={`transition-all ${currentView === 'stats' ? 'text-black fill-current' : 'text-stone-500'}`}
+                     strokeWidth={currentView === 'stats' ? 0 : 2}
+                  />
+                  <span className={`text-[10px] font-medium ${currentView === 'stats' ? 'text-black' : 'text-stone-500'}`}>
+                     Estadísticas
+                  </span>
+               </button>
+
+               <button
+                  onClick={() => handleChangeView('profile')}
+                  className="flex flex-col items-center justify-center gap-1 w-16"
+               >
+                  {user?.photoURL ? (
+                     <div className={`w-6 h-6 rounded-full overflow-hidden ${currentView === 'profile' ? 'ring-2 ring-black' : ''}`}>
+                        <img src={user.photoURL} alt="User" className="w-full h-full object-cover" />
+                     </div>
+                  ) : (
+                     <Icons.User
+                        size={24}
+                        className={`transition-all ${currentView === 'profile' ? 'text-black fill-current' : 'text-stone-500'}`}
+                        strokeWidth={currentView === 'profile' ? 0 : 2}
+                     />
+                  )}
+                  <span className={`text-[10px] font-medium ${currentView === 'profile' ? 'text-black' : 'text-stone-500'}`}>
+                     Cuenta
+                  </span>
+               </button>
+            </div>
+         </div>
+
+         {/* Main Content Area - Adjusted margin for desktop sidebar */}
+         <main className="flex-1 p-4 md:p-10 max-w-7xl mx-auto w-full pb-24 md:pb-10 relative z-0 md:ml-20">
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
                {currentView === 'dashboard' && (
                   <Dashboard
