@@ -303,8 +303,8 @@ function App() {
          <aside className="hidden md:flex fixed left-0 top-0 h-screen w-20 flex-col items-center py-6 bg-white z-50 border-r border-gray-100">
             {/* Logo */}
             <div className="mb-8">
-               <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center transition-all hover:bg-red-700 cursor-pointer shadow-sm">
-                  <Icons.Utensils className="text-white" size={20} />
+               <div className="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center transition-all hover:bg-stone-200 cursor-pointer shadow-sm">
+                  <Icons.Utensils className="text-stone-800" size={24} />
                </div>
             </div>
 
