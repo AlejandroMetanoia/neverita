@@ -351,17 +351,17 @@ function App() {
 
          {/* Mobile Pinterest-style Bottom Navigation */}
          <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 z-50 px-2 pb-safe-area">
-            <div className="flex flex-row justify-around items-center h-16">
+            <div className="flex flex-row justify-around items-center h-20">
                <button
                   onClick={() => handleChangeView('dashboard')}
                   className="flex flex-col items-center justify-center gap-1 w-16"
                >
                   <Icons.Dashboard
-                     size={24}
+                     size={28}
                      className={`transition-all ${currentView === 'dashboard' ? 'text-black fill-current' : 'text-stone-500'}`}
                      strokeWidth={currentView === 'dashboard' ? 0 : 2}
                   />
-                  <span className={`text-[10px] font-medium ${currentView === 'dashboard' ? 'text-black' : 'text-stone-500'}`}>
+                  <span className={`text-xs font-medium ${currentView === 'dashboard' ? 'text-black' : 'text-stone-500'}`}>
                      Diario
                   </span>
                </button>
@@ -371,11 +371,11 @@ function App() {
                   className="flex flex-col items-center justify-center gap-1 w-16"
                >
                   <Icons.Fridge
-                     size={24}
+                     size={28}
                      className={`transition-all ${currentView === 'library' ? 'text-black fill-current' : 'text-stone-500'}`}
                      strokeWidth={currentView === 'library' ? 0 : 2}
                   />
-                  <span className={`text-[10px] font-medium ${currentView === 'library' ? 'text-black' : 'text-stone-500'}`}>
+                  <span className={`text-xs font-medium ${currentView === 'library' ? 'text-black' : 'text-stone-500'}`}>
                      Nevera
                   </span>
                </button>
@@ -385,11 +385,11 @@ function App() {
                   className="flex flex-col items-center justify-center gap-1 w-16"
                >
                   <Icons.Stats
-                     size={24}
+                     size={28}
                      className={`transition-all ${currentView === 'stats' ? 'text-black fill-current' : 'text-stone-500'}`}
                      strokeWidth={currentView === 'stats' ? 0 : 2}
                   />
-                  <span className={`text-[10px] font-medium ${currentView === 'stats' ? 'text-black' : 'text-stone-500'}`}>
+                  <span className={`text-xs font-medium ${currentView === 'stats' ? 'text-black' : 'text-stone-500'}`}>
                      Estadísticas
                   </span>
                </button>
@@ -399,17 +399,17 @@ function App() {
                   className="flex flex-col items-center justify-center gap-1 w-16"
                >
                   {user?.photoURL ? (
-                     <div className={`w-6 h-6 rounded-full overflow-hidden ${currentView === 'profile' ? 'ring-2 ring-black' : ''}`}>
+                     <div className={`w-7 h-7 rounded-full overflow-hidden ${currentView === 'profile' ? 'ring-2 ring-black' : ''}`}>
                         <img src={user.photoURL} alt="User" className="w-full h-full object-cover" />
                      </div>
                   ) : (
                      <Icons.User
-                        size={24}
+                        size={28}
                         className={`transition-all ${currentView === 'profile' ? 'text-black fill-current' : 'text-stone-500'}`}
                         strokeWidth={currentView === 'profile' ? 0 : 2}
                      />
                   )}
-                  <span className={`text-[10px] font-medium ${currentView === 'profile' ? 'text-black' : 'text-stone-500'}`}>
+                  <span className={`text-xs font-medium ${currentView === 'profile' ? 'text-black' : 'text-stone-500'}`}>
                      Cuenta
                   </span>
                </button>
