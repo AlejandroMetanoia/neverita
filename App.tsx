@@ -383,76 +383,76 @@ function App() {
                   <Stats logs={logs} goals={goals} onUpdateGoals={updateGoals} />
                )}
                {currentView === 'profile' && (
-                  <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                     {/* Full screen blurred background */}
+                  <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-6 md:p-12 animate-in fade-in duration-300">
+                     {/* Full screen blurred background - Darker for better contrast */}
                      <div
-                        className="absolute inset-0 bg-stone-900/30 backdrop-blur-xl transition-all duration-500"
-                        onClick={() => handleChangeView('dashboard')} // Click outside to close
+                        className="absolute inset-0 bg-stone-950/80 backdrop-blur-2xl transition-all duration-500"
+                        onClick={() => handleChangeView('dashboard')}
                      />
 
-                     {/* Content */}
-                     <div className="relative z-10 w-full max-w-md animate-in zoom-in-95 duration-300">
-                        <div className="bg-white/80 backdrop-blur-md border border-white/60 p-8 md:p-12 rounded-[2.5rem] shadow-2xl text-center relative overflow-hidden">
-                           <div className="absolute top-0 w-full h-40 bg-gradient-to-b from-stone-100 to-transparent opacity-50 pointer-events-none left-0" />
+                     {/* Close Button */}
+                     <button
+                        onClick={() => handleChangeView('dashboard')}
+                        className="absolute top-6 right-6 md:top-10 md:right-10 p-3 rounded-full hover:bg-white/10 text-white/70 hover:text-white transition-colors z-50"
+                     >
+                        <Icons.X size={32} />
+                     </button>
 
-                           <button
-                              onClick={() => handleChangeView('dashboard')}
-                              className="absolute top-6 right-6 p-2 rounded-full hover:bg-black/5 text-gray-400 hover:text-gray-600 transition-colors"
-                           >
-                              <Icons.X size={24} />
-                           </button>
+                     {/* Content Container - Full Width/Height, No Card Styles */}
+                     <div className="relative z-10 w-full h-full max-w-5xl mx-auto flex flex-col items-center justify-center text-center">
+                        <div className="animate-in slide-in-from-bottom-8 duration-500 flex flex-col items-center w-full">
+                           {user ? (
+                              <>
+                                 <div className="w-40 h-40 rounded-full mx-auto mb-8 p-1 bg-gradient-to-tr from-stone-700 to-stone-500 shadow-2xl">
+                                    <img
+                                       src={user.photoURL || 'https://ui-avatars.com/api/?name=User'}
+                                       className="w-full h-full rounded-full object-cover border-4 border-stone-800"
+                                       alt={user.displayName || 'User'}
+                                    />
+                                 </div>
+                                 <h2 className="text-5xl md:text-6xl font-bold text-white mb-4 font-[Outfit] tracking-tight drop-shadow-sm">{user.displayName}</h2>
+                                 <p className="text-stone-400 mb-12 font-medium text-xl md:text-2xl">{user.email}</p>
 
-                           <div className="relative z-10 pt-4">
-                              {user ? (
-                                 <>
-                                    <div className="w-32 h-32 rounded-full mx-auto mb-6 p-1 bg-white shadow-xl">
-                                       <img
-                                          src={user.photoURL || 'https://ui-avatars.com/api/?name=User'}
-                                          className="w-full h-full rounded-full object-cover border-4 border-stone-50"
-                                          alt={user.displayName || 'User'}
-                                       />
-                                    </div>
-                                    <h2 className="text-4xl font-bold text-stone-800 mb-2 font-[Outfit] tracking-tight">{user.displayName}</h2>
-                                    <p className="text-stone-500 mb-10 font-medium text-lg">{user.email}</p>
-
-                                    <div className="flex flex-col gap-4">
-                                       <button
-                                          onClick={() => auth.signOut()}
-                                          className="w-full bg-stone-900 hover:bg-stone-800 text-white font-bold py-4 px-8 rounded-2xl transition-all shadow-lg hover:shadow-xl text-lg flex items-center justify-center gap-3 active:scale-95"
-                                       >
-                                          Cerrar Sesión
-                                       </button>
-                                       <button
-                                          onClick={() => handleChangeView('dashboard')}
-                                          className="w-full bg-white hover:bg-stone-50 text-stone-600 font-bold py-4 px-8 rounded-2xl transition-all border border-stone-200 hover:border-stone-300 text-lg active:scale-95"
-                                       >
-                                          Volver
-                                       </button>
-                                    </div>
-                                 </>
-                              ) : (
-                                 <>
-                                    <div className="w-32 h-32 rounded-full mx-auto mb-6 bg-stone-100 flex items-center justify-center text-stone-300 border-[6px] border-white shadow-xl">
-                                       <Icons.User size={64} />
-                                    </div>
-                                    <h2 className="text-3xl font-bold text-stone-800 mb-2 font-[Outfit]">Invitado</h2>
-                                    <p className="text-stone-500 mb-10 font-medium text-lg">Inicia sesión para guardar tus datos</p>
+                                 <div className="flex flex-col md:flex-row gap-6 w-full max-w-xl">
+                                    <button
+                                       onClick={() => auth.signOut()}
+                                       className="flex-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 hover:border-red-500/50 font-bold py-6 px-8 rounded-3xl transition-all shadow-[0_0_20px_rgba(239,68,68,0.1)] hover:shadow-[0_0_30px_rgba(239,68,68,0.2)] text-xl backdrop-blur-md active:scale-95"
+                                    >
+                                       Cerrar Sesión
+                                    </button>
+                                    <button
+                                       onClick={() => handleChangeView('dashboard')}
+                                       className="flex-1 bg-white/5 hover:bg-white/10 text-white border border-white/10 hover:border-white/20 font-bold py-6 px-8 rounded-3xl transition-all shadow-lg hover:shadow-xl text-xl backdrop-blur-md active:scale-95"
+                                    >
+                                       Volver
+                                    </button>
+                                 </div>
+                              </>
+                           ) : (
+                              <>
+                                 <div className="w-40 h-40 rounded-full mx-auto mb-8 bg-stone-800/80 flex items-center justify-center text-stone-500 border-[6px] border-stone-700/50 shadow-2xl backdrop-blur-md">
+                                    <Icons.User size={80} />
+                                 </div>
+                                 <h2 className="text-5xl font-bold text-white mb-4 font-[Outfit]">Invitado</h2>
+                                 <p className="text-stone-400 mb-12 font-medium text-xl">Inicia sesión para desbloquear todas las funciones</p>
+                                 <div className="w-full max-w-md">
                                     <button
                                        onClick={handleLogin}
-                                       className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-800 border-2 border-gray-100 hover:border-gray-200 font-bold py-5 px-8 rounded-2xl transition-all shadow-sm hover:shadow-md text-lg active:scale-95"
+                                       className="w-full flex items-center justify-center gap-4 bg-white hover:bg-stone-200 text-stone-900 border-none font-bold py-6 px-10 rounded-3xl transition-all shadow-[0_0_40px_rgba(255,255,255,0.15)] hover:shadow-[0_0_60px_rgba(255,255,255,0.25)] text-xl active:scale-95 transform hover:-translate-y-1"
                                     >
                                        <img
                                           src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                                           alt="Google"
-                                          className="w-6 h-6"
+                                          className="w-8 h-8"
                                        />
                                        Inicia Sesión con Google
                                     </button>
-                                 </>
-                              )}
-                              <div className="mt-12">
-                                 <p className="text-xs text-stone-300 uppercase tracking-[0.2em] font-bold">Neverita v1.0</p>
-                              </div>
+                                 </div>
+                              </>
+                           )}
+
+                           <div className="mt-20">
+                              <p className="text-sm text-stone-600 uppercase tracking-[0.3em] font-bold">Neverita v1.0</p>
                            </div>
                         </div>
                      </div>
