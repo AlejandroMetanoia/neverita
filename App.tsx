@@ -10,7 +10,7 @@ import Stats from './components/Stats';
 import { Food, LogEntry, UserGoals } from './types';
 import { INITIAL_FOODS } from './constants';
 
-type View = 'dashboard' | 'library' | 'stats' | 'profile';
+type View = 'dashboard' | 'library' | 'stats' | 'profile' | 'edit-goals';
 
 function App() {
    const [user, setUser] = useState<User | null>(null);
@@ -35,6 +35,23 @@ function App() {
 
    const [guestLogs, setGuestLogs] = useState<LogEntry[]>([]);
    const [goals, setGoals] = useState<UserGoals | null>(null);
+
+   // Edit Goals State
+   const [currentWeight, setCurrentWeight] = useState('');
+   const [desiredWeight, setDesiredWeight] = useState('');
+   const [timeframe, setTimeframe] = useState('');
+
+   const weeklyChange = useMemo(() => {
+      const current = parseFloat(currentWeight);
+      const desired = parseFloat(desiredWeight);
+      const weeks = parseFloat(timeframe);
+
+      if (!current || !desired || !weeks || weeks === 0) return 0;
+
+      const totalChange = desired - current; // Negative for loss, positive for gain
+      const changePerWeek = (totalChange / weeks) * 1000; // Convert to grams
+      return Math.round(changePerWeek);
+   }, [currentWeight, desiredWeight, timeframe]);
 
    const handleNavigateToLibraryAdd = () => {
       setCurrentView('library');
