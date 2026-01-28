@@ -170,6 +170,13 @@ function App() {
             if (data.kcalObjetivo && data.macrosPct) {
                setGoals(data as UserGoals);
             }
+
+            // Check for Weight Goals
+            if (data.weightGoals) {
+               setCurrentWeight(data.weightGoals.currentWeight?.toString() || '');
+               setDesiredWeight(data.weightGoals.desiredWeight?.toString() || '');
+               setTimeframe(data.weightGoals.timeframe?.toString() || '');
+            }
          }
       });
       return () => unsubscribe();
@@ -181,6 +188,24 @@ function App() {
          await setDoc(doc(db, 'users', user.uid), newGoals, { merge: true });
       } catch (error) {
          console.error("Error updating goals:", error);
+      }
+   };
+
+   const saveWeightGoals = async () => {
+      if (!user) return;
+
+      const newWeightGoals = {
+         currentWeight: parseFloat(currentWeight) || 0,
+         desiredWeight: parseFloat(desiredWeight) || 0,
+         timeframe: parseFloat(timeframe) || 0,
+         updatedAt: new Date().toISOString()
+      };
+
+      try {
+         await setDoc(doc(db, 'users', user.uid), { weightGoals: newWeightGoals }, { merge: true });
+         handleChangeView('profile');
+      } catch (error) {
+         console.error("Error saving weight goals:", error);
       }
    };
 
@@ -558,7 +583,7 @@ function App() {
                         </button>
                         <h2 className="text-lg font-bold text-stone-900">Editar objetivos</h2>
                         <button
-                           onClick={() => handleChangeView('profile')}
+                           onClick={saveWeightGoals}
                            className="bg-stone-200 hover:bg-stone-300 text-stone-900 font-bold py-2 px-4 rounded-full text-sm transition-colors"
                         >
                            Hecho

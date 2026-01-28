@@ -55,5 +55,11 @@ export interface UserGoals {
     carbohidratos: number;
     grasas: number;
   };
+  weightGoals?: {
+    currentWeight: number;
+    desiredWeight: number;
+    timeframe: number;
+    updatedAt?: string;
+  };
   updatedAt?: string;
 }
