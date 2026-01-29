@@ -29,7 +29,7 @@ const getCurrentMeal = (): MealType => {
     return 'Cena';
 };
 
-export const useHybridPrediction = () => {
+export const useHybridPrediction = (todaysLogs: LogEntry[]) => {
     const [prediction, setPrediction] = useState<PredictionResult | null>(null);
     const [loading, setLoading] = useState(true);
     const [dismissed, setDismissed] = useState(false);
@@ -80,16 +80,38 @@ export const useHybridPrediction = () => {
                 });
 
                 const scores = calculateHabitScores(logs);
-                const best = getBestSuggestion(scores);
 
-                if (best) {
+                // Get sorted candidates instead of just one best
+                const sortedCandidates = Object.values(scores).sort((a, b) => b.totalScore - a.totalScore);
+
+                // Find the first candidate that isn't in today's logs for the predicted meal
+                let bestCandidate = null;
+
+                for (const candidate of sortedCandidates) {
+                    if (candidate.totalScore < 40) break; // Optimization: stop if below threshold
+
+                    const candidateMeal = candidate.data.meal;
+
+                    // Check if this specific food has already been logged TODAY for this MEAL
+                    const alreadyLogged = todaysLogs.some(log =>
+                        log.foodName === candidate.data.foodName &&
+                        log.meal === candidateMeal
+                    );
+
+                    if (!alreadyLogged) {
+                        bestCandidate = candidate.data;
+                        break; // Found the winner
+                    }
+                }
+
+                if (bestCandidate) {
                     setPrediction({
-                        foodName: best.foodName,
-                        foodId: best.foodId,
-                        grams: best.grams,
-                        calculated: best.calculated,
-                        score: 0, // Score logic handled inside, just need the data
-                        meal: best.meal // Use the meal type from the best matching log
+                        foodName: bestCandidate.foodName,
+                        foodId: bestCandidate.foodId,
+                        grams: bestCandidate.grams,
+                        calculated: bestCandidate.calculated,
+                        score: 0,
+                        meal: bestCandidate.meal
                     });
                 } else {
                     setPrediction(null);
@@ -103,7 +125,7 @@ export const useHybridPrediction = () => {
         };
 
         fetchAndPredict();
-    }, [dismissed]);
+    }, [dismissed, todaysLogs]); // Re-run when logs change (user adds something)
 
     return { prediction, loading, dismiss: () => setDismissed(true) };
 };
@@ -182,15 +204,4 @@ const calculateHabitScores = (logs: LogEntry[]) => {
     return scores;
 };
 
-const getBestSuggestion = (scores: Record<string, { totalScore: number; data: LogEntry }>, threshold = 40) => {
-    const entries = Object.entries(scores);
-    if (entries.length === 0) return null;
 
-    // Sort by highest score
-    const sorted = entries.sort((a, b) => b[1].totalScore - a[1].totalScore);
-    const topResult = sorted[0][1];
-
-    // console.log("Prediction Scores:", sorted.map(s => `${s[0]}: ${s[1].totalScore}`));
-
-    return topResult.totalScore >= threshold ? topResult.data : null;
-};

@@ -114,7 +114,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
     }, [selectedFood, grams, recipeIngredients]);
 
     // Prediction Hook
-    const { prediction, dismiss: dismissPrediction } = useHybridPrediction();
+    const { prediction, dismiss: dismissPrediction } = useHybridPrediction(dailyLogs);
 
     const handleAddPrediction = () => {
         if (!prediction) return;
