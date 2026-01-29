@@ -54,9 +54,8 @@ export const useHybridPrediction = () => {
                 const q = query(
                     collection(db, 'daily_logs'),
                     where('userId', '==', userId),
-                    where('meal', '==', currentMeal),
                     orderBy('createdAt', 'desc'),
-                    limit(30)
+                    limit(50)
                 );
 
                 let querySnapshot;
@@ -90,7 +89,7 @@ export const useHybridPrediction = () => {
                         grams: best.grams,
                         calculated: best.calculated,
                         score: 0, // Score logic handled inside, just need the data
-                        meal: currentMeal
+                        meal: best.meal // Use the meal type from the best matching log
                     });
                 } else {
                     setPrediction(null);
