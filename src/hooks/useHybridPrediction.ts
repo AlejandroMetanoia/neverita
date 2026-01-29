@@ -90,12 +90,12 @@ export const useHybridPrediction = (todaysLogs: LogEntry[]) => {
                 for (const candidate of sortedCandidates) {
                     if (candidate.totalScore < 40) break; // Optimization: stop if below threshold
 
-                    const candidateMeal = candidate.data.meal;
-
-                    // Check if this specific food has already been logged TODAY for this MEAL
+                    // Check if this specific food has already been logged TODAY for the CURRENT meal context
+                    // This allows "Rice" (eaten at Lunch) to still be suggested for Dinner if valid,
+                    // unless it was ALREADY logged for Dinner today.
                     const alreadyLogged = todaysLogs.some(log =>
                         log.foodName === candidate.data.foodName &&
-                        log.meal === candidateMeal
+                        log.meal === currentMeal
                     );
 
                     if (!alreadyLogged) {
@@ -111,7 +111,7 @@ export const useHybridPrediction = (todaysLogs: LogEntry[]) => {
                         grams: bestCandidate.grams,
                         calculated: bestCandidate.calculated,
                         score: 0,
-                        meal: bestCandidate.meal
+                        meal: currentMeal // Ensure it saves to the NOW meal
                     });
                 } else {
                     setPrediction(null);
