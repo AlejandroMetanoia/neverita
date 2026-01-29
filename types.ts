@@ -38,6 +38,7 @@ export interface LogEntry {
     carbs: number;
     fat: number;
   };
+  createdAt?: any;
 }
 
 export interface DayStats {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { User, onAuthStateChanged, signInWithPopup } from 'firebase/auth';
-import { collection, query, where, onSnapshot, setDoc, deleteDoc, doc, QuerySnapshot } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, setDoc, deleteDoc, doc, QuerySnapshot, serverTimestamp } from 'firebase/firestore';
 import { auth, db, googleProvider } from './src/firebase';
 // Login component removed
 import { Icons } from './components/ui/Icons';
@@ -329,7 +329,7 @@ function App() {
       }
       try {
          // Add userId to the log entry before saving
-         const logWithUser = { ...log, userId: user.uid };
+         const logWithUser = { ...log, userId: user.uid, createdAt: serverTimestamp() };
          await setDoc(doc(db, 'daily_logs', log.id), logWithUser);
       } catch (error) {
          console.error("Error adding log:", error);
