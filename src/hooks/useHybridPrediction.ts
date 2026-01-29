@@ -22,10 +22,10 @@ export interface PredictionResult {
 const getCurrentMeal = (): MealType => {
     const hour = new Date().getHours();
     // Simple heuristic - adjust as needed
-    if (hour >= 5 && hour < 12) return 'Desayuno';
-    if (hour >= 12 && hour < 14) return 'Almuerzo'; // Mid-morning / early lunch
-    if (hour >= 14 && hour < 17) return 'Comida'; // Main lunch
-    if (hour >= 17 && hour < 20) return 'Merienda';
+    if (hour >= 5 && hour < 11) return 'Desayuno';
+    if (hour >= 11 && hour < 13) return 'Almuerzo'; // Mid-morning / early lunch
+    if (hour >= 13 && hour < 17) return 'Comida'; // Main lunch
+    if (hour >= 17 && hour < 19) return 'Merienda';
     return 'Cena';
 };
 
