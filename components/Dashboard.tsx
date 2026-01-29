@@ -471,14 +471,14 @@ Return ONLY a raw JSON object.
             {/* Predictive One-Tap Log */}
             {prediction && (
                 <div className="mb-6 animate-in slide-in-from-top-4 duration-500">
-                    <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl p-1 shadow-lg shadow-indigo-200">
+                    <div className="bg-gradient-to-r from-stone-500 to-stone-700 rounded-3xl p-1 shadow-lg shadow-stone-200">
                         <div className="bg-white/95 backdrop-blur-sm rounded-[20px] p-5 relative overflow-hidden">
                             {/* Decorative background element */}
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-purple-100 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50 pointer-events-none"></div>
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-stone-200 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50 pointer-events-none"></div>
 
                             <div className="flex justify-between items-start mb-3 relative z-10">
                                 <div>
-                                    <h3 className="text-sm font-bold text-indigo-600 uppercase tracking-widest flex items-center gap-2">
+                                    <h3 className="text-sm font-bold text-stone-600 uppercase tracking-widest flex items-center gap-2">
                                         <Icons.Sparkles size={14} />
                                         ¿Lo de siempre?
                                     </h3>
@@ -503,7 +503,7 @@ Return ONLY a raw JSON object.
                                 </div>
                                 <button
                                     onClick={handleAddPrediction}
-                                    className="bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-2xl shadow-indigo-200 shadow-md transition-all active:scale-95 flex items-center gap-2 font-bold text-sm"
+                                    className="bg-stone-700 hover:bg-stone-800 text-white p-3 rounded-2xl shadow-stone-200 shadow-md transition-all active:scale-95 flex items-center gap-2 font-bold text-sm"
                                 >
                                     <Icons.Check size={20} />
                                     <span className="hidden sm:inline">Añadir</span>
