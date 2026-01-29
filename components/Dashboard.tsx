@@ -484,12 +484,6 @@ Return ONLY a raw JSON object.
                                     </h3>
                                     <p className="text-gray-500 text-xs mt-1 font-medium">Basado en tus hábitos de {prediction.meal?.toLowerCase()}</p>
                                 </div>
-                                <button
-                                    onClick={dismissPrediction}
-                                    className="text-gray-300 hover:text-gray-500 transition-colors p-1"
-                                >
-                                    <Icons.X size={18} />
-                                </button>
                             </div>
 
                             <div className="flex items-center justify-between gap-4 relative z-10">
@@ -501,13 +495,21 @@ Return ONLY a raw JSON object.
                                         <span>{prediction.calculated.calories} kcal</span>
                                     </div>
                                 </div>
-                                <button
-                                    onClick={handleAddPrediction}
-                                    className="bg-stone-700 hover:bg-stone-800 text-white p-3 rounded-2xl shadow-stone-200 shadow-md transition-all active:scale-95 flex items-center gap-2 font-bold text-sm"
-                                >
-                                    <Icons.Check size={20} />
-                                    <span className="hidden sm:inline">Añadir</span>
-                                </button>
+                                <div className="flex flex-col items-end gap-1">
+                                    <button
+                                        onClick={dismissPrediction}
+                                        className="text-[10px] font-bold text-stone-400 hover:text-stone-600 uppercase tracking-wider py-1 px-2"
+                                    >
+                                        Cerrar
+                                    </button>
+                                    <button
+                                        onClick={handleAddPrediction}
+                                        className="bg-stone-700 hover:bg-stone-800 text-white p-3 rounded-2xl shadow-stone-200 shadow-md transition-all active:scale-95 flex items-center gap-2 font-bold text-sm"
+                                    >
+                                        <Icons.Check size={20} />
+                                        <span className="hidden sm:inline">Añadir</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
