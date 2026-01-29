@@ -7,6 +7,7 @@ import { Icons } from './ui/Icons';
 import { HelpModal } from './ui/HelpModal';
 import BarcodeScanner from './BarcodeScanner';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { useHybridPrediction } from '../src/hooks/useHybridPrediction';
 
 interface DashboardProps {
     isGuest: boolean;
@@ -111,6 +112,25 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
             fat: Number((selectedFood.fat * ratio).toFixed(1)),
         };
     }, [selectedFood, grams, recipeIngredients]);
+
+    // Prediction Hook
+    const { prediction, dismiss: dismissPrediction } = useHybridPrediction();
+
+    const handleAddPrediction = () => {
+        if (!prediction) return;
+
+        onAddLog({
+            id: Date.now().toString(),
+            date: selectedDate,
+            foodId: prediction.foodId,
+            foodName: prediction.foodName,
+            meal: prediction.meal,
+            grams: prediction.grams,
+            calculated: prediction.calculated
+        });
+
+        dismissPrediction();
+    };
 
     // Update ingredients when a recipe is selected
     useEffect(() => {
@@ -447,6 +467,52 @@ Return ONLY a raw JSON object.
 
                 </div>
             </div>
+
+            {/* Predictive One-Tap Log */}
+            {prediction && (
+                <div className="mb-6 animate-in slide-in-from-top-4 duration-500">
+                    <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl p-1 shadow-lg shadow-indigo-200">
+                        <div className="bg-white/95 backdrop-blur-sm rounded-[20px] p-5 relative overflow-hidden">
+                            {/* Decorative background element */}
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-purple-100 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50 pointer-events-none"></div>
+
+                            <div className="flex justify-between items-start mb-3 relative z-10">
+                                <div>
+                                    <h3 className="text-sm font-bold text-indigo-600 uppercase tracking-widest flex items-center gap-2">
+                                        <Icons.Sparkles size={14} />
+                                        ¿Lo de siempre?
+                                    </h3>
+                                    <p className="text-gray-500 text-xs mt-1 font-medium">Basado en tus hábitos de {prediction.meal?.toLowerCase()}</p>
+                                </div>
+                                <button
+                                    onClick={dismissPrediction}
+                                    className="text-gray-300 hover:text-gray-500 transition-colors p-1"
+                                >
+                                    <Icons.X size={18} />
+                                </button>
+                            </div>
+
+                            <div className="flex items-center justify-between gap-4 relative z-10">
+                                <div>
+                                    <p className="text-xl font-bold text-gray-800 leading-tight">{prediction.foodName}</p>
+                                    <div className="flex gap-3 text-xs text-gray-500 font-mono mt-1">
+                                        <span>{prediction.grams}g</span>
+                                        <span className="text-gray-300">|</span>
+                                        <span>{prediction.calculated.calories} kcal</span>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={handleAddPrediction}
+                                    className="bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-2xl shadow-indigo-200 shadow-md transition-all active:scale-95 flex items-center gap-2 font-bold text-sm"
+                                >
+                                    <Icons.Check size={20} />
+                                    <span className="hidden sm:inline">Añadir</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 <button
