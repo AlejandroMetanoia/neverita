@@ -65,6 +65,9 @@ const Neverita: React.FC<NeveritaProps> = ({
 
     return (
         <div className="flex flex-col h-full bg-background relative pb-20 md:pb-0">
+            {/* Decoration similar to Dashboard */}
+            <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-stone-100 rounded-full blur-3xl opacity-50 pointer-events-none" />
+
             {/* Header */}
             <div className="flex items-center justify-between mb-8 relative z-10 animate-in fade-in slide-in-from-top-4 duration-500">
                 <div>
@@ -189,9 +192,9 @@ const Neverita: React.FC<NeveritaProps> = ({
 
                 {/* Quick Stats / Overview */}
                 <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-white/60 backdrop-blur-xl p-5 rounded-3xl shadow-sm border border-white/40 transition-all hover:bg-white/70">
+                    <div className="bg-white/50 backdrop-blur-md p-5 rounded-3xl shadow-sm border border-white/40 transition-all hover:bg-white/60">
                         <div className="flex items-center gap-3 mb-2">
-                            <div className="p-2 bg-blue-50/80 text-blue-600 rounded-xl border border-blue-100">
+                            <div className="p-2 bg-stone-200/50 text-stone-600 rounded-xl">
                                 <Icons.Fridge size={20} />
                             </div>
                             <span className="text-sm font-bold text-stone-500 uppercase tracking-wider">Total</span>
@@ -199,9 +202,9 @@ const Neverita: React.FC<NeveritaProps> = ({
                         <p className="text-3xl font-bold text-stone-800">{fridgeItems.reduce((acc, item) => acc + item.quantity, 0)} <span className="text-base font-medium text-stone-400">unidades</span></p>
                     </div>
 
-                    <div className="bg-white/60 backdrop-blur-xl p-5 rounded-3xl shadow-sm border border-white/40 transition-all hover:bg-white/70">
+                    <div className="bg-white/50 backdrop-blur-md p-5 rounded-3xl shadow-sm border border-white/40 transition-all hover:bg-white/60">
                         <div className="flex items-center gap-3 mb-2">
-                            <div className="p-2 bg-orange-50/80 text-orange-600 rounded-xl border border-orange-100">
+                            <div className="p-2 bg-stone-200/50 text-stone-600 rounded-xl">
                                 <Icons.Clock size={20} />
                             </div>
                             <span className="text-sm font-bold text-stone-500 uppercase tracking-wider">Caducan Pronto</span>
@@ -226,9 +229,9 @@ const Neverita: React.FC<NeveritaProps> = ({
                     {fridgeItems.filter(i => i.quantity === 0).length > 0 ? (
                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                             {fridgeItems.filter(i => i.quantity === 0).slice(0, 4).map(item => (
-                                <div key={item.id} className="bg-white/60 backdrop-blur-xl p-3 rounded-2xl border border-white/40 shadow-sm flex flex-col gap-2 group hover:bg-white/80 transition-all">
+                                <div key={item.id} className="bg-white/40 backdrop-blur-md p-3 rounded-2xl border border-white/40 shadow-sm flex flex-col gap-2 group hover:bg-white/60 transition-all">
                                     <div className="flex items-start justify-between">
-                                        <div className="p-2 bg-stone-50/80 text-stone-400 rounded-lg group-hover:bg-blue-50 group-hover:text-blue-500 transition-colors">
+                                        <div className="p-2 bg-stone-100/50 text-stone-400 rounded-lg group-hover:bg-stone-200 group-hover:text-stone-600 transition-colors">
                                             {item.category === 'Recetas' ? <Icons.ChefHat size={16} /> : <Icons.Carrot size={16} />}
                                         </div>
                                         <button
@@ -246,8 +249,8 @@ const Neverita: React.FC<NeveritaProps> = ({
                             ))}
                         </div>
                     ) : (
-                        <div className="bg-white/40 backdrop-blur-md border border-white/40 rounded-3xl p-8 flex flex-col items-center justify-center text-center">
-                            <div className="w-16 h-16 bg-white/50 rounded-full flex items-center justify-center mb-4 text-stone-300 backdrop-blur-sm">
+                        <div className="bg-white/30 backdrop-blur-md border border-white/40 rounded-3xl p-8 flex flex-col items-center justify-center text-center">
+                            <div className="w-16 h-16 bg-white/40 rounded-full flex items-center justify-center mb-4 text-stone-400 backdrop-blur-sm">
                                 <Icons.Sparkles size={32} />
                             </div>
                             <h3 className="text-lg font-bold text-stone-600 mb-2">Aprendiendo tus hábitos...</h3>
@@ -266,8 +269,8 @@ const Neverita: React.FC<NeveritaProps> = ({
                     </div>
 
                     {fridgeItems.filter(i => i.quantity > 0).length === 0 ? (
-                        <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-10 flex flex-col items-center justify-center text-center border border-dashed border-white/40 shadow-sm">
-                            <div className="w-20 h-20 bg-stone-50/50 rounded-full flex items-center justify-center mb-4 text-stone-300">
+                        <div className="bg-white/40 backdrop-blur-md rounded-3xl p-10 flex flex-col items-center justify-center text-center border border-dashed border-white/40 shadow-sm">
+                            <div className="w-20 h-20 bg-stone-100/50 rounded-full flex items-center justify-center mb-4 text-stone-300">
                                 <Icons.Fridge size={40} />
                             </div>
                             <h3 className="text-xl font-bold text-stone-700 mb-2">Tu nevera está vacía</h3>
@@ -299,7 +302,7 @@ const Neverita: React.FC<NeveritaProps> = ({
                                     const isExpired = daysToExpiry !== null && daysToExpiry < 0;
 
                                     return (
-                                        <div key={item.id} className="bg-white/60 backdrop-blur-xl p-4 rounded-2xl border border-white/40 shadow-sm flex items-center justify-between group hover:bg-white/80 transition-all">
+                                        <div key={item.id} className="bg-white/50 backdrop-blur-md p-4 rounded-2xl border border-white/40 shadow-sm flex items-center justify-between group hover:bg-white/60 transition-all">
                                             <div className="flex items-center gap-4">
                                                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center border border-white/50 ${isExpired ? 'bg-red-50/80 text-red-500' : isExpiringSoon ? 'bg-orange-50/80 text-orange-500' : 'bg-stone-50/80 text-stone-500'}`}>
                                                     {item.category === 'Recetas' ? <Icons.ChefHat size={24} /> : <Icons.Carrot size={24} />}
