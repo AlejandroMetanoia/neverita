@@ -47,6 +47,16 @@ const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, o
     const [mealType, setMealType] = useState<MealType>('Desayuno');
     const [foodSearch, setFoodSearch] = useState('');
 
+    // Handle 'Eat Now' from Neverita
+    useEffect(() => {
+        if (itemToConsume) {
+            setEntryMode('search');
+            setSelectedFoodId(itemToConsume.foodId);
+            setFoodSearch(itemToConsume.name);
+            setGrams(itemToConsume.unitWeight || 100);
+        }
+    }, [itemToConsume]);
+
 
     // Manual Entry State
     const [manualEntry, setManualEntry] = useState<{
