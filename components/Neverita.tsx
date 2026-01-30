@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import { Icons } from './ui/Icons';
 import { Food, FridgeItem } from '../types';
 
-
 interface NeveritaProps {
     isGuest: boolean;
     foods: Food[];
@@ -64,74 +63,72 @@ const Neverita: React.FC<NeveritaProps> = ({
     };
 
     return (
-        <div className="flex flex-col h-full bg-background relative pb-20 md:pb-0">
-            {/* Decoration similar to Dashboard */}
-            <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-stone-100 rounded-full blur-3xl opacity-50 pointer-events-none" />
-
-            {/* Header */}
-            <div className="flex items-center justify-between mb-8 relative z-10 animate-in fade-in slide-in-from-top-4 duration-500">
+        <div className="flex flex-col h-full relative pb-20 md:pb-0 animate-fade-in">
+            {/* Header - EXACT MATCH to Library */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                 <div>
-                    <h1 className="text-4xl font-bold text-stone-900 font-[Outfit] tracking-tight">
+                    <h2 className="text-3xl font-bold text-gray-800 tracking-tight">
                         Neverita
-                    </h1>
-                    <p className="text-stone-500 font-medium">
+                    </h2>
+                    <p className="text-gray-500 text-sm font-medium ml-1">
                         Tu inventario inteligente
                     </p>
                 </div>
 
                 <button
                     onClick={() => setIsAddModalOpen(true)}
-                    className="w-12 h-12 bg-black hover:scale-105 active:scale-95 text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group"
+                    className="bg-gray-900 hover:bg-black text-white font-bold py-3 px-6 rounded-xl flex items-center gap-2 transition-all shadow-lg hover:shadow-xl hover:scale-105"
                 >
-                    <Icons.Plus size={24} className="group-hover:rotate-90 transition-transform duration-300" />
+                    <Icons.Plus size={20} />
+                    Añadir Compra
                 </button>
             </div>
 
             {/* Add Modal */}
             {isAddModalOpen && (
-                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-                    <div className="bg-white/90 backdrop-blur-xl border border-white/40 rounded-3xl w-full max-w-md p-6 shadow-2xl animate-in zoom-in-95 duration-200">
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-2xl font-bold text-stone-800">Añadir Compra</h2>
-                            <button onClick={() => setIsAddModalOpen(false)} className="p-2 bg-stone-100/50 hover:bg-stone-200/50 rounded-full transition-colors">
+                <div className="fixed inset-0 z-50 bg-black/20 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div className="bg-white/90 backdrop-blur-xl border border-white/60 rounded-[2rem] w-full max-w-md p-8 shadow-glass animate-in zoom-in-95 duration-200">
+                        <div className="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                            <h2 className="text-xl font-bold text-gray-800">Añadir Compra</h2>
+                            <button onClick={() => setIsAddModalOpen(false)} className="p-2 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors text-gray-500">
                                 <Icons.X size={20} />
                             </button>
                         </div>
 
-                        <div className="space-y-4">
+                        <div className="space-y-6">
                             {/* Food Search */}
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold text-stone-500 uppercase">Alimento</label>
+                            <div>
+                                <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Alimento</label>
                                 {!selectedFood ? (
                                     <div className="relative">
-                                        <Icons.Search className="absolute left-3 top-3 text-stone-400" size={20} />
+                                        <Icons.Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                                         <input
                                             type="text"
                                             value={searchQuery}
                                             onChange={e => setSearchQuery(e.target.value)}
                                             placeholder="Buscar alimento..."
-                                            className="w-full pl-10 p-3 bg-white/50 border border-white/40 rounded-xl focus:bg-white focus:border-stone-300 outline-none transition-all"
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 pl-12 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 transition-all placeholder:text-gray-400 font-medium"
                                             autoFocus
                                         />
                                         {searchQuery && filteredFoods.length > 0 && (
-                                            <div className="absolute top-full left-0 right-0 mt-2 bg-white/90 backdrop-blur-xl rounded-xl shadow-xl border border-white/40 overflow-hidden z-20 max-h-48 overflow-y-auto">
+                                            <div className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-xl rounded-xl shadow-xl border border-white/60 overflow-hidden z-20 max-h-48 overflow-y-auto">
                                                 {filteredFoods.map(food => (
                                                     <button
                                                         key={food.id}
-                                                        className="w-full text-left p-3 hover:bg-stone-100/50 border-b border-stone-100/50 last:border-0"
+                                                        className="w-full text-left p-4 hover:bg-stone-50 border-b border-gray-50 last:border-0 transition-colors"
                                                         onClick={() => {
                                                             setSelectedFood(food);
                                                             setSearchQuery('');
                                                         }}
                                                     >
-                                                        <p className="font-bold text-stone-800">{food.name}</p>
+                                                        <p className="font-bold text-gray-800">{food.name}</p>
                                                     </button>
                                                 ))}
                                             </div>
                                         )}
                                     </div>
                                 ) : (
-                                    <div className="flex items-center justify-between p-3 bg-stone-900 text-white rounded-xl shadow-lg">
+                                    <div className="flex items-center justify-between p-4 bg-gray-900 text-white rounded-xl shadow-lg">
                                         <span className="font-bold">{selectedFood.name}</span>
                                         <button onClick={() => setSelectedFood(null)} className="p-1 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
                                             <Icons.X size={16} />
@@ -142,43 +139,43 @@ const Neverita: React.FC<NeveritaProps> = ({
 
                             {/* Unit Info */}
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-1">
-                                    <label className="text-xs font-bold text-stone-500 uppercase">Peso / Unidad (g)</label>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Peso / Unidad (g)</label>
                                     <input
                                         type="number"
                                         value={unitWeight}
                                         onChange={e => setUnitWeight(e.target.value)}
                                         placeholder="Ej. 125"
-                                        className="w-full p-3 bg-white/50 border border-white/40 rounded-xl focus:bg-white focus:border-stone-300 outline-none transition-all"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 font-bold"
                                     />
                                 </div>
-                                <div className="space-y-1">
-                                    <label className="text-xs font-bold text-stone-500 uppercase">Cantidad (uds)</label>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Cantidad (uds)</label>
                                     <input
                                         type="number"
                                         value={quantity}
                                         onChange={e => setQuantity(e.target.value)}
                                         placeholder="Ej. 4"
-                                        className="w-full p-3 bg-white/50 border border-white/40 rounded-xl focus:bg-white focus:border-stone-300 outline-none transition-all"
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 font-bold"
                                     />
                                 </div>
                             </div>
 
                             {/* Expiration */}
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold text-stone-500 uppercase">Caducidad (Opcional)</label>
+                            <div>
+                                <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Caducidad (Opcional)</label>
                                 <input
                                     type="date"
                                     value={expirationDate}
                                     onChange={e => setExpirationDate(e.target.value)}
-                                    className="w-full p-3 bg-white/50 border border-white/40 rounded-xl focus:bg-white focus:border-stone-300 outline-none transition-all"
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-gray-800 focus:outline-none focus:border-stone-300 focus:ring-4 focus:ring-stone-100 font-medium"
                                 />
                             </div>
 
                             <button
                                 disabled={!selectedFood || !unitWeight || !quantity}
                                 onClick={handleAdd}
-                                className="w-full py-4 bg-stone-900 text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+                                className="w-full py-4 bg-gray-900 text-white rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-2"
                             >
                                 Añadir a la Nevera
                             </button>
@@ -188,102 +185,99 @@ const Neverita: React.FC<NeveritaProps> = ({
             )}
 
             {/* Main Content Scrollable Area */}
-            <div className="flex-1 overflow-y-auto pr-2 -mr-2 space-y-8 animate-in fade-in duration-700 delay-150">
+            <div className="flex-1 overflow-y-auto pr-2 -mr-2 space-y-10 animate-in fade-in duration-700 delay-150">
 
-                {/* Quick Stats / Overview */}
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-white/50 backdrop-blur-md p-5 rounded-3xl shadow-sm border border-white/40 transition-all hover:bg-white/60">
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="p-2 bg-stone-200/50 text-stone-600 rounded-xl">
-                                <Icons.Fridge size={20} />
+                {/* Quick Stats / Overview - Matched to Stats/Library style */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-white/60 backdrop-blur-sm p-6 rounded-[1.5rem] shadow-sm border border-white/60">
+                        <div className="flex items-center gap-4 mb-3">
+                            <div className="p-3 bg-white rounded-full border border-gray-100 shadow-sm text-gray-400">
+                                <Icons.Fridge size={24} />
                             </div>
-                            <span className="text-sm font-bold text-stone-500 uppercase tracking-wider">Total</span>
+                            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Total Almacenado</span>
                         </div>
-                        <p className="text-3xl font-bold text-stone-800">{fridgeItems.reduce((acc, item) => acc + item.quantity, 0)} <span className="text-base font-medium text-stone-400">unidades</span></p>
+                        <p className="text-4xl font-black text-gray-800">{fridgeItems.reduce((acc, item) => acc + item.quantity, 0)} <span className="text-lg font-bold text-gray-400">unidades</span></p>
                     </div>
 
-                    <div className="bg-white/50 backdrop-blur-md p-5 rounded-3xl shadow-sm border border-white/40 transition-all hover:bg-white/60">
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="p-2 bg-stone-200/50 text-stone-600 rounded-xl">
-                                <Icons.Clock size={20} />
+                    <div className="bg-white/60 backdrop-blur-sm p-6 rounded-[1.5rem] shadow-sm border border-white/60">
+                        <div className="flex items-center gap-4 mb-3">
+                            <div className="p-3 bg-white rounded-full border border-gray-100 shadow-sm text-gray-400">
+                                <Icons.Clock size={24} />
                             </div>
-                            <span className="text-sm font-bold text-stone-500 uppercase tracking-wider">Caducan Pronto</span>
+                            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Caducan Pronto</span>
                         </div>
-                        <p className="text-3xl font-bold text-stone-800">{fridgeItems.filter(i => {
+                        <p className="text-4xl font-black text-gray-800">{fridgeItems.filter(i => {
                             if (!i.expirationDate) return false;
                             const days = Math.ceil((new Date(i.expirationDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
                             return days <= 3 && days >= 0;
-                        }).length} <span className="text-base font-medium text-stone-400">items</span></p>
+                        }).length} <span className="text-lg font-bold text-gray-400">items</span></p>
                     </div>
                 </div>
 
                 {/* Suggested Shopping / Predictive */}
                 <section>
-                    <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl font-bold text-stone-800">Sugerencias de Compra</h2>
+                    <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-2">
+                        <h2 className="text-black text-xs font-bold uppercase tracking-[0.2em]">Sugerencias de Compra</h2>
                         {fridgeItems.filter(i => i.quantity === 0).length > 0 && (
-                            <button className="text-sm font-bold text-stone-400 hover:text-stone-600">Ver todo</button>
+                            <button className="text-xs font-bold text-gray-400 hover:text-gray-600 uppercase tracking-wider">Ver todo</button>
                         )}
                     </div>
 
                     {fridgeItems.filter(i => i.quantity === 0).length > 0 ? (
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                             {fridgeItems.filter(i => i.quantity === 0).slice(0, 4).map(item => (
-                                <div key={item.id} className="bg-white/40 backdrop-blur-md p-3 rounded-2xl border border-white/40 shadow-sm flex flex-col gap-2 group hover:bg-white/60 transition-all">
-                                    <div className="flex items-start justify-between">
-                                        <div className="p-2 bg-stone-100/50 text-stone-400 rounded-lg group-hover:bg-stone-200 group-hover:text-stone-600 transition-colors">
-                                            {item.category === 'Recetas' ? <Icons.ChefHat size={16} /> : <Icons.Carrot size={16} />}
+                                <div key={item.id} className="bg-white/60 backdrop-blur-sm p-5 rounded-[1.5rem] border border-white/60 hover:bg-white/80 transition-all shadow-sm group">
+                                    <div className="flex items-start justify-between mb-3">
+                                        <div className="p-3 bg-white rounded-full text-gray-400 border border-gray-100 shadow-sm group-hover:text-stone-600 transition-colors">
+                                            {item.category === 'Recetas' ? <Icons.ChefHat size={20} /> : <Icons.Carrot size={20} />}
                                         </div>
                                         <button
                                             onClick={() => onUpdateFridgeItem({ ...item, quantity: 1, purchasedDate: new Date().toISOString() })}
-                                            className="p-1.5 bg-black text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110 active:scale-95 shadow-lg"
+                                            className="p-2 bg-gray-900 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all hover:scale-110 shadow-lg"
                                         >
-                                            <Icons.Plus size={14} />
+                                            <Icons.Plus size={16} />
                                         </button>
                                     </div>
                                     <div>
-                                        <span className="text-sm font-bold text-stone-700 line-clamp-1">{item.name}</span>
-                                        <span className="text-xs text-stone-400">{item.unitWeight}g / ud</span>
+                                        <span className="text-base font-bold text-gray-700 block mb-1 truncate">{item.name}</span>
+                                        <span className="text-xs text-gray-400 font-medium">{item.unitWeight}g / ud</span>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     ) : (
-                        <div className="bg-white/30 backdrop-blur-md border border-white/40 rounded-3xl p-8 flex flex-col items-center justify-center text-center">
-                            <div className="w-16 h-16 bg-white/40 rounded-full flex items-center justify-center mb-4 text-stone-400 backdrop-blur-sm">
+                        <div className="bg-white/40 backdrop-blur-sm border border-white/60 rounded-[2rem] p-10 flex flex-col items-center justify-center text-center">
+                            <div className="w-16 h-16 bg-white/50 rounded-full flex items-center justify-center mb-4 text-gray-400 backdrop-blur-sm border border-white/50">
                                 <Icons.Sparkles size={32} />
                             </div>
-                            <h3 className="text-lg font-bold text-stone-600 mb-2">Aprendiendo tus hábitos...</h3>
-                            <p className="text-stone-400 text-sm max-w-xs">Usa la Neverita durante un par de semanas para recibir sugerencias inteligentes.</p>
+                            <h3 className="text-lg font-bold text-gray-600 mb-2">Aprendiendo tus hábitos...</h3>
+                            <p className="text-gray-400 text-sm max-w-xs font-medium">Usa la Neverita durante un par de semanas para recibir sugerencias inteligentes.</p>
                         </div>
                     )}
                 </section>
 
                 {/* Inventory List */}
                 <section>
-                    <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-xl font-bold text-stone-800">En la Nevera</h2>
-                        <div className="flex gap-2">
-                            {/* Sort controls could go here */}
-                        </div>
+                    <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-2">
+                        <h2 className="text-black text-xs font-bold uppercase tracking-[0.2em]">En la Nevera</h2>
                     </div>
 
                     {fridgeItems.filter(i => i.quantity > 0).length === 0 ? (
-                        <div className="bg-white/40 backdrop-blur-md rounded-3xl p-10 flex flex-col items-center justify-center text-center border border-dashed border-white/40 shadow-sm">
-                            <div className="w-20 h-20 bg-stone-100/50 rounded-full flex items-center justify-center mb-4 text-stone-300">
-                                <Icons.Fridge size={40} />
+                        <div className="bg-white/40 backdrop-blur-sm rounded-[2rem] p-12 flex flex-col items-center justify-center text-center border-2 border-dashed border-white/60">
+                            <div className="w-24 h-24 bg-white/50 rounded-full flex items-center justify-center mb-6 text-gray-300">
+                                <Icons.Fridge size={48} />
                             </div>
-                            <h3 className="text-xl font-bold text-stone-700 mb-2">Tu nevera está vacía</h3>
-                            <p className="text-stone-400 mb-6 max-w-xs">Añade tu compra semanal para olvidarte de pesar la comida cada día.</p>
+                            <h3 className="text-xl font-bold text-gray-700 mb-2">Tu nevera está vacía</h3>
+                            <p className="text-gray-400 mb-8 max-w-xs font-medium">Añade tu compra semanal para olvidarte de pesar la comida cada día.</p>
                             <button
                                 onClick={() => setIsAddModalOpen(true)}
-                                className="bg-stone-900 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all text-sm"
+                                className="bg-gray-900 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all text-sm uppercase tracking-wide"
                             >
                                 Añadir primera compra
                             </button>
                         </div>
                     ) : (
-                        <div className="space-y-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {fridgeItems
                                 .filter(i => i.quantity > 0)
                                 .sort((a, b) => {
@@ -302,36 +296,42 @@ const Neverita: React.FC<NeveritaProps> = ({
                                     const isExpired = daysToExpiry !== null && daysToExpiry < 0;
 
                                     return (
-                                        <div key={item.id} className="bg-white/50 backdrop-blur-md p-4 rounded-2xl border border-white/40 shadow-sm flex items-center justify-between group hover:bg-white/60 transition-all">
-                                            <div className="flex items-center gap-4">
-                                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center border border-white/50 ${isExpired ? 'bg-red-50/80 text-red-500' : isExpiringSoon ? 'bg-orange-50/80 text-orange-500' : 'bg-stone-50/80 text-stone-500'}`}>
-                                                    {item.category === 'Recetas' ? <Icons.ChefHat size={24} /> : <Icons.Carrot size={24} />}
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-bold text-stone-800">{item.name}</h4>
-                                                    <div className="flex items-center gap-2 text-xs text-stone-400 font-medium">
-                                                        <span>{item.quantity} uds × {item.unitWeight}g</span>
-                                                        {item.expirationDate && (
-                                                            <span className={`${isExpired ? 'text-red-500 font-bold' : isExpiringSoon ? 'text-orange-500 font-bold' : ''}`}>
-                                                                • {isExpired ? 'Caducado' : daysToExpiry === 0 ? 'Caduca hoy' : `Caduca en ${daysToExpiry} días`}
-                                                            </span>
-                                                        )}
+                                        <div key={item.id} className="bg-white/70 backdrop-blur-md p-5 rounded-2xl border border-white/60 hover:border-stone-200 hover:bg-white transition-all group relative hover:-translate-y-1 hover:shadow-md shadow-sm">
+                                            <div className="flex items-start justify-between mb-3">
+                                                <div className="flex items-center gap-4">
+                                                    <div className={`p-3 bg-white rounded-full border border-gray-100 shadow-sm ${isExpired ? 'text-red-500' : isExpiringSoon ? 'text-orange-500' : 'text-gray-400'}`}>
+                                                        {item.category === 'Recetas' ? <Icons.ChefHat size={24} /> : <Icons.Carrot size={24} />}
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-gray-800 text-lg">{item.name}</h4>
+                                                        <div className="flex items-center gap-2 text-xs text-gray-400 font-medium mt-0.5">
+                                                            <span>{item.quantity} uds × {item.unitWeight}g</span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div className="flex items-center gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                                                <button
-                                                    onClick={() => onConsume(item, 1)}
-                                                    className="bg-stone-900 hover:bg-black text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md active:scale-95 transition-all"
-                                                >
-                                                    Comer (1)
-                                                </button>
                                                 <button
                                                     onClick={() => onDeleteFridgeItem(item.id)}
-                                                    className="p-2 hover:bg-red-50 text-stone-400 hover:text-red-500 rounded-lg transition-colors"
+                                                    className="text-gray-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all scale-90 hover:scale-110"
                                                 >
                                                     <Icons.Trash size={18} />
+                                                </button>
+                                            </div>
+
+                                            <div className="flex justify-between items-center mt-4 pt-3 border-t border-gray-100/50">
+                                                {item.expirationDate ? (
+                                                    <span className={`text-xs font-bold ${isExpired ? 'text-red-500' : isExpiringSoon ? 'text-orange-500' : 'text-gray-400'}`}>
+                                                        {isExpired ? 'Caducado' : daysToExpiry === 0 ? 'Caduca hoy' : `Caduca en ${daysToExpiry} días`}
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-xs text-gray-300 font-medium">Sin fecha</span>
+                                                )}
+
+                                                <button
+                                                    onClick={() => onConsume(item, 1)}
+                                                    className="bg-gray-900 hover:bg-black text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md active:scale-95 transition-all"
+                                                >
+                                                    Comer (1)
                                                 </button>
                                             </div>
                                         </div>
