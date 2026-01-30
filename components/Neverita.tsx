@@ -357,18 +357,35 @@ const Neverita: React.FC<NeveritaProps> = ({
                                 </div>
 
                                 <div>
-                                    <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">Categoría</label>
-                                    <select
-                                        value={newFood.category}
-                                        onChange={e => setNewFood({ ...newFood, category: e.target.value })}
-                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-gray-800 font-medium focus:outline-none focus:border-stone-400"
-                                    >
-                                        <option value="" disabled>Seleccionar...</option>
-                                        {Object.keys(FOOD_CATEGORIES).map(cat => (
-                                            <option key={cat} value={cat}>{cat}</option> // Ideally flatten/map properly if we need subcats
-                                        ))}
-                                        {/* Simplified categories for now, or assume keys are main groups */}
-                                    </select>
+                                    <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">Marca (Opcional)</label>
+                                    <input
+                                        type="text"
+                                        value={newFood.brand}
+                                        onChange={e => setNewFood({ ...newFood, brand: e.target.value })}
+                                        className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-gray-800 font-medium focus:outline-none focus:border-stone-400 placeholder:text-gray-400"
+                                        placeholder="Ej. Hacendado, ElPozo..."
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">Carpeta / Categoría</label>
+                                    <div className="relative">
+                                        <Icons.ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                                        <select
+                                            value={newFood.category}
+                                            onChange={e => setNewFood({ ...newFood, category: e.target.value })}
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-gray-800 font-medium focus:outline-none focus:border-stone-400 appearance-none"
+                                        >
+                                            <option value="" disabled>Seleccionar...</option>
+                                            {Object.entries(FOOD_CATEGORIES).map(([group, subcategories]) => (
+                                                <optgroup key={group} label={group}>
+                                                    {subcategories.map(sub => (
+                                                        <option key={sub} value={sub}>{sub}</option>
+                                                    ))}
+                                                </optgroup>
+                                            ))}
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-3">
