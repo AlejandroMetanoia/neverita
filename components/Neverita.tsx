@@ -197,7 +197,7 @@ const Neverita: React.FC<NeveritaProps> = ({
                                     className="flex items-center gap-4 p-5 bg-white/50 border border-gray-200 rounded-2xl hover:bg-white hover:border-gray-300 hover:shadow-md transition-all group text-left"
                                 >
                                     <div className="p-3 bg-stone-100 rounded-xl text-stone-600 group-hover:bg-black group-hover:text-white transition-colors">
-                                        <Icons.Scan size={24} />
+                                        <Icons.ScanBarcode size={24} />
                                     </div>
                                     <div>
                                         <span className="font-bold text-gray-800 block text-lg">Escanear</span>
