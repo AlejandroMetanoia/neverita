@@ -94,7 +94,8 @@ const Neverita: React.FC<NeveritaProps> = ({
             name: selectedFood.name,
             unitWeight: parseFloat(unitWeight),
             quantity: parseFloat(quantity),
-            expirationDate: expirationDate || undefined,
+
+            ...(expirationDate ? { expirationDate } : {}),
             purchasedDate: new Date().toISOString(),
             category: selectedFood.category
         };
