@@ -590,6 +590,7 @@ function App() {
                      onDeleteFridgeItem={deleteFridgeItem}
                      onConsume={consumeFromFridge}
                      onToggleMenu={setIsMenuHidden}
+                     onAddFood={addFood}
                   />
                )}
                {currentView === 'dashboard' && (
