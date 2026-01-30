@@ -539,10 +539,16 @@ const Neverita: React.FC<NeveritaProps> = ({
                             {fridgeItems
                                 .filter(i => i.quantity > 0)
                                 .sort((a, b) => {
-                                    // Sort by expiration date (if exists), then by purchased date
-                                    if (a.expirationDate && b.expirationDate) return new Date(a.expirationDate).getTime() - new Date(b.expirationDate).getTime();
-                                    if (a.expirationDate) return -1;
-                                    if (b.expirationDate) return 1;
+                                    // 1. Items with Expiration Date come FIRST
+                                    if (a.expirationDate && !b.expirationDate) return -1;
+                                    if (!a.expirationDate && b.expirationDate) return 1;
+
+                                    // 2. If both have Expiration Date, sort by earliest expiry
+                                    if (a.expirationDate && b.expirationDate) {
+                                        return new Date(a.expirationDate).getTime() - new Date(b.expirationDate).getTime();
+                                    }
+
+                                    // 3. Fallback: Sort by purchase date (newest first) for items without expiry
                                     return new Date(b.purchasedDate).getTime() - new Date(a.purchasedDate).getTime();
                                 })
                                 .map(item => {
