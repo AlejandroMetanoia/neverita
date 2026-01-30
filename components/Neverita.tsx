@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Icons } from './ui/Icons';
 import { Food, FridgeItem } from '../types';
-import { v4 as uuidv4 } from 'uuid'; // Assuming uuid is available or use a helper
+
 
 interface NeveritaProps {
     isGuest: boolean;
