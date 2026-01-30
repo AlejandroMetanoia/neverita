@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import OpenAI from "openai";
-import { Food, LogEntry, MealType, UserGoals, Ingredient } from '../types';
+import { Food, LogEntry, MealType, UserGoals, Ingredient, FridgeItem } from '../types';
 import { MEAL_TYPES, MEAL_COLORS } from '../constants';
 import { Icons } from './ui/Icons';
 import { HelpModal } from './ui/HelpModal';
@@ -20,9 +20,11 @@ interface DashboardProps {
     onNavigateToLibrary: () => void;
     onToggleMenu: (hidden: boolean) => void;
     goals: UserGoals | null;
+    fridgeItems?: FridgeItem[];
+    itemToConsume?: FridgeItem | null;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, onDeleteLog, selectedDate, onDateChange, onNavigateToLibrary, onToggleMenu, goals }) => {
+const Dashboard: React.FC<DashboardProps> = ({ isGuest, foods, logs, onAddLog, onDeleteLog, selectedDate, onDateChange, onNavigateToLibrary, onToggleMenu, goals, fridgeItems = [], itemToConsume }) => {
     const [entryMode, setEntryMode] = useState<'search' | 'scan' | 'manual' | 'ai' | 'subscription_teaser' | 'subscription_details' | null>(null);
     const [showHelp, setShowHelp] = useState(false);
 
@@ -745,6 +747,30 @@ Return ONLY a raw JSON object.
                                         </div>
                                         {foodSearch && !selectedFoodId && (
                                             <div className="mt-2 max-h-48 overflow-y-auto bg-white border border-gray-100 rounded-xl shadow-xl z-20">
+
+                                                {/* Suggestions from Fridge */}
+                                                {fridgeItems.length > 0 && foodSearch && (
+                                                    fridgeItems
+                                                        .filter(i => i.name.toLowerCase().includes(foodSearch.toLowerCase()))
+                                                        .map(item => (
+                                                            <div
+                                                                key={`fridge-${item.id}`}
+                                                                onClick={() => {
+                                                                    setSelectedFoodId(item.foodId);
+                                                                    setFoodSearch(item.name);
+                                                                    setGrams(item.unitWeight); // Pre-fill with unit weight
+                                                                }}
+                                                                className="p-4 hover:bg-blue-50 cursor-pointer text-sm text-gray-700 flex justify-between border-b border-gray-50 last:border-0 bg-blue-50/50"
+                                                            >
+                                                                <span className="font-bold text-blue-800 flex items-center gap-2">
+                                                                    <Icons.Fridge size={14} />
+                                                                    {item.name} (Nevera)
+                                                                </span>
+                                                                <span className="text-blue-600 font-mono text-xs">{item.quantity} uds • {item.unitWeight}g</span>
+                                                            </div>
+                                                        ))
+                                                )}
+
                                                 {filteredFoods.map(f => (
                                                     <div
                                                         key={f.id}

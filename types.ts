@@ -63,5 +63,15 @@ export interface UserGoals {
     timeframe: number;
     updatedAt?: string;
   };
-  updatedAt?: string;
+}
+
+export interface FridgeItem {
+  id: string;
+  foodId: string; // link to Library food
+  name: string;
+  unitWeight: number; // grams per unit
+  quantity: number; // number of units
+  expirationDate?: string; // ISO Date String
+  purchasedDate: string; // ISO Date String
+  category?: string;
 }

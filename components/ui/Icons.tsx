@@ -51,7 +51,8 @@ import {
   Camera,
   ChefHat,
   X,
-  Save
+  Save,
+  Clock
 } from 'lucide-react';
 
 export const Icons = {
@@ -108,5 +109,6 @@ export const Icons = {
   Camera,
   ChefHat,
   X,
-  Save
+  Save,
+  Clock
 };

@@ -7,10 +7,11 @@ import { Icons } from './components/ui/Icons';
 import Dashboard from './components/Dashboard';
 import Library from './components/Library';
 import Stats from './components/Stats';
-import { Food, LogEntry, UserGoals } from './types';
+import Neverita from './components/Neverita';
+import { Food, LogEntry, UserGoals, FridgeItem } from './types';
 import { INITIAL_FOODS } from './constants';
 
-type View = 'dashboard' | 'library' | 'stats' | 'profile' | 'edit-goals';
+type View = 'dashboard' | 'neverita' | 'library' | 'stats' | 'profile' | 'edit-goals';
 
 function App() {
    const [user, setUser] = useState<User | null>(null);
@@ -24,6 +25,7 @@ function App() {
    const [userFoods, setUserFoods] = useState<Food[]>([]);
    const [userRecipes, setUserRecipes] = useState<Food[]>([]);
    const [baseFoods, setBaseFoods] = useState<Food[]>([]);
+   const [fridgeItems, setFridgeItems] = useState<FridgeItem[]>([]);
 
    // Combine static, base, user foods and recipes, and sort alphabetically
    const foods = useMemo(() => {
@@ -42,6 +44,10 @@ function App() {
    const [startingWeight, setStartingWeight] = useState('');
    const [timeframe, setTimeframe] = useState('');
    const [isEditingProfile, setIsEditingProfile] = useState(false);
+   const [previousLogs, setPreviousLogs] = useState<LogEntry[]>([]); // Placeholder if needed
+
+   // Fridge Consumption State
+   const [itemToConsume, setItemToConsume] = useState<FridgeItem | null>(null);
 
    const weeklyChange = useMemo(() => {
       const start = parseFloat(startingWeight);
@@ -214,6 +220,23 @@ function App() {
       return () => unsubscribe();
    }, [user]);
 
+   // Listen for fridge_items
+   useEffect(() => {
+      if (!user) {
+         setFridgeItems([]);
+         return;
+      }
+      const q = query(collection(db, 'fridge_items'), where('userId', '==', user.uid));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+         const items: FridgeItem[] = [];
+         snapshot.forEach((doc) => {
+            items.push(doc.data() as FridgeItem);
+         });
+         setFridgeItems(items);
+      });
+      return () => unsubscribe();
+   }, [user]);
+
    const updateGoals = async (newGoals: UserGoals) => {
       if (!user) return;
       try {
@@ -323,6 +346,20 @@ function App() {
    };
 
    const addLog = async (log: LogEntry) => {
+      // Handle Fridge Deduction
+      if (itemToConsume && log.foodId === itemToConsume.foodId) {
+         const consumedUnits = itemToConsume.unitWeight > 0 ? (log.grams / itemToConsume.unitWeight) : 1;
+         const newQuantity = Math.max(0, itemToConsume.quantity - consumedUnits);
+
+         if (newQuantity <= 0.1) { // Threshold
+            // Don't delete, set to 0 to keep in history/suggestions
+            await updateFridgeItem({ ...itemToConsume, quantity: 0 });
+         } else {
+            await updateFridgeItem({ ...itemToConsume, quantity: newQuantity });
+         }
+         setItemToConsume(null);
+      }
+
       if (!user) {
          setGuestLogs(prev => [...prev, log]);
          return;
@@ -348,6 +385,41 @@ function App() {
       }
    };
 
+   // Neverita Handlers
+   const addToFridge = async (item: FridgeItem) => {
+      if (!user) return;
+      try {
+         const itemWithUser = { ...item, userId: user.uid };
+         await setDoc(doc(db, 'fridge_items', item.id), itemWithUser);
+      } catch (error) {
+         console.error("Error adding to fridge:", error);
+      }
+   };
+
+   const updateFridgeItem = async (item: FridgeItem) => {
+      if (!user) return;
+      try {
+         const itemWithUser = { ...item, userId: user.uid };
+         await setDoc(doc(db, 'fridge_items', item.id), itemWithUser);
+      } catch (error) {
+         console.error("Error updating fridge item:", error);
+      }
+   };
+
+   const deleteFridgeItem = async (id: string) => {
+      if (!user) return;
+      try {
+         await deleteDoc(doc(db, 'fridge_items', id));
+      } catch (error) {
+         console.error("Error deleting fridge item:", error);
+      }
+   };
+
+   const consumeFromFridge = (item: FridgeItem, quantityToConsume: number) => { // quantityToConsume unused here as we use calculator
+      setItemToConsume(item);
+      setCurrentView('dashboard');
+   };
+
    if (loading) {
       return <div className="min-h-screen bg-background flex items-center justify-center text-white">Loading...</div>;
    }
@@ -370,8 +442,9 @@ function App() {
             <img
                src={
                   currentView === 'library' ? "/library-bg-desktop.jpg" :
-                     currentView === 'stats' ? "/stats-bg-desktop.jpg" :
-                        "/dashboard-bg-desktop.jpg"
+                     currentView === 'neverita' ? "/library-bg-desktop.jpg" : // Reuse library bg for now
+                        currentView === 'stats' ? "/stats-bg-desktop.jpg" :
+                           "/dashboard-bg-desktop.jpg"
                }
                alt="Background"
                className="hidden md:block w-full h-full object-cover opacity-80"
@@ -395,10 +468,17 @@ function App() {
                </button>
 
                <button
+                  onClick={() => handleChangeView('neverita')}
+                  className={`p-3 rounded-xl transition-all duration-200 group relative flex items-center justify-center ${currentView === 'neverita' ? 'bg-black text-white' : 'text-stone-500 hover:bg-stone-100'}`}
+               >
+                  <Icons.Fridge size={24} strokeWidth={currentView === 'neverita' ? 3 : 2} />
+               </button>
+
+               <button
                   onClick={() => handleChangeView('library')}
                   className={`p-3 rounded-xl transition-all duration-200 group relative flex items-center justify-center ${currentView === 'library' ? 'bg-black text-white' : 'text-stone-500 hover:bg-stone-100'}`}
                >
-                  <Icons.Fridge size={24} strokeWidth={currentView === 'library' ? 3 : 2} />
+                  <Icons.Library size={24} strokeWidth={currentView === 'library' ? 3 : 2} />
                </button>
 
                <button
@@ -440,16 +520,30 @@ function App() {
                </button>
 
                <button
-                  onClick={() => handleChangeView('library')}
+                  onClick={() => handleChangeView('neverita')}
                   className="flex flex-col items-center justify-center gap-1 w-16"
                >
                   <Icons.Fridge
+                     size={28}
+                     className={`transition-all ${currentView === 'neverita' ? 'text-black fill-current' : 'text-stone-500'}`}
+                     strokeWidth={currentView === 'neverita' ? 0 : 2}
+                  />
+                  <span className={`text-xs font-medium ${currentView === 'neverita' ? 'text-black' : 'text-stone-500'}`}>
+                     Neverita
+                  </span>
+               </button>
+
+               <button
+                  onClick={() => handleChangeView('library')}
+                  className="flex flex-col items-center justify-center gap-1 w-16"
+               >
+                  <Icons.Library
                      size={28}
                      className={`transition-all ${currentView === 'library' ? 'text-black fill-current' : 'text-stone-500'}`}
                      strokeWidth={currentView === 'library' ? 0 : 2}
                   />
                   <span className={`text-xs font-medium ${currentView === 'library' ? 'text-black' : 'text-stone-500'}`}>
-                     Nevera
+                     Librería
                   </span>
                </button>
 
@@ -486,10 +580,24 @@ function App() {
          {/* Main Content Area - Adjusted margin for desktop sidebar */}
          <main className="flex-1 p-4 md:p-10 max-w-7xl mx-auto w-full pb-24 md:pb-10 relative z-0 md:ml-20">
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
+               {currentView === 'neverita' && (
+                  <Neverita
+                     isGuest={!user}
+                     foods={foods}
+                     fridgeItems={fridgeItems}
+                     onAddToFridge={addToFridge}
+                     onUpdateFridgeItem={updateFridgeItem}
+                     onDeleteFridgeItem={deleteFridgeItem}
+                     onConsume={consumeFromFridge}
+                     onToggleMenu={setIsMenuHidden}
+                  />
+               )}
                {currentView === 'dashboard' && (
                   <Dashboard
                      isGuest={!user}
                      foods={foods}
+                     fridgeItems={fridgeItems}
+                     itemToConsume={itemToConsume}
                      logs={user ? logs : guestLogs.filter(l => l.date === selectedDate)}
                      onAddLog={addLog}
                      onDeleteLog={deleteLog}
