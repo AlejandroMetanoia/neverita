@@ -348,15 +348,56 @@ function App() {
    const addLog = async (log: LogEntry) => {
       // Handle Fridge Deduction
       if (itemToConsume && log.foodId === itemToConsume.foodId) {
-         const consumedUnits = itemToConsume.unitWeight > 0 ? (log.grams / itemToConsume.unitWeight) : 1;
-         const newQuantity = Math.max(0, itemToConsume.quantity - consumedUnits);
+         const consumedGrams = log.grams;
+         const unitWeight = itemToConsume.unitWeight;
+         const currentQuantity = itemToConsume.quantity;
 
-         if (newQuantity <= 0.1) { // Threshold
-            // Don't delete, set to 0 to keep in history/suggestions
-            await updateFridgeItem({ ...itemToConsume, quantity: 0 });
+         // Calculate how many FULL units are consumed
+         // Avoid division by zero
+         const effectiveUnitWeight = unitWeight > 0 ? unitWeight : consumedGrams; // Fallback if weight is 0/undefined
+         const fullUnitsConsumed = Math.floor(consumedGrams / effectiveUnitWeight);
+         const remainingGramsToConsume = consumedGrams % effectiveUnitWeight;
+
+         if (remainingGramsToConsume > 0) {
+            // Partial consumption logic
+            if (currentQuantity > fullUnitsConsumed + 1) {
+               // We have surplus units: Keep some full, consume some full, and open one partial.
+               // 1. Update original item (reduce quantity by full_consumed + 1_opened)
+               const newFullQuantity = currentQuantity - fullUnitsConsumed - 1;
+               await updateFridgeItem({ ...itemToConsume, quantity: newFullQuantity });
+
+               // 2. Create new item for the partial unit (The 'opened' one)
+               // We create a new entry with the REMAINING weight
+               const newPartialWeight = effectiveUnitWeight - remainingGramsToConsume;
+               await addToFridge({
+                  ...itemToConsume,
+                  id: crypto.randomUUID(),
+                  quantity: 1,
+                  unitWeight: newPartialWeight,
+                  purchasedDate: new Date().toISOString() // Treat as new state entry
+               });
+
+            } else if (currentQuantity >= fullUnitsConsumed + 1) {
+               // We have exactly enough to cover full eats + the one partial.
+               // The original item effectively BECOMES the partial one (all other full units are gone)
+               const newPartialWeight = effectiveUnitWeight - remainingGramsToConsume;
+               await updateFridgeItem({
+                  ...itemToConsume,
+                  quantity: 1,
+                  unitWeight: newPartialWeight
+               });
+            } else {
+               // Not enough quantity to cover consumption (consumed > total in fridge)
+               // Just empty the item
+               await updateFridgeItem({ ...itemToConsume, quantity: 0 });
+            }
+
          } else {
+            // Exact multiple consumption (or 0 remainder)
+            const newQuantity = Math.max(0, currentQuantity - fullUnitsConsumed);
             await updateFridgeItem({ ...itemToConsume, quantity: newQuantity });
          }
+
          setItemToConsume(null);
       }
 
