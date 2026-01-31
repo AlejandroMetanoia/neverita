@@ -474,8 +474,9 @@ function App() {
             <img
                src={
                   currentView === 'library' ? "/library-bg-mobile.jpg" :
-                     currentView === 'stats' ? "/stats-bg-mobile.png" :
-                        "/dashboard-bg-mobile.jpg"
+                     currentView === 'neverita' ? "/neverita-bg-mobile.jpg" :
+                        currentView === 'stats' ? "/stats-bg-mobile.png" :
+                           "/dashboard-bg-mobile.jpg"
                }
                alt="Background"
                className="block md:hidden w-full h-full object-cover opacity-80"
@@ -483,7 +484,7 @@ function App() {
             <img
                src={
                   currentView === 'library' ? "/library-bg-desktop.jpg" :
-                     currentView === 'neverita' ? "/library-bg-desktop.jpg" : // Reuse library bg for now
+                     currentView === 'neverita' ? "/neverita-bg-desktop.jpg" :
                         currentView === 'stats' ? "/stats-bg-desktop.jpg" :
                            "/dashboard-bg-desktop.jpg"
                }
