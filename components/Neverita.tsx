@@ -174,7 +174,7 @@ const Neverita: React.FC<NeveritaProps> = ({
 
             {/* MAIN MODAL WRAPPER */}
             {entryMode && (
-                <div className="fixed inset-0 z-50 bg-black/20 backdrop-blur-sm flex items-center justify-center p-4">
+                <div className="fixed inset-0 z-50 bg-black/20 backdrop-blur-md flex items-center justify-center p-4">
                     <div className="bg-white/90 backdrop-blur-xl border border-white/60 rounded-[2rem] w-full max-w-md p-8 shadow-glass animate-in zoom-in-95 duration-200 overflow-y-auto max-h-[90vh]">
 
                         {/* Modal Header */}
@@ -448,7 +448,7 @@ const Neverita: React.FC<NeveritaProps> = ({
 
                 {/* Quick Stats / Overview - Matched to Stats/Library style */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-white/60 backdrop-blur-sm p-6 rounded-[1.5rem] shadow-sm border border-white/60">
+                    <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] shadow-sm border border-white/60">
                         <div className="flex items-center gap-4 mb-3">
                             <div className="p-3 bg-white rounded-full border border-gray-100 shadow-sm text-gray-400">
                                 <Icons.Fridge size={24} />
@@ -458,7 +458,7 @@ const Neverita: React.FC<NeveritaProps> = ({
                         <p className="text-4xl font-black text-gray-800">{fridgeItems.reduce((acc, item) => acc + item.quantity, 0)} <span className="text-lg font-bold text-gray-400">unidades</span></p>
                     </div>
 
-                    <div className="bg-white/60 backdrop-blur-sm p-6 rounded-[1.5rem] shadow-sm border border-white/60">
+                    <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] shadow-sm border border-white/60">
                         <div className="flex items-center gap-4 mb-3">
                             <div className="p-3 bg-white rounded-full border border-gray-100 shadow-sm text-gray-400">
                                 <Icons.Clock size={24} />
@@ -485,7 +485,7 @@ const Neverita: React.FC<NeveritaProps> = ({
                     {fridgeItems.filter(i => i.quantity === 0).length > 0 ? (
                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                             {fridgeItems.filter(i => i.quantity === 0).slice(0, 4).map(item => (
-                                <div key={item.id} className="bg-white/60 backdrop-blur-sm p-5 rounded-[1.5rem] border border-white/60 hover:bg-white/80 transition-all shadow-sm group">
+                                <div key={item.id} className="bg-white/60 backdrop-blur-md p-5 rounded-[1.5rem] border border-white/60 hover:bg-white/80 transition-all shadow-sm group">
                                     <div className="flex items-start justify-between mb-3">
                                         <div className="p-3 bg-white rounded-full text-gray-400 border border-gray-100 shadow-sm group-hover:text-stone-600 transition-colors">
                                             {item.category === 'Recetas' ? <Icons.ChefHat size={20} /> : <Icons.Carrot size={20} />}
@@ -505,8 +505,8 @@ const Neverita: React.FC<NeveritaProps> = ({
                             ))}
                         </div>
                     ) : (
-                        <div className="bg-white/40 backdrop-blur-sm border border-white/60 rounded-[2rem] p-10 flex flex-col items-center justify-center text-center">
-                            <div className="w-16 h-16 bg-white/50 rounded-full flex items-center justify-center mb-4 text-gray-400 backdrop-blur-sm border border-white/50">
+                        <div className="bg-white/40 backdrop-blur-md border border-white/60 rounded-[2rem] p-10 flex flex-col items-center justify-center text-center">
+                            <div className="w-16 h-16 bg-white/50 rounded-full flex items-center justify-center mb-4 text-gray-400 backdrop-blur-md border border-white/50">
                                 <Icons.Sparkles size={32} />
                             </div>
                             <h3 className="text-lg font-bold text-gray-600 mb-2">Aprendiendo tus hábitos...</h3>
@@ -522,7 +522,7 @@ const Neverita: React.FC<NeveritaProps> = ({
                     </div>
 
                     {fridgeItems.filter(i => i.quantity > 0).length === 0 ? (
-                        <div className="bg-white/40 backdrop-blur-sm rounded-[2rem] p-12 flex flex-col items-center justify-center text-center border-2 border-dashed border-white/60">
+                        <div className="bg-white/40 backdrop-blur-md rounded-[2rem] p-12 flex flex-col items-center justify-center text-center border-2 border-dashed border-white/60">
                             <div className="w-24 h-24 bg-white/50 rounded-full flex items-center justify-center mb-6 text-gray-300">
                                 <Icons.Fridge size={48} />
                             </div>
