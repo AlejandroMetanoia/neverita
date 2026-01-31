@@ -506,11 +506,11 @@ const Neverita: React.FC<NeveritaProps> = ({
                         </div>
                     ) : (
                         <div className="bg-white/40 backdrop-blur-md border border-white/60 rounded-[2rem] p-10 flex flex-col items-center justify-center text-center">
-                            <div className="w-16 h-16 bg-white/50 rounded-full flex items-center justify-center mb-4 text-gray-400 backdrop-blur-md border border-white/50">
+                            <div className="w-16 h-16 bg-white/50 rounded-full flex items-center justify-center mb-4 text-white backdrop-blur-md border border-white/50">
                                 <Icons.Sparkles size={32} />
                             </div>
-                            <h3 className="text-lg font-bold text-gray-600 mb-2">Aprendiendo tus hábitos...</h3>
-                            <p className="text-gray-400 text-sm max-w-xs font-medium">Usa la Neverita durante un par de semanas para recibir sugerencias inteligentes.</p>
+                            <h3 className="text-lg font-bold text-white mb-2">Aprendiendo tus hábitos...</h3>
+                            <p className="text-white/80 text-sm max-w-xs font-medium">Usa la Neverita durante un par de semanas para recibir sugerencias inteligentes.</p>
                         </div>
                     )}
                 </section>
@@ -523,11 +523,11 @@ const Neverita: React.FC<NeveritaProps> = ({
 
                     {fridgeItems.filter(i => i.quantity > 0).length === 0 ? (
                         <div className="bg-white/40 backdrop-blur-md rounded-[2rem] p-12 flex flex-col items-center justify-center text-center border-2 border-dashed border-white/60">
-                            <div className="w-24 h-24 bg-white/50 rounded-full flex items-center justify-center mb-6 text-gray-300">
+                            <div className="w-24 h-24 bg-white/50 rounded-full flex items-center justify-center mb-6 text-white">
                                 <Icons.Fridge size={48} />
                             </div>
-                            <h3 className="text-xl font-bold text-gray-700 mb-2">Tu nevera está vacía</h3>
-                            <p className="text-gray-400 mb-8 max-w-xs font-medium">Añade tu compra semanal para olvidarte de pesar la comida cada día.</p>
+                            <h3 className="text-xl font-bold text-white mb-2">Tu nevera está vacía</h3>
+                            <p className="text-white/80 mb-8 max-w-xs font-medium">Añade tu compra semanal para olvidarte de pesar la comida cada día.</p>
                             <button
                                 onClick={() => setEntryMode('select')}
                                 className="bg-gray-900 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all text-sm uppercase tracking-wide"
