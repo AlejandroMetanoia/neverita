@@ -448,7 +448,7 @@ const Neverita: React.FC<NeveritaProps> = ({
 
                 {/* Quick Stats / Overview - Matched to Stats/Library style */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] shadow-sm border border-white/60">
+                    <div className="bg-white/60 backdrop-blur-md p-4 rounded-[1.5rem] shadow-sm border border-white/60">
                         <div className="flex items-center gap-4 mb-3">
                             <div className="p-3 bg-white rounded-full border border-gray-100 shadow-sm text-gray-400">
                                 <Icons.Fridge size={24} />
@@ -458,7 +458,7 @@ const Neverita: React.FC<NeveritaProps> = ({
                         <p className="text-4xl font-black text-gray-800">{fridgeItems.reduce((acc, item) => acc + item.quantity, 0)} <span className="text-lg font-bold text-gray-400">unidades</span></p>
                     </div>
 
-                    <div className="bg-white/60 backdrop-blur-md p-6 rounded-[1.5rem] shadow-sm border border-white/60">
+                    <div className="bg-white/60 backdrop-blur-md p-4 rounded-[1.5rem] shadow-sm border border-white/60">
                         <div className="flex items-center gap-4 mb-3">
                             <div className="p-3 bg-white rounded-full border border-gray-100 shadow-sm text-gray-400">
                                 <Icons.Clock size={24} />
@@ -509,7 +509,7 @@ const Neverita: React.FC<NeveritaProps> = ({
                             <div className="w-16 h-16 bg-white/50 rounded-full flex items-center justify-center mb-4 text-white backdrop-blur-md border border-white/50">
                                 <Icons.Sparkles size={32} />
                             </div>
-                            <h3 className="text-lg font-bold text-white mb-2">Aprendiendo tus hábitos...</h3>
+                            <h3 className="text-lg font-bold text-black mb-2">Aprendiendo tus hábitos...</h3>
                             <p className="text-white/80 text-sm max-w-xs font-medium">Usa la Neverita durante un par de semanas para recibir sugerencias inteligentes.</p>
                         </div>
                     )}
@@ -526,7 +526,7 @@ const Neverita: React.FC<NeveritaProps> = ({
                             <div className="w-24 h-24 bg-white/50 rounded-full flex items-center justify-center mb-6 text-white">
                                 <Icons.Fridge size={48} />
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-2">Tu nevera está vacía</h3>
+                            <h3 className="text-xl font-bold text-black mb-2">Tu nevera está vacía</h3>
                             <p className="text-white/80 mb-8 max-w-xs font-medium">Añade tu compra semanal para olvidarte de pesar la comida cada día.</p>
                             <button
                                 onClick={() => setEntryMode('select')}
